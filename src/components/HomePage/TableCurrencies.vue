@@ -1,8 +1,5 @@
 <template>
-  <table
-    class="currency-table table table-hover border border-1 border-light w-80"
-    v-if="!isLoading"
-  >
+  <table class="currency-table table table-hover border border-1 border-light w-80">
     <thead>
       <tr>
         <th class="lead" scope="col">#</th>
@@ -16,10 +13,10 @@
     <tbody>
       <tr
         class="currency-table__row"
-        v-for="(currency, index) of currencies.data"
+        v-for="(currency, index) of getCurrencies.data"
         :key="currency.id"
       >
-        <th class="align-middle" scope="row">{{ index + 1 }}</th>
+        <th class="align-middle" scope="row">{{ (currentPage - 1) * limit + index + 1 }}</th>
         <td class="align-middle">
           {{ currency.name }}
           <span class="currency-table__currency-symbol">{{ currency.symbol }}</span>
@@ -46,27 +43,27 @@
   </table>
 </template>
 <script lang='ts'>
-import { defineComponent, onMounted, ref } from 'vue';
-import axios from 'axios';
+import { computed, defineComponent, onMounted, ref } from 'vue';
 
 export default defineComponent({
-  setup(_, ctx) {
+  props: ['currencies', 'currentPage', 'limit'],
+  setup(props, ctx) {
 
-    let currencies = ref()
     let isLoading = ref(true)
 
     const openCurrencyModalWindow = (id: any) => {
       ctx.emit('open-currency-modal-window', id)
     }
 
-    onMounted(async () => {
-      //! Temporary crutch
-      currencies.value = (await axios.get('https://api.coincap.io/v2/assets?limit=5')).data
-      isLoading.value = false
-
+    const getCurrencies = computed(() => {
+      return props.currencies
+    })
+    const getCurrentPage = computed(() => {
+      return props.currentPage
     })
 
-    return { currencies, isLoading, openCurrencyModalWindow }
+
+    return { isLoading, openCurrencyModalWindow, getCurrencies, getCurrentPage, limit: props.limit }
   }
 })
 </script>

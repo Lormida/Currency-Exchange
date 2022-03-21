@@ -99,7 +99,7 @@ export default defineComponent({
     width: 50%;
     transition: transform 0.3s ease;
     &:hover {
-      transform: scale(1.2) rotateZ(15deg);
+      transform: scale(1) rotateZ(15deg);
     }
   }
 
