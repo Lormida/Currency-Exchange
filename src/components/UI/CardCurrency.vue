@@ -30,6 +30,7 @@
         <button
           type="button"
           class="card__btn-buy btn mx-auto my-2 px-4 btn-sm btn-outline-success"
+          @click="openCurrencyModalWindow(id)"
         >Buy</button>
       </div>
     </div>
@@ -39,8 +40,11 @@
 import { defineComponent, onMounted, ref } from 'vue';
 export default defineComponent({
   props: ['name', 'changePercent24Hr', 'priceUsd', 'marketCapUsd', 'id', 'index'],
-  setup(props) {
-
+  emit: ['open-currency-modal-window'],
+  setup(props, ctx) {
+    const openCurrencyModalWindow = (id: any) => {
+      ctx.emit('open-currency-modal-window', id)
+    }
 
     return {
       name: props.name,
@@ -48,7 +52,8 @@ export default defineComponent({
       priceUsd: props.priceUsd,
       marketCapUsd: props.marketCapUsd,
       id: props.id,
-      index: props.index
+      index: props.index,
+      openCurrencyModalWindow
     }
   }
 })
@@ -56,13 +61,9 @@ export default defineComponent({
 <style lang='scss' scoped>
 .card {
   box-shadow: rgba(0, 0, 0, 0.19) 0px 10px 20px, rgba(0, 0, 0, 0.23) 0px 6px 6px;
-  // .card__title
+  height: 100%;
 
   // .card__header
-  .card {
-    height: 100%;
-  }
-
   &__header {
   }
 

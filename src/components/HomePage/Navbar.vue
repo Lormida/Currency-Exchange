@@ -11,6 +11,7 @@
         :priceUsd="currency.priceUsd"
         :id="currency.id"
         :index="index + 1"
+        @open-currency-modal-window="openCurrencyModalWindow"
       ></CardCurrency>
     </div>
     <!-- ===========================Bag currency=========================== -->
@@ -39,10 +40,13 @@ import { defineComponent } from 'vue';
 import CardCurrency from '@/components/UI/CardCurrency.vue';
 export default defineComponent({
   components: { CardCurrency },
-  setup() {
+  setup(_, ctx) {
     let currencies = ref()
     let isLoading = ref(true)
 
+    const openCurrencyModalWindow = (id: any) => {
+      ctx.emit('open-currency-modal-window', id)
+    }
 
     onMounted(() => {
       //! Temporary crutch
@@ -65,7 +69,7 @@ export default defineComponent({
 
     })
 
-    return { currencies, isLoading }
+    return { currencies, isLoading, openCurrencyModalWindow }
   }
 })
 </script>
@@ -95,7 +99,7 @@ export default defineComponent({
     width: 50%;
     transition: transform 0.3s ease;
     &:hover {
-      transform: scale(1.2);
+      transform: scale(1.2) rotateZ(15deg);
     }
   }
 

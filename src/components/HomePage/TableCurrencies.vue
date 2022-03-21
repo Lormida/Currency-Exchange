@@ -35,7 +35,11 @@
         </td>
         <td class="align-middle">chart</td>
         <td class="align-middle">
-          <button type="button" class="currency-table__btn btn btn-success px-3">Buy</button>
+          <button
+            type="button"
+            class="currency-table__btn btn btn-success px-3"
+            @click="openCurrencyModalWindow(currency.id)"
+          >Buy</button>
         </td>
       </tr>
     </tbody>
@@ -43,13 +47,17 @@
 </template>
 <script lang='ts'>
 import { defineComponent, onMounted, ref } from 'vue';
-import axios from 'axios'
-export default defineComponent({
-  setup() {
+import axios from 'axios';
 
+export default defineComponent({
+  setup(_, ctx) {
 
     let currencies = ref()
     let isLoading = ref(true)
+
+    const openCurrencyModalWindow = (id: any) => {
+      ctx.emit('open-currency-modal-window', id)
+    }
 
     onMounted(async () => {
       //! Temporary crutch
@@ -58,7 +66,7 @@ export default defineComponent({
 
     })
 
-    return { currencies, isLoading }
+    return { currencies, isLoading, openCurrencyModalWindow }
   }
 })
 </script>
