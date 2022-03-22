@@ -37,7 +37,7 @@
             <button
               type="button"
               class="currency-table__btn btn btn-success px-3"
-              @click="openCurrencyModalWindow(currency.id)"
+              @click="openModal(currency.id)"
             >Buy</button>
           </td>
         </tr>
@@ -54,8 +54,8 @@ export default defineComponent({
 
     let isLoading = ref(true)
 
-    const openCurrencyModalWindow = (id: any) => {
-      ctx.emit('open-currency-modal-window', id)
+    const openModal = (id: any) => {
+      ctx.emit('open-modal-window', id)
     }
 
     const getCurrencies = computed(() => {
@@ -66,7 +66,7 @@ export default defineComponent({
     })
 
 
-    return { isLoading, openCurrencyModalWindow, getCurrencies, getCurrentPage, limit: props.limit }
+    return { isLoading, openModal, getCurrencies, getCurrentPage, limit: props.limit }
   }
 })
 </script>

@@ -30,7 +30,7 @@
         <button
           type="button"
           class="card__btn-buy btn mx-auto my-2 px-4 btn-sm btn-outline-success"
-          @click="openCurrencyModalWindow(id)"
+          @click="openModal(id)"
         >Buy</button>
       </div>
     </div>
@@ -40,10 +40,10 @@
 import { defineComponent, onMounted, ref } from 'vue';
 export default defineComponent({
   props: ['name', 'changePercent24Hr', 'priceUsd', 'marketCapUsd', 'id', 'index'],
-  emit: ['open-currency-modal-window'],
+  emit: ['open-modal-window'],
   setup(props, ctx) {
-    const openCurrencyModalWindow = (id: any) => {
-      ctx.emit('open-currency-modal-window', id)
+    const openModal = (id: any) => {
+      ctx.emit('open-modal-window', id)
     }
 
     return {
@@ -53,7 +53,7 @@ export default defineComponent({
       marketCapUsd: props.marketCapUsd,
       id: props.id,
       index: props.index,
-      openCurrencyModalWindow
+      openModal
     }
   }
 })

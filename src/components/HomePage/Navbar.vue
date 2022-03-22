@@ -11,12 +11,12 @@
         :priceUsd="currency.priceUsd"
         :id="currency.id"
         :index="index + 1"
-        @open-currency-modal-window="openCurrencyModalWindow"
+        @open-modal-window="openModal"
       ></CardCurrency>
     </div>
     <!-- ===========================Bag currency=========================== -->
     <div class="nav__bag bag d-flex p-0 align-items-center col-3">
-      <a href="#" class="nav__bag-link">
+      <a href="#" class="nav__bag-link" @click="openModal('bag')">
         <img class="nav__bag-image" src="@/assets/svg/bag-fill.svg" alt="bag" />
       </a>
       <div class="bag__tooltip p-1 bag--hide-tooltip">
@@ -40,12 +40,13 @@ import { defineComponent } from 'vue';
 import CardCurrency from '@/components/UI/CardCurrency.vue';
 export default defineComponent({
   components: { CardCurrency },
+  emits: ['open-modal-window'],
   setup(_, ctx) {
     let currencies = ref()
     let isLoading = ref(true)
 
-    const openCurrencyModalWindow = (id: any) => {
-      ctx.emit('open-currency-modal-window', id)
+    const openModal = (id: any) => {
+      ctx.emit('open-modal-window', id)
     }
 
     onMounted(() => {
@@ -69,7 +70,7 @@ export default defineComponent({
 
     })
 
-    return { currencies, isLoading, openCurrencyModalWindow }
+    return { currencies, isLoading, openModal }
   }
 })
 </script>
