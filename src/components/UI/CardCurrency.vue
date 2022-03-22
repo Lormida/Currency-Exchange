@@ -13,7 +13,7 @@
         </p>
         <p class="card__text card-text my-1">
           <span class="card__small-title">Market capital :</span>
-          ${{ ((+marketCapUsd) / 1000000000).toFixed(2) }} Milliards
+          ${{ ((+marketCapUsd) / 1e9).toFixed(2) }} Milliards
         </p>
         <p class="card__text card-text my-1">
           <span class="card__small-title">Change for 24h :</span>

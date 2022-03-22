@@ -11,34 +11,37 @@
       </tr>
     </thead>
     <tbody>
-      <tr
-        class="currency-table__row"
-        v-for="(currency, index) of getCurrencies.data"
-        :key="currency.id"
-      >
-        <th class="align-middle" scope="row">{{ (currentPage - 1) * limit + index + 1 }}</th>
-        <td class="align-middle">
-          {{ currency.name }}
-          <span class="currency-table__currency-symbol">{{ currency.symbol }}</span>
-        </td>
-        <td class="align-middle">$ {{ (+currency.priceUsd).toFixed(2) }}</td>
-        <td class="text-start align-middle">
-          <span
-            :class="{
-              'currency-table--currency-fall': currency.changePercent24Hr < 0,
-              'currency-table--currency-growth': currency.changePercent24Hr >= 0
-            }"
-          >{{ (+currency.changePercent24Hr).toFixed(2) }}%</span>
-        </td>
-        <td class="align-middle">chart</td>
-        <td class="align-middle">
-          <button
-            type="button"
-            class="currency-table__btn btn btn-success px-3"
-            @click="openCurrencyModalWindow(currency.id)"
-          >Buy</button>
-        </td>
-      </tr>
+      <template v-for="(currency, index) of getCurrencies.data" :key="currency.id">
+        <tr class="currency-table__row">
+          <th class="align-middle" scope="row">{{ (currentPage - 1) * limit + index + 1 }}</th>
+          <td class="align-middle">
+            <router-link
+              class="currency-table__link-detail"
+              :to="{ name: 'currency', params: { id: currency.id } }"
+            >
+              {{ currency.name }}
+              <span class="currency-table__currency-symbol">{{ currency.symbol }}</span>
+            </router-link>
+          </td>
+          <td class="align-middle">$ {{ (+currency.priceUsd).toFixed(2) }}</td>
+          <td class="text-start align-middle">
+            <span
+              :class="{
+                'currency-table--currency-fall': currency.changePercent24Hr < 0,
+                'currency-table--currency-growth': currency.changePercent24Hr >= 0
+              }"
+            >{{ (+currency.changePercent24Hr).toFixed(2) }}%</span>
+          </td>
+          <td class="align-middle">chart</td>
+          <td class="align-middle">
+            <button
+              type="button"
+              class="currency-table__btn btn btn-success px-3"
+              @click="openCurrencyModalWindow(currency.id)"
+            >Buy</button>
+          </td>
+        </tr>
+      </template>
     </tbody>
   </table>
 </template>
@@ -70,6 +73,10 @@ export default defineComponent({
 <style lang='scss' scoped>
 .currency-table__currency-symbol {
   font-weight: 100;
+}
+.currency-table__link-detail {
+  text-decoration: none;
+  color: #222;
 }
 .currency-table--currency-fall {
   color: red;

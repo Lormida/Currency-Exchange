@@ -1,5 +1,231 @@
 <template>
-  <div class="about">
-    <h1>This is an about page</h1>
+  <div v-if="!isLoading" class="container-fluid">
+    <div class="container currency">
+      <!-- Currency Header -->
+      <header class="currency__header">
+        <div class="currency__title-wrapper">
+          <span class="currency__title-name">{{ getDataCurrency.name }}</span>
+          <span class="currency__title-currency">{{ getDataCurrency.symbol }}</span>
+        </div>
+
+        <div class="currency__title-wrapper currency__buy-wrapper">
+          <span class="currency__title-name currency__buy-text">Buy</span>
+        </div>
+      </header>
+      <!-- /Currency Header -->
+
+      <!-- /Currency Main -->
+      <main class="currency__main">
+        <div class="card currency__card">
+          <div class="card__header chart">
+            <header class="chart__header">
+              <span class="chart__currency-short">$</span>
+              <span class="chart__currency-price">{{ (+getDataCurrency.priceUsd).toFixed(2) }}</span>
+              <span class="chart__currency-price-change">+5.08%</span>
+            </header>
+
+            <main class="chart__content">
+              <!-- Chart -->
+              <Chart :currency="id"></Chart>
+            </main>
+          </div>
+
+          <!-- Market Stats -->
+          <MarketStats :getDataCurrency="getDataCurrency" :getRelativeSupply="getRelativeSupply"></MarketStats>
+        </div>
+      </main>
+      <!-- /Currency Main -->
+    </div>
   </div>
 </template>
+<script lang='ts'>
+import { defineComponent, ref, computed } from 'vue';
+import Chart from '@/components/CurrencyPage/Chart.vue'
+import MarketStats from '@/components/CurrencyPage/MarketStats.vue'
+import axios from 'axios'
+export default defineComponent({
+  components: { Chart, MarketStats },
+  props: ['id'],
+  setup(props) {
+
+    let isLoading = ref(true)
+    const dataCurrency = {}
+    const baseURL = `https://api.coincap.io/v2/assets/${props.id}`
+
+    axios.get(baseURL)
+      .then(response => response.data)
+      .then(({ data }) => {
+        const { rank, name, symbol, supply, maxSupply, marketCapUsd, volumeUsd24Hr, priceUsd, vwap24Hr, changePercent24Hr } = data
+        dataCurrency.rank = rank
+        dataCurrency.name = name
+        dataCurrency.symbol = symbol
+        dataCurrency.supply = supply
+        dataCurrency.maxSupply = maxSupply
+        dataCurrency.marketCapUsd = marketCapUsd
+        dataCurrency.volumeUsd24Hr = volumeUsd24Hr
+        dataCurrency.priceUsd = priceUsd
+        dataCurrency.vwap24Hr = vwap24Hr
+        dataCurrency.changePercent24Hr = changePercent24Hr
+        isLoading.value = false
+      })
+
+    const getDataCurrency = computed(() => {
+      return dataCurrency
+    })
+
+    const getRelativeSupply = computed(() => {
+      if (dataCurrency.maxSupply == null) {
+        return
+      }
+      return `${((+dataCurrency.supply) / (+dataCurrency.maxSupply)).toFixed(2) * 100}% of total supply`
+    })
+    return { id: props.id, getDataCurrency, isLoading, getRelativeSupply }
+
+  }
+})
+</script>
+<style lang='scss' scoped>
+.container-fluid {
+  background: linear-gradient(to right, #d7dde8, #757f9a);
+  min-height: 100vh;
+}
+.container {
+  width: 80%;
+  padding-bottom: 10px;
+}
+.currency {
+  // .currency__header
+
+  &__header {
+    display: flex;
+    justify-content: space-between;
+    padding: 5px 0;
+  }
+
+  // .currency__title-wrapper
+
+  &__title-wrapper {
+    display: flex;
+    box-shadow: rgba(0, 0, 0, 0.09) 0px 3px 12px;
+    border-radius: 5px;
+    width: fit-content;
+    justify-content: space-between;
+    background-color: rgba(255, 255, 255, 0.8);
+    padding: 10px;
+    margin-bottom: 10px;
+    transition: all 0.3s ease;
+    box-shadow: rgba(0, 0, 0, 0.15) 0px 3px 3px 0px;
+    &:hover {
+      color: rgba(255, 255, 255, 0.8);
+      background-color: #222;
+    }
+  }
+
+  // .currency__title-name
+
+  &__title-name {
+    font-size: 32px;
+    font-weight: bold;
+    margin-right: 30px;
+  }
+
+  // .currency__title-currency
+
+  &__title-currency {
+  }
+
+  // .currency__buy-wrapper
+
+  &__buy-wrapper {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 0 80px;
+    transition: all 0.3s ease;
+    box-shadow: rgba(0, 0, 0, 0.15) 0px 3px 3px 0px;
+    background-color: rgba(82, 221, 156, 0.9);
+    &:hover {
+      cursor: pointer;
+      color: rgba(82, 221, 156, 0.9);
+      background-color: #222;
+    }
+  }
+
+  // .currency__buy-text
+
+  &__buy-text {
+    text-align: center;
+  }
+
+  // .currency__main
+
+  &__main {
+    min-height: 80vh;
+  }
+
+  // .currency__card
+
+  &__card {
+    box-shadow: rgba(14, 30, 37, 0.12) 0px 2px 4px 0px,
+      rgba(14, 30, 37, 0.32) 0px 2px 16px 0px;
+    height: 100%;
+  }
+
+  // .currency__body
+
+  &__body {
+  }
+}
+.card {
+  // .card__header
+
+  &__header {
+  }
+}
+
+.chart {
+  min-height: 60vh;
+  height: 70%;
+  display: flex;
+  flex-direction: column;
+  background-color: #f7f9fd;
+
+  // .chart__header
+
+  &__header {
+    position: relative;
+    width: fit-content;
+    height: auto;
+    padding: 1% 0 1% 5%;
+  }
+
+  // .chart__currency-short
+
+  &__currency-short {
+    font-size: 32px;
+  }
+
+  // .chart__currency-price
+
+  &__currency-price {
+    font-size: 48px;
+  }
+
+  // .chart__currency-price-change
+
+  &__currency-price-change {
+    position: absolute;
+    top: 0;
+    right: 0;
+    font-size: 18px;
+    transform: translateX(100%);
+    color: rgb(9, 133, 81);
+  }
+
+  // .chart__content
+
+  &__content {
+    flex-grow: 1;
+  }
+}
+</style>
