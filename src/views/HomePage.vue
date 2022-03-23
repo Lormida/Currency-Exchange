@@ -1,7 +1,7 @@
  <template>
   <div class="home-container d-flex flex-column">
     <header class="header mw-100 p-0 m-0 container-fluid">
-      <Navbar @open-modal-window="openModal"></Navbar>
+      <Navbar></Navbar>
     </header>
 
     <main class="main">
@@ -10,7 +10,6 @@
         :limit="limit"
         :currentPage="currentPage"
         :currencies="getCurrencies"
-        @open-modal-window="openModal"
       ></TableCurrencies>
       <SpinnerLoader v-else></SpinnerLoader>
     </main>
@@ -22,12 +21,7 @@
         @change-current-page="setNewPage"
       ></Pagination>
     </footer>
-    <!-- Modal buy-->
-    <ModalWrapper
-      v-if="isModalOpen"
-      :modalIndicator="getCurrentModalIndicator"
-      @close-modal-window="toggleModal"
-    ></ModalWrapper>
+
   </div>
 </template>
 
@@ -36,29 +30,19 @@ import ApiService from '@/utils/ApiService'
 import { useStore } from '@/store'
 import TableCurrencies from '@/components/HomePage/TableCurrencies.vue'
 import Navbar from '@/components/HomePage/Navbar.vue'
-import ModalWrapper from '@/components/UI/ModalWrapper.vue';
 import Pagination from '@/components/HomePage/Pagination.vue';
 import { computed, defineComponent, onMounted, ref } from 'vue';
 import SpinnerLoader from '../components/UI/SpinnerLoader.vue';
 
 export default defineComponent({
-  components: { TableCurrencies, Navbar, ModalWrapper, Pagination, SpinnerLoader },
+  components: { TableCurrencies, Navbar, Pagination, SpinnerLoader },
   setup() {
 
     const store = useStore()
-    const isModalOpen = ref(false)
     const limit = 7
     const currentPage = ref(1)
-    const currentModalIndicator = ref('')
     const totalPage = Math.ceil(100 / limit)
 
-    const openModal = (id: string) => {
-      currentModalIndicator.value = id
-      isModalOpen.value = true
-    }
-    const toggleModal = (state: boolean) => {
-      isModalOpen.value = state;
-    }
 
     const setNewPage = async (pageNumber: number) => {
       currentPage.value = pageNumber
@@ -77,14 +61,14 @@ export default defineComponent({
     const getCurrentPage = computed(() => currentPage.value)
     const getCurrencies = computed(() => store.getters.getCurrencies)
     const getIsLoading = computed(() => store.getters.getIsLoading)
-    const getCurrentModalIndicator = computed(() => currentModalIndicator.value)
+
 
     onMounted(async () => {
       await fetchData(currentPage, limit)
     })
 
+
     return {
-      isModalOpen, toggleModal, openModal, currentModalIndicator, getCurrentModalIndicator,
       limit, currentPage, totalPage, setNewPage, getCurrentPage, getIsLoading, fetchData, getCurrencies
     }
   }

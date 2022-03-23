@@ -11,7 +11,6 @@
         :priceUsd="currency.priceUsd"
         :id="currency.id"
         :index="index + 1"
-        @open-modal-window="openModal"
       ></CardCurrency>
     </div>
     <!-- Bag currency -->
@@ -36,21 +35,17 @@
 <script lang="ts">
 import { onMounted, ref } from 'vue';
 import axios from 'axios'
+import ModalService from '@/utils/ModalService'
 import { defineComponent } from 'vue';
 import CardCurrency from '@/components/UI/CardCurrency.vue';
 export default defineComponent({
   components: { CardCurrency },
-  emits: ['open-modal-window'],
-  setup(_, ctx) {
+  setup() {
     let currencies = ref()
     let isLoading = ref(true)
 
-    const openModal = (id: any) => {
-      ctx.emit('open-modal-window', id)
-    }
-
     onMounted(() => {
-      //! Temporary crutch
+
       axios.get('https://api.coincap.io/v2/assets?limit=3')
         .then(({ data }) => {
           currencies.value = data
@@ -66,9 +61,13 @@ export default defineComponent({
             tooltip.classList.add('bag--hide-tooltip')
           })
         })
-
-
     })
+
+    const openModal = (currentModalIndicator: string) => {
+      ModalService.changeCurrentModalIndicator(currentModalIndicator)
+      ModalService.changeModalState(true)
+    }
+
 
     return { currencies, isLoading, openModal }
   }
@@ -87,7 +86,7 @@ export default defineComponent({
   &__card-currency-wrapper {
     border: 3px #222 dashed;
     background-color: #ece4db;
-    height:100%;
+    height: 100%;
   }
 
   // .nav__bag

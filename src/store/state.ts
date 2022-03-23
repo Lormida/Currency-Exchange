@@ -12,17 +12,26 @@ type Currency = {
   "vwap24Hr": string,
   "explorer": string,
 }
+type Modal = {
+  currentModalIndicator: string,
+  isModalOpen: boolean
+}
 
 type State = {
   currencies: Currency[],
   currentCurrency: Currency,
-  isLoading: boolean
+  isLoading: boolean,
+  modal: Modal
 }
 
 const state: State = {
   currencies: [],
   currentCurrency: {} as Currency,
-  isLoading: true
+  isLoading: true,
+  modal: {
+    currentModalIndicator: '',
+    isModalOpen: false
+  },
 }
 
 export { state, State, Currency }

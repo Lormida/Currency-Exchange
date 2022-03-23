@@ -37,13 +37,17 @@
   </div>
 </template>
 <script lang='ts'>
+
 import { defineComponent, onMounted, ref } from 'vue';
+import ModalService from '@/utils/ModalService'
+
 export default defineComponent({
   props: ['name', 'changePercent24Hr', 'priceUsd', 'marketCapUsd', 'id', 'index'],
-  emit: ['open-modal-window'],
-  setup(props, ctx) {
-    const openModal = (id: any) => {
-      ctx.emit('open-modal-window', id)
+  setup(props) {
+
+    const openModal = (currentModalIndicator: string) => {
+      ModalService.changeCurrentModalIndicator(currentModalIndicator)
+      ModalService.changeModalState(true)
     }
 
     return {

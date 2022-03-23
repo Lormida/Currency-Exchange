@@ -13,7 +13,10 @@
     <tbody>
       <template v-for="(currency, index) of getCurrencies" :key="currency.id">
         <tr class="currency-table__row">
-          <th class="align-middle text-center" scope="row">{{ (currentPage - 1) * limit + index + 1 }}</th>
+          <th
+            class="align-middle text-center"
+            scope="row"
+          >{{ (currentPage - 1) * limit + index + 1 }}</th>
           <td class="align-middle">
             <router-link
               class="currency-table__link-detail"
@@ -46,27 +49,23 @@
   </table>
 </template>
 <script lang='ts'>
+import ModalService from '@/utils/ModalService';
 import { computed, defineComponent, onMounted, ref } from 'vue';
 
 export default defineComponent({
   props: ['currencies', 'currentPage', 'limit'],
-  setup(props, ctx) {
+  setup(props) {
 
-    let isLoading = ref(true)
+    const getCurrencies = computed(() => props.currencies)
+    const getCurrentPage = computed(() => props.currentPage)
 
-    const openModal = (id: any) => {
-      ctx.emit('open-modal-window', id)
+    const openModal = (currentModalIndicator: string) => {
+      ModalService.changeCurrentModalIndicator(currentModalIndicator)
+      ModalService.changeModalState(true)
     }
 
-    const getCurrencies = computed(() => {
-      return props.currencies
-    })
-    const getCurrentPage = computed(() => {
-      return props.currentPage
-    })
 
-
-    return { isLoading, openModal, getCurrencies, getCurrentPage, limit: props.limit }
+    return { openModal, getCurrencies, getCurrentPage, limit: props.limit }
   }
 })
 </script>

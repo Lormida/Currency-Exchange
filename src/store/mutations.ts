@@ -5,12 +5,16 @@ export enum MutationsType {
   SetLoading = 'SET_LOADING',
   SaveCurrenciesLocal = 'SAVE_DATA_LOCAL',
   SaveCurrentCurrencyLocal = 'SAVE_CURRENT_CURRENCY_LOCAL',
+  ChangeModalState = 'CHANGE_MODAL_STATE',
+  ChangeCurrentModalIndicator = 'CHANGE_CURRENT_MODAL_INDICATOR'
 }
 
 export interface Mutations {
   [MutationsType.SetLoading](state: State, status: boolean): void,
   [MutationsType.SaveCurrenciesLocal](state: State, currencies: Currency[]): void,
-  [MutationsType.SaveCurrentCurrencyLocal](state: State, currencies: Currency): void,
+  [MutationsType.SaveCurrentCurrencyLocal](state: State, currentCurrency: Currency): void,
+  [MutationsType.ChangeModalState](state: State, stateModal: boolean): void,
+  [MutationsType.ChangeCurrentModalIndicator](state: State, currentModalIndicator: string): void,
 }
 
 export const mutations: MutationTree<State> & Mutations = {
@@ -22,7 +26,6 @@ export const mutations: MutationTree<State> & Mutations = {
     } else {
       state.isLoading = status
     }
-
   },
   [MutationsType.SaveCurrenciesLocal](state, currencies) {
     state.currencies = currencies
@@ -30,4 +33,10 @@ export const mutations: MutationTree<State> & Mutations = {
   [MutationsType.SaveCurrentCurrencyLocal](state, currentCurrency) {
     state.currentCurrency = currentCurrency
   },
+  [MutationsType.ChangeModalState](state, stateModal) {
+    state.modal.isModalOpen = stateModal
+  },
+  [MutationsType.ChangeCurrentModalIndicator](state, currentModalIndicator) {
+    state.modal.currentModalIndicator = currentModalIndicator
+  }
 }

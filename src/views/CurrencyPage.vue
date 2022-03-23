@@ -8,7 +8,10 @@
           <span class="currency__title-currency">{{ getDataCurrency.symbol }}</span>
         </div>
 
-        <div class="currency__title-wrapper currency__buy-wrapper">
+        <div
+          class="currency__title-wrapper currency__buy-wrapper"
+          @click="openModal(getDataCurrency.name)"
+        >
           <span class="currency__title-name currency__buy-text">Buy</span>
         </div>
       </header>
@@ -46,6 +49,7 @@ import MarketStats from '@/components/CurrencyPage/MarketStats.vue'
 import ApiService from '@/utils/ApiService'
 import { Currency } from '@/store/state'
 import { useStore } from '@/store'
+import ModalService from '@/utils/ModalService';
 export default defineComponent({
   components: { Chart, MarketStats },
   props: ['id'],
@@ -63,12 +67,17 @@ export default defineComponent({
       return `${divide * 100}% of total supply`
     })
 
+    const openModal = (currentModalIndicator: string) => {   
+      ModalService.changeCurrentModalIndicator(currentModalIndicator)
+      ModalService.changeModalState(true)
+    }
+
     ApiService.getCurrentCurrency(props.id)
       .then(() => {
         ApiService.setLoading(false)
       })
 
-    return { id: props.id, getDataCurrency, getIsLoading, getRelativeSupply }
+    return { id: props.id, getDataCurrency, getIsLoading, getRelativeSupply, openModal }
   }
 })
 </script>
@@ -93,7 +102,7 @@ export default defineComponent({
     display: flex;
     justify-content: space-between;
     padding: 5px 0;
-    height:11%;
+    height: 11%;
   }
 
   // .currency__title-wrapper
@@ -223,5 +232,4 @@ export default defineComponent({
     flex-grow: 1;
   }
 }
-
 </style>

@@ -53,7 +53,7 @@ export default defineComponent({
   padding: 10px 10px;
   border-radius: 10px;
   box-shadow: 0px 0px 13px 10px rgba(41, 61, 77, 0.2);
-  min-height: 200px;
+  min-height: 100px;
   // .bag__table
 
   &__table {

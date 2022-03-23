@@ -25,8 +25,7 @@ export const actions: ActionTree<State, State> & Actions = {
   [ActionsType.getAllCurrencies](context, { currentPage, limit }) {
     context.commit(MutationsType.SetLoading, true)
 
-    // @ts-ignore - impossible to fix bug with crossDomain type in default interface
-    axios.get('https://api.coincap.io/v2/assets', { crossDomain: true, params: { offset: (currentPage - 1) * limit, limit } })
+    axios.get('https://api.coincap.io/v2/assets', { params: { offset: (currentPage - 1) * limit, limit } })
       .then(response => response.data)
       .then(({ data }) => {
         new Promise<void>(resolve => {
@@ -41,10 +40,8 @@ export const actions: ActionTree<State, State> & Actions = {
   [ActionsType.getCurrentCurrency](context, currencyName) {
 
     context.commit(MutationsType.SetLoading, true)
-    console.log('isLoading : ', context.state.isLoading);
 
-    // @ts-ignore - impossible to fix bug with crossDomain type in default interface
-    axios.get(`https://api.coincap.io/v2/assets/${currencyName}`, { crossDomain: true })
+    axios.get(`https://api.coincap.io/v2/assets/${currencyName}`)
       .then(response => response.data)
       .then(({ data }) => {
         new Promise<void>(resolve => {

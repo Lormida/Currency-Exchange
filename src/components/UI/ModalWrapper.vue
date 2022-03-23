@@ -1,10 +1,13 @@
 <template>
-  <div class="modal__overlay" @click.self="closeCurrencyWindow">
+  <div class="modal__overlay" @click.self="closeModal">
     <div class="modal-window">
       <div class="modal-window__content">
-        <span class="modal-window__close-btn" @click.self="closeCurrencyWindow"></span>
+        <span class="modal-window__close-btn" @click.self="closeModal"></span>
 
-        <ModalBuyCurrency v-if="modalIndicator !== 'bag'" :currency="modalIndicator"></ModalBuyCurrency>
+        <ModalBuyCurrency
+          v-if="getCurrentModalIndicator !== 'bag'"
+          :currency="getCurrentModalIndicator"
+        ></ModalBuyCurrency>
         <ModalBag v-else></ModalBag>
       </div>
     </div>
@@ -12,28 +15,25 @@
 </template>
 
 <script lang='ts'>
-// *ts-ignore
+
+import { useStore } from '@/store'
+import ModalService from '@/utils/ModalService'
 import ModalBag from './ModalBag.vue';
 import ModalBuyCurrency from './ModalBuyCurrency.vue';
-import { defineComponent, ref } from 'vue';
+import { computed, defineComponent, ref } from 'vue';
 export default defineComponent({
-  props: { modalIndicator: String },
-  emits: ['close-modal-window'],
-  components: {
-    'ModalBuyCurrency': ModalBuyCurrency,
-    'ModalBag': ModalBag,
-
-  },
-  // components: { ModalBuyCurrency, ModalBag },
-  setup(props, ctx) {
+  components: { ModalBuyCurrency, ModalBag },
+  setup() {
     let amountCurrency = ref('')
+    const store = useStore()
+    const getCurrentModalIndicator = computed(() => store.getters.getCurrentModalIndicator)
 
-    const closeCurrencyWindow = () => {
-      ctx.emit('close-modal-window', false)
+    const closeModal = () => {
+      ModalService.changeModalState(false)
     }
 
     return {
-      amountCurrency, closeCurrencyWindow, modalIndicator: props.modalIndicator
+      amountCurrency, closeModal, getCurrentModalIndicator
     }
   }
 })
