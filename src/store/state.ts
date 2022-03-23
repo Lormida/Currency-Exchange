@@ -25,7 +25,7 @@ type State = {
 }
 
 const state: State = {
-  currencies: [],
+  currencies: [] as Currency[],
   currentCurrency: {} as Currency,
   isLoading: true,
   modal: {

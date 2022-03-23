@@ -3,30 +3,46 @@
     <h3 class="form-currency__title mb-3">
       Specify the sum
       <br />
-      <span class="currency-label">[{{ String(currency).toUpperCase() }}]</span>
+      <span class="form-currency__label">[{{ String(currency).toUpperCase() }}]</span>
     </h3>
-    <div class="form-floating">
-      <input type="text" class="form-control" id="currency-input" placeholder="Sum" />
-      <label for="currency-input">Sum of currency</label>
-    </div>
 
-    <button @click.prevent class="w-100 btn btn-lg btn-primary" type="submit">Buy currency</button>
+    <InputCurrency @recalc-validate="calcDisabledBtn" :currency="currency"></InputCurrency>
+
+    <button
+      :disabled="getDisabledBtn"
+      @click.prevent
+      class="w-100 btn btn-lg btn-primary"
+      type="submit"
+    >Buy currency</button>
   </form>
 </template>
 
 <script lang='ts'>
-import ModalWrapper from './ModalWrapper.vue'
-import { defineComponent } from 'vue';
+import InputCurrency from '@/components/UI/InputCurrency.vue'
+import { computed, defineComponent, ref } from 'vue';
 export default defineComponent({
   props: ['currency'],
+  components: { InputCurrency },
   setup(props) {
+    const disabledBtnStatus = ref(false)
 
-    return { currency: props.currency }
+    const calcDisabledBtn = (state: boolean) => disabledBtnStatus.value = state
+    const getDisabledBtn = computed(() => disabledBtnStatus.value)
+
+
+    return {
+      currency: props.currency, calcDisabledBtn, getDisabledBtn
+    };
   }
 })
 </script>
 
 <style lang='scss' scoped>
+.form-currency__label {
+  font-size: 15px;
+  font-weight: 800;
+  color: rgb(0, 255, 149);
+}
 .form-currency {
   background-color: rgba(31, 36, 33, 0.8);
   padding: 50px 80px;
@@ -35,13 +51,5 @@ export default defineComponent({
     color: white;
     text-align: center;
   }
-}
-.form-floating {
-  margin: 10px 0;
-}
-.currency-label {
-  font-size: 15px;
-  font-weight: 800;
-  color: rgb(0, 255, 149);
 }
 </style>
