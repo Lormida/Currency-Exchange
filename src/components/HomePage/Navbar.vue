@@ -1,7 +1,7 @@
 <template>
-  <nav class="nav px-3" v-if="!isLoading">
-    <!-- ===========================Cards=========================== -->
-    <div class="nav__card-currency-wrapper row col-9 p-3">
+  <nav class="nav" v-if="!isLoading">
+    <!-- Cards -->
+    <div class="nav__card-currency-wrapper row p-3 col-7">
       <CardCurrency
         v-for="(currency, index) of currencies.data"
         :key="currency.id"
@@ -14,7 +14,7 @@
         @open-modal-window="openModal"
       ></CardCurrency>
     </div>
-    <!-- ===========================Bag currency=========================== -->
+    <!-- Bag currency -->
     <div class="nav__bag bag d-flex p-0 align-items-center col-3">
       <a href="#" class="nav__bag-link" @click="openModal('bag')">
         <img class="nav__bag-image" src="@/assets/svg/bag-fill.svg" alt="bag" />
@@ -76,13 +76,18 @@ export default defineComponent({
 </script>
 <style lang='scss' scoped>
 .nav {
+  height: 100%;
+  padding: 15px;
+  display: flex;
+  justify-content: space-evenly;
+
   background-color: #ffe5d9;
-  padding: 20px;
   // .nav__card-currency-wrapper
 
   &__card-currency-wrapper {
     border: 3px #222 dashed;
     background-color: #ece4db;
+    height:100%;
   }
 
   // .nav__bag

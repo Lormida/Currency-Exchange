@@ -71,9 +71,11 @@ export default defineComponent({
 .card-body {
 }
 .market {
+  margin-top: 10px;
   display: flex;
   flex-direction: column;
   background-color: rgba(238, 226, 223, 0.5);
+  // height:181px;
   // .market__header
 
   &__header {
@@ -95,6 +97,7 @@ export default defineComponent({
     border: 2px dashed #222;
     display: flex;
     justify-content: space-between;
+    height: 100%;
   }
 
   // .market__cap-wrapper

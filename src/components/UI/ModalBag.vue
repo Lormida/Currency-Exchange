@@ -40,10 +40,8 @@
   </div>
 </template>
 <script lang='ts'>
-import ModalWrapper from './ModalWrapper.vue'
 import { defineComponent } from 'vue';
 export default defineComponent({
-  components: { ModalWrapper },
   setup(props) {
 
   }
@@ -69,8 +67,8 @@ export default defineComponent({
   &__trash-btn {
     // position: absolute;
     // right: 0;
-    width: 40px;
-    height: 40px;
+    width: 33px;
+    height: 33px;
     background-color: #000;
     display: flex;
     justify-content: center;

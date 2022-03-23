@@ -18,7 +18,6 @@
 import ModalWrapper from './ModalWrapper.vue'
 import { defineComponent } from 'vue';
 export default defineComponent({
-  components: { ModalWrapper },
   props: ['currency'],
   setup(props) {
 

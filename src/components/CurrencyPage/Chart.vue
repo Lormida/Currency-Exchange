@@ -6,7 +6,7 @@
 <script lang="ts">
 import { defineComponent, ref, onMounted, computed } from 'vue';
 import { LineChart } from 'vue-chart-3';
-import { Chart, registerables } from "chart.js";
+import { Chart, ChartData, registerables, ScatterDataPoint } from "chart.js";
 import axios from "axios";
 
 Chart.register(...registerables);
@@ -17,15 +17,15 @@ export default defineComponent({
   setup(props) {
     const baseURL = `https://api.coincap.io/v2/assets/${props.currency}/history?interval=m1`;
 
-    let dataX = []
-    let dataY = []
+    let dataX: any = []
+    let dataY: any = []
     let isLoading = ref(true)
     let testData = {}
 
 
     const fetchData = async () => {
       let { data } = (await axios.get(baseURL)).data
-      data.forEach(item => {
+      data.forEach((item: any) => {
         dataX.push(new Date(item.time).toLocaleTimeString().slice(0, -6))
         dataY.push(item.priceUsd)
       })
@@ -48,10 +48,14 @@ export default defineComponent({
 
 
     const getData = computed(() => {
-      return testData
+      return testData as any
     })
 
     return { isLoading, getData }
   },
 });
 </script>
+
+<style lang="scss" scope>
+
+</style>

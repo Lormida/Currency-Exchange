@@ -1,6 +1,6 @@
 <template>
-  <div v-if="!isLoading" class="container-fluid">
-    <div class="container currency">
+  <div class="container-currency">
+    <div v-if="!getIsLoading && Object.keys(getDataCurrency).length > 0" class="container currency">
       <!-- Currency Header -->
       <header class="currency__header">
         <div class="currency__title-wrapper">
@@ -36,70 +36,64 @@
       </main>
       <!-- /Currency Main -->
     </div>
+    <SpinnerLoader v-else></SpinnerLoader>
   </div>
 </template>
 <script lang='ts'>
 import { defineComponent, ref, computed } from 'vue';
 import Chart from '@/components/CurrencyPage/Chart.vue'
 import MarketStats from '@/components/CurrencyPage/MarketStats.vue'
-import axios from 'axios'
+import ApiService from '@/utils/ApiService'
+import { Currency } from '@/store/state'
+import { useStore } from '@/store'
 export default defineComponent({
   components: { Chart, MarketStats },
   props: ['id'],
   setup(props) {
 
-    let isLoading = ref(true)
-    const dataCurrency = {}
-    const baseURL = `https://api.coincap.io/v2/assets/${props.id}`
+    const store = useStore()
+    let dataCurrency: Currency = {} as Currency
 
-    axios.get(baseURL)
-      .then(response => response.data)
-      .then(({ data }) => {
-        const { rank, name, symbol, supply, maxSupply, marketCapUsd, volumeUsd24Hr, priceUsd, vwap24Hr, changePercent24Hr } = data
-        dataCurrency.rank = rank
-        dataCurrency.name = name
-        dataCurrency.symbol = symbol
-        dataCurrency.supply = supply
-        dataCurrency.maxSupply = maxSupply
-        dataCurrency.marketCapUsd = marketCapUsd
-        dataCurrency.volumeUsd24Hr = volumeUsd24Hr
-        dataCurrency.priceUsd = priceUsd
-        dataCurrency.vwap24Hr = vwap24Hr
-        dataCurrency.changePercent24Hr = changePercent24Hr
-        isLoading.value = false
-      })
-
-    const getDataCurrency = computed(() => {
-      return dataCurrency
-    })
+    const getIsLoading = computed(() => store.getters.getIsLoading)
+    const getDataCurrency = computed(() => store.getters.getCurrentCurrency)
 
     const getRelativeSupply = computed(() => {
-      if (dataCurrency.maxSupply == null) {
-        return
-      }
-      return `${((+dataCurrency.supply) / (+dataCurrency.maxSupply)).toFixed(2) * 100}% of total supply`
+      if (dataCurrency.maxSupply == null) return
+      const divide = Number(((+dataCurrency.supply) / (+dataCurrency.maxSupply)).toFixed(2))
+      return `${divide * 100}% of total supply`
     })
-    return { id: props.id, getDataCurrency, isLoading, getRelativeSupply }
 
+    ApiService.getCurrentCurrency(props.id)
+      .then(() => {
+        ApiService.setLoading(false)
+      })
+
+    return { id: props.id, getDataCurrency, getIsLoading, getRelativeSupply }
   }
 })
 </script>
 <style lang='scss' scoped>
-.container-fluid {
+.container-currency {
+  position: fixed;
+  top: 0;
+  left: 0;
   background: linear-gradient(to right, #d7dde8, #757f9a);
-  min-height: 100vh;
+  height: 100%;
+  width: 100%;
 }
 .container {
   width: 80%;
   padding-bottom: 10px;
 }
 .currency {
+  height: 100%;
   // .currency__header
 
   &__header {
     display: flex;
     justify-content: space-between;
     padding: 5px 0;
+    height:11%;
   }
 
   // .currency__title-wrapper
@@ -160,7 +154,9 @@ export default defineComponent({
   // .currency__main
 
   &__main {
-    min-height: 80vh;
+    height: 89%;
+    // height: 672px;
+    // height: 86%;
   }
 
   // .currency__card
@@ -184,7 +180,6 @@ export default defineComponent({
 }
 
 .chart {
-  min-height: 60vh;
   height: 70%;
   display: flex;
   flex-direction: column;
@@ -228,4 +223,5 @@ export default defineComponent({
     flex-grow: 1;
   }
 }
+
 </style>

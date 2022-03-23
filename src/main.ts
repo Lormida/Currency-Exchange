@@ -1,8 +1,20 @@
 import { createApp } from 'vue'
-import App from './App.vue'
+import { useStore } from './store'
 import router from './router'
-import store from './store'
+import App from './App.vue'
 
- 
+import SpinnerLoader from '@/components/UI/SpinnerLoader.vue';
 
-createApp(App).use(store).use(router).mount('#app')
+const components = [SpinnerLoader];
+const store = useStore()
+const app = createApp(App)
+
+
+components.forEach(component => {
+  app.component(component.name, component)
+})
+
+app
+  .use(router)
+  .use(store)
+  .mount('#app')

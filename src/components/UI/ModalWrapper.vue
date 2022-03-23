@@ -6,24 +6,26 @@
 
         <ModalBuyCurrency v-if="modalIndicator !== 'bag'" :currency="modalIndicator"></ModalBuyCurrency>
         <ModalBag v-else></ModalBag>
-
       </div>
     </div>
   </div>
 </template>
 
 <script lang='ts'>
-import ModalBuyCurrency from './ModalBuyCurrency.vue';
+// *ts-ignore
 import ModalBag from './ModalBag.vue';
+import ModalBuyCurrency from './ModalBuyCurrency.vue';
 import { defineComponent, ref } from 'vue';
 export default defineComponent({
-  props: ['modalIndicator'],
+  props: { modalIndicator: String },
   emits: ['close-modal-window'],
-  components: { ModalBuyCurrency, ModalBag },
+  components: {
+    'ModalBuyCurrency': ModalBuyCurrency,
+    'ModalBag': ModalBag,
+
+  },
+  // components: { ModalBuyCurrency, ModalBag },
   setup(props, ctx) {
-
-    console.log(props.modalIndicator);
-
     let amountCurrency = ref('')
 
     const closeCurrencyWindow = () => {
@@ -36,6 +38,7 @@ export default defineComponent({
   }
 })
 </script>
+
 <style lang="scss" scoped>
 .modal__overlay {
   background-color: rgba(22, 22, 22, 0.5);

@@ -1,10 +1,10 @@
-computed, , watch<template>
+<template>
   <nav
     class="footer-nav container-fluid d-flex justify-content-center align-items-stretch"
     aria-label="Page navigation example"
   >
-    <ul class="pagination pagination-lg my-1">
-      <li class="page-item">
+    <ul class="pagination pagination-lg m-0 d-flex align-items-center">
+      <li class="page-item ">
         <a
           class="page-link"
           href="#"
@@ -59,17 +59,20 @@ export default defineComponent({
 })
 </script>
 <style lang='scss' scoped>
+span {
+  display: block;
+}
 .footer-nav {
-  position: fixed;
-  bottom: 0%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   background-color: #f0e6ef;
-  left: 50%;
-  transform: translateX(-50%);
 }
 .pagination {
 }
 .active {
-  background-color: #e8a598;
+  background-color: #bcd4e6;
 }
 .page-item {
 }

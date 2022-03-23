@@ -1,5 +1,5 @@
 <template>
-  <div class="col-4">
+  <div class="col-4 h-100">
     <div class="card">
       <div class="card__header card-header d-flex flex-column align-items-center">
         <h5 class="card__title card-title text-center">{{ name }}</h5>
@@ -90,7 +90,7 @@ export default defineComponent({
   &__text {
     display: flex;
     justify-content: space-between;
-    font-size: 13px;
+    font-size: 11px;
   }
   // card__btn-buy
   &__btn-buy {
