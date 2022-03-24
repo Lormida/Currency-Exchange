@@ -4,13 +4,23 @@ import { SuperStore, useStore } from '@/store'
 import { Currency } from '@/store/state'
 import { State } from '@/store/state'
 import axios from 'axios'
+import { getActualCurrencyPrices } from '@/hooks/getActualCurrencyPrices'
+
+type bagProfitData = {
+  oldBagValue: number,
+  actualBagValue: number,
+  profitPercent: number,
+  profitAbsolute: number,
+}
 
 interface BagActions {
   getBag(): PurchasedCurrency[],
   deleteCurrencyFromBag(currencyName: string): void,
   addCurrencyToBag(currencyName: string, amount: number): any,
   saveBagLocal(bag: PurchasedCurrency[]): void,
-  loadBagLocal(): void
+  loadBagLocal(): void,
+  analyzeBag(currencyPrices: typeof getActualCurrencyPrices, bag: any): Promise<bagProfitData>,
+  calculateActualBagProfit(actualCurrencyPrices: Record<string, number>): bagProfitData
 }
 
 class BagService implements BagActions {
@@ -45,6 +55,35 @@ class BagService implements BagActions {
     if (bag) {
       store.commit(MutationsType.LoadBagLocal, JSON.parse(bag))
     }
+  }
+  analyzeBag(currencyPrices: typeof getActualCurrencyPrices, bag: any) {
+    return currencyPrices(bag)
+      .then(actualCurrencyPrices => {
+        return this.calculateActualBagProfit(actualCurrencyPrices)
+      })
+  }
+
+  updateInfoBag(currencyPrices: typeof getActualCurrencyPrices, bag: any) {
+    this.analyzeBag(currencyPrices, bag)
+      .then(actualBagProfit => {
+        store.commit(MutationsType.ChangeActualBagData, actualBagProfit)
+      })
+  }
+
+
+  calculateActualBagProfit(actualCurrencyPrices: Record<string, number>) {
+    const oldBagValue = +this.getBag().reduce((acc: number, purchasedCurrency: PurchasedCurrency) => {
+      return acc + purchasedCurrency.purchasePriceUsd * purchasedCurrency.amount
+    }, 0).toFixed(2)
+
+    const actualBagValue = +this.getBag().reduce((acc: number, purchasedCurrency: PurchasedCurrency) => {
+      return acc + actualCurrencyPrices[purchasedCurrency.name] * purchasedCurrency.amount
+    }, 0).toFixed(2)
+
+    const profitPercent = +(((actualBagValue - oldBagValue) / oldBagValue) * 100).toFixed(2)
+    const profitAbsolute = +(actualBagValue - oldBagValue).toFixed(2)
+
+    return { oldBagValue, actualBagValue, profitPercent, profitAbsolute }
   }
 
 

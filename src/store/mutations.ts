@@ -12,6 +12,7 @@ export enum MutationsType {
   DeleteCurrencyFromBag = 'DELETE_CURRENCY_FROM_BAG',
   AddCurrencyToBag = 'ADD_CURRENCY_TO_BAG',
   LoadBagLocal = 'LOAD_BAG_LOCAL',
+  ChangeActualBagData = 'CHANGE_ACTUAL_BAG_DATA',
 }
 
 export interface Mutations {
@@ -25,6 +26,7 @@ export interface Mutations {
   [MutationsType.DeleteCurrencyFromBag](state: State, currencyName: string): void,
   [MutationsType.AddCurrencyToBag](state: State, newCurrency: PurchasedCurrency): void,
   [MutationsType.LoadBagLocal](state: State, bag: PurchasedCurrency[]): void,
+  [MutationsType.ChangeActualBagData](state: State, actualBagProfit: any): void,
 }
 
 export const mutations: MutationTree<State> & Mutations = {
@@ -56,8 +58,6 @@ export const mutations: MutationTree<State> & Mutations = {
   },
   [MutationsType.AddCurrencyToBag](state, newCurrency: PurchasedCurrency) {
 
-    console.log('New currency: ', newCurrency);
-
     const findIndex = state.bag.findIndex((currency: PurchasedCurrency) => currency.name === newCurrency.name)
 
     // If currency already exists - increase its amount
@@ -78,4 +78,12 @@ export const mutations: MutationTree<State> & Mutations = {
   [MutationsType.LoadBagLocal](state, bag) {
     state.bag = bag
   },
+  [MutationsType.ChangeActualBagData](state, actualBagProfit) {
+    const { oldBagValue, actualBagValue, profitPercent, profitAbsolute } = actualBagProfit
+
+    state.actualBagData.oldBagValue = oldBagValue
+    state.actualBagData.actualBagValue = actualBagValue
+    state.actualBagData.profitPercent = profitPercent
+    state.actualBagData.profitAbsolute = profitAbsolute
+  }
 }

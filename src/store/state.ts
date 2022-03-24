@@ -1,3 +1,5 @@
+import { reactive } from "vue"
+
 type Currency = {
   id: string
   rank: string,
@@ -23,6 +25,7 @@ type State = {
   isLoading: boolean,
   modal: Modal,
   bag: PurchasedCurrency[]
+  actualBagData: typeof reactive | any,
 }
 type PurchasedCurrency = {
   name: string,
@@ -40,6 +43,12 @@ const state: State = {
     isModalOpen: false
   },
   bag: [] as PurchasedCurrency[],
+  actualBagData: reactive({
+    oldBagValue: 0,
+    actualBagValue: 0,
+    profitPercent: 0,
+    profitAbsolute: 0,
+  }),
 }
 
 export { state, State, Currency, PurchasedCurrency }

@@ -19,26 +19,26 @@
         <img class="nav__bag-image" src="@/assets/svg/bag-fill.svg" alt="bag" />
       </a>
       <div class="bag__tooltip p-1 bag--hide-tooltip">
-        Before: ${{ actualBagData.oldBagValue }}
+        Before: ${{ getActualBagData.oldBagValue }}
         <br />
-        Today : ${{ actualBagData.actualBagValue }}
+        Today : ${{ getActualBagData.actualBagValue }}
         <span
           style="color: #555b6e"
-        >({{ actualBagData.profitPercent }}%)</span>
+        >({{ getActualBagData.profitPercent }}%)</span>
       </div>
       <div
         class="bag__label m-1 flex-grow-1 py-2 fs-5 text-center align-self-start mt-4 border border-dark border-2"
       >
-        ${{ actualBagData.actualBagValue }}
+        ${{ getActualBagData.actualBagValue }}
         <span
           style="color: #555b6e; border-bottom: 1px #222 solid;"
-        >({{ actualBagData.profitPercent }}%)</span>
+        >({{ getActualBagData.profitPercent }}%)</span>
       </div>
     </div>
   </nav>
 </template>
 <script lang="ts">
-import { onMounted, reactive, ref } from 'vue';
+import { computed, onMounted, reactive, ref } from 'vue';
 import axios from 'axios'
 import ModalService from '@/utils/ModalService'
 import { defineComponent } from 'vue';
@@ -47,35 +47,14 @@ import { Currency, PurchasedCurrency } from '@/store/state';
 import ApiService from '@/utils/ApiService';
 import BagService from '@/utils/BagService';
 import { getActualCurrencyPrices } from '@/hooks/getActualCurrencyPrices'
+import { useStore } from '@/store';
 export default defineComponent({
   components: { CardCurrency },
   setup() {
     let currencies = ref()
     let isLoading = ref(true)
-    const actualBagData = reactive({
-      oldBagValue: 0,
-      actualBagValue: 0,
-      profitPercent: 0,
-      profitAbsolute: 0,
-    })
+    const store = useStore()
 
-    const calculateActualBagProfit = ({ ...actualBagData }: any, actualCurrencyPrices: Record<string, number>) => {
-
-      actualBagData.oldBagValue = +BagService.getBag().reduce((acc: number, purchasedCurrency: PurchasedCurrency) => {
-        return acc + purchasedCurrency.purchasePriceUsd * purchasedCurrency.amount
-      }, 0).toFixed(2)
-
-      actualBagData.actualBagValue = +BagService.getBag().reduce((acc: number, purchasedCurrency: PurchasedCurrency) => {
-        return acc + actualCurrencyPrices[purchasedCurrency.name] * purchasedCurrency.amount
-      }, 0).toFixed(2)
-
-      actualBagData.profitPercent =
-        +(((actualBagData.actualBagValue - actualBagData.oldBagValue) / actualBagData.oldBagValue) * 100).toFixed(2)
-
-      actualBagData.profitAbsolute = +(actualBagData.actualBagValue - actualBagData.oldBagValue).toFixed(2)
-
-      return actualBagData
-    }
     const initTooltip = () => {
       const tooltip = document.querySelector('.bag__tooltip') as Element
       const tooltipParent = document.querySelector('.nav__bag-link') as Element
@@ -90,24 +69,19 @@ export default defineComponent({
       ModalService.changeCurrentModalIndicator(currentModalIndicator)
       ModalService.changeModalState(true)
     }
-    const analyzeBag = () => {
-      getActualCurrencyPrices(BagService.getBag())
-        .then(actualCurrencyPrices => {
-          const { oldBagValue, actualBagValue, profitPercent, profitAbsolute } = calculateActualBagProfit(actualBagData, actualCurrencyPrices)
-
-          actualBagData.oldBagValue = oldBagValue
-          actualBagData.actualBagValue = actualBagValue
-          actualBagData.profitPercent = profitPercent
-          actualBagData.profitAbsolute = profitAbsolute
-
-        })
-    }
+    const getActualBagData = computed(() => store.getters.getActualBagData)
 
     //* loading bag from LocalStorage
     BagService.loadBagLocal();
 
-    //* Get info about bag
-    analyzeBag()
+    //* Update info about bag
+    BagService.updateInfoBag(getActualCurrencyPrices, BagService.getBag())
+
+    //* Interval updating bag data
+    setInterval(() => {
+      BagService.updateInfoBag(getActualCurrencyPrices, BagService.getBag())
+    }, 30000)
+
 
     onMounted(() => {
 
@@ -123,7 +97,7 @@ export default defineComponent({
 
 
 
-    return { currencies, isLoading, openModal, actualBagData }
+    return { currencies, isLoading, openModal, getActualBagData }
   }
 })
 </script>

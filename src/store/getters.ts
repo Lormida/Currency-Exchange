@@ -12,6 +12,7 @@ export type Getters = {
   getCurrentModalIndicator(state: State): string,
   getDetailCurrency(state: State, getters: Getters): CustomGetter;
   getBag(state: State, getters: Getters): PurchasedCurrency[];
+  getActualBagData(state: State): any
 }
 
 export const getters: GetterTree<State, State> & Getters = {
@@ -40,6 +41,9 @@ export const getters: GetterTree<State, State> & Getters = {
   },
   getBag(state) {
     return state.bag
+  },
+  getActualBagData(state) {
+    return state.actualBagData
   }
 
 }

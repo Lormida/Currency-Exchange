@@ -80,7 +80,13 @@ export default defineComponent({
       })
 
 
-    const removeCurrency = (currencyName: string) => BagService.deleteCurrencyFromBag(currencyName);
+    const removeCurrency = (currencyName: string) => {
+      BagService.deleteCurrencyFromBag(currencyName);
+
+      //* Update info about bag
+      BagService.updateInfoBag(getActualCurrencyPrices, BagService.getBag())
+    }
+
     const openModal = (currentModalIndicator: string) => {
       ModalService.changeCurrentModalIndicator(currentModalIndicator);
       ModalService.changeModalState(true);
