@@ -50,11 +50,13 @@ export const mutations: MutationTree<State> & Mutations = {
   [MutationsType.ChangeCurrentModalIndicator](state, currentModalIndicator) {
     state.modal.currentModalIndicator = currentModalIndicator
   },
-  
+
   [MutationsType.DeleteCurrencyFromBag](state, currencyName: string) {
     state.bag = [].filter.call(state.bag, ((currency: PurchasedCurrency) => currency.name !== currencyName))
   },
   [MutationsType.AddCurrencyToBag](state, newCurrency: PurchasedCurrency) {
+
+    console.log('New currency: ', newCurrency);
 
     const findIndex = state.bag.findIndex((currency: PurchasedCurrency) => currency.name === newCurrency.name)
 

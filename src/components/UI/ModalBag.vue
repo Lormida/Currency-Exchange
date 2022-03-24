@@ -16,14 +16,12 @@
               </tr>
             </thead>
             <tbody>
-              >
               <tr v-for="(currency, index) of getBag" :key="currency.name">
                 <th scope="row" class="col-1">{{ index + 1 }}</th>
                 <td class="col-1">{{ currency.symbol }}</td>
                 <td
                   v-if="!getCustomIsLoading"
                   class="col-2"
-                  v-cloak
                 >{{ (+bagCurrencyActualPrices[currency.name]).toFixed(2) }}</td>
                 <td style="position:relative" p-0 v-else class="col-2">
                   <SpinnerLoader size="small"></SpinnerLoader>
@@ -32,7 +30,6 @@
                 <td
                   v-if="!getCustomIsLoading"
                   class="col-2"
-                  v-cloak
                 >{{ ((((bagCurrencyActualPrices[currency.name]) / currency.purchasePriceUsd) - 1) * 100).toFixed(2) }}%</td>
                 <td style="position:relative" p-0 v-else class="col-2">
                   <SpinnerLoader size="small"></SpinnerLoader>
@@ -64,9 +61,9 @@ export default defineComponent({
   setup() {
 
     const customIsLoading = ref(true)
+    const bagCurrencyActualPrices: any = ref({});
     const getCustomIsLoading = computed(() => customIsLoading.value)
 
-    const bagCurrencyActualPrices: any = ref({});
     // loading bag from LocalStorage
     BagService.loadBagLocal();
     const getBag = computed(() => BagService.getBag());
@@ -108,6 +105,8 @@ export default defineComponent({
   border-radius: 10px;
   box-shadow: 0px 0px 13px 10px rgba(41, 61, 77, 0.2);
   min-height: 100px;
+  max-height: 600px;
+  overflow: auto;
   // .bag__table
 
   &__table {

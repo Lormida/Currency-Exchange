@@ -6,7 +6,7 @@
 
         <ModalBuyCurrency
           v-if="getCurrentModalIndicator !== 'bag'"
-          :currency="getCurrentModalIndicator"
+          :currency="getCurrentModalIndicator.toLowerCase()"
         ></ModalBuyCurrency>
         <ModalBag v-else></ModalBag>
       </div>

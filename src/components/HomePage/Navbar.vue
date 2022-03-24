@@ -19,15 +19,18 @@
         <img class="nav__bag-image" src="@/assets/svg/bag-fill.svg" alt="bag" />
       </a>
       <div class="bag__tooltip p-1 bag--hide-tooltip">
-        Last purchase: $4000
-        <br />Today : $8000
-        <span style="color: #555b6e">(+100%)</span>
+        Before: ${{ oldBagValue }}
+        <br />
+        Today : ${{ actualBagValue }}
+        <span style="color: #555b6e">({{ profitPercent }}%)</span>
       </div>
       <div
         class="bag__label m-1 flex-grow-1 py-2 fs-5 text-center align-self-start mt-4 border border-dark border-2"
       >
-        $8000
-        <span style="color: #555b6e; border-bottom: 1px #222 solid;">(+100%)</span>
+        ${{ actualBagValue }}
+        <span
+          style="color: #555b6e; border-bottom: 1px #222 solid;"
+        >({{ profitPercent }}%)</span>
       </div>
     </div>
   </nav>
@@ -38,11 +41,66 @@ import axios from 'axios'
 import ModalService from '@/utils/ModalService'
 import { defineComponent } from 'vue';
 import CardCurrency from '@/components/UI/CardCurrency.vue';
+import { Currency, PurchasedCurrency } from '@/store/state';
+import ApiService from '@/utils/ApiService';
+import BagService from '@/utils/BagService';
 export default defineComponent({
   components: { CardCurrency },
   setup() {
     let currencies = ref()
     let isLoading = ref(true)
+    const bagCurrencyActualPrices: any = ref({});
+
+    const oldBagValue = ref(0)
+    const actualBagValue = ref(0)
+
+    const profitPercent = ref(0)
+    const profitAbsolute = ref(0)
+
+
+    /////////////
+    // loading bag from LocalStorage
+    BagService.loadBagLocal();
+
+    const actualizeCurrencyPrices = () => {
+      const bagCurrencyPromises = [] as Promise<Currency>[];
+      BagService.getBag().forEach((currency: PurchasedCurrency) => {
+        bagCurrencyPromises.push(ApiService.getSpecificCurrency(currency.name))
+      });
+
+      Promise.all(bagCurrencyPromises)
+        .then((purchasedCurrencies: Currency[]) => {
+          purchasedCurrencies.forEach((purchasedCurrency: Currency) => {
+            bagCurrencyActualPrices.value[`${purchasedCurrency.id}`] = purchasedCurrency.priceUsd;
+          });
+        })
+        // .then(() => customIsLoading.value = false)
+        .then(() => {
+          oldBagValue.value = +BagService.getBag().reduce((acc: number, purchasedCurrency: PurchasedCurrency) => {
+            return acc + purchasedCurrency.purchasePriceUsd * purchasedCurrency.amount
+          }, 0).toFixed(2)
+
+          actualBagValue.value = +BagService.getBag().reduce((acc: number, purchasedCurrency: PurchasedCurrency) => {
+            return acc + bagCurrencyActualPrices.value[purchasedCurrency.name] * purchasedCurrency.amount
+          }, 0).toFixed(2)
+
+
+          profitPercent.value = +(((actualBagValue.value - oldBagValue.value) / oldBagValue.value) * 100).toFixed(2)
+          profitAbsolute.value = +(actualBagValue.value - oldBagValue.value).toFixed(2)
+
+          console.log(profitPercent.value);
+          console.log(profitAbsolute.value);
+
+
+          console.log(oldBagValue.value);
+          console.log(actualBagValue.value);
+
+        })
+    };
+
+    // Get actual prices to purchased currency
+    actualizeCurrencyPrices();
+    /////////////
 
     onMounted(() => {
 
@@ -68,8 +126,7 @@ export default defineComponent({
       ModalService.changeModalState(true)
     }
 
-
-    return { currencies, isLoading, openModal }
+    return { currencies, isLoading, openModal, profitPercent, profitAbsolute, oldBagValue, actualBagValue }
   }
 })
 </script>
@@ -84,6 +141,8 @@ export default defineComponent({
   // .nav__card-currency-wrapper
 
   &__card-currency-wrapper {
+    box-shadow: rgba(50, 50, 93, 0.25) 0px 13px 27px -5px,
+      rgba(0, 0, 0, 0.3) 0px 8px 16px -8px;
     border: 3px #222 dashed;
     background-color: #ece4db;
     height: 100%;
@@ -92,6 +151,8 @@ export default defineComponent({
   // .nav__bag
 
   &__bag {
+    box-shadow: rgba(50, 50, 93, 0.25) 0px 13px 27px -5px,
+      rgba(0, 0, 0, 0.3) 0px 8px 16px -8px;
     position: relative;
     border: 3px #222 dashed;
     background-color: #f8edeb;

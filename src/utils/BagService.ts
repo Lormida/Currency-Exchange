@@ -28,7 +28,7 @@ class BagService implements BagActions {
       .then(response => response.data)
       .then(({ data }) => {
         let { symbol, id: name, priceUsd } = data
-        priceUsd = (+priceUsd).toFixed(2)
+        priceUsd = (+priceUsd)
         const newCurrency = { name, symbol, amount, purchasePriceUsd: priceUsd } as PurchasedCurrency
 
         store.commit(MutationsType.AddCurrencyToBag, newCurrency)
