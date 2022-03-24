@@ -28,6 +28,9 @@ export default defineComponent({
   font-family: "Inter", sans-serif;
   box-sizing: border-box;
 }
+[v-cloak] {
+  display: none !important;
+}
 .page-enter-from,
 .page-leave-to {
   opacity: 0;

@@ -9,33 +9,43 @@ interface BagActions {
   getBag(): PurchasedCurrency[],
   deleteCurrencyFromBag(currencyName: string): void,
   addCurrencyToBag(currencyName: string, amount: number): any,
+  saveBagLocal(bag: PurchasedCurrency[]): void,
+  loadBagLocal(): void
 }
 
 class BagService implements BagActions {
   constructor(private store: SuperStore) { }
   getBag(): PurchasedCurrency[] {
-    return this.store.getters.getBag
+    return store.getters.getBag
   }
   deleteCurrencyFromBag(currencyName: string): void {
-    this.store.commit(MutationsType.DeleteCurrencyFromBag, currencyName)
+    store.commit(MutationsType.DeleteCurrencyFromBag, currencyName)
+    this.saveBagLocal(store.getters.getBag)
   }
   addCurrencyToBag(currencyName: string, amount: number): any {
 
-    return new Promise((resolve) => {
-      axios.get(`https://api.coincap.io/v2/assets/${currencyName}`)
-        .then(response => response.data)
-        .then(({ data }) => {
-          let { symbol: name, priceUsd } = data
-          priceUsd = (+priceUsd).toFixed(2)
-          const newCurrency = { name, amount, purchasePriceUsd: priceUsd, currentPriceUsd: priceUsd } as PurchasedCurrency
-          this.store.commit(MutationsType.AddCurrencyToBag, newCurrency)
-          resolve(true)
-        })
-        .catch(e => console.log(e))
-    })
+    return axios.get(`https://api.coincap.io/v2/assets/${currencyName}`)
+      .then(response => response.data)
+      .then(({ data }) => {
+        let { symbol, id: name, priceUsd } = data
+        priceUsd = (+priceUsd).toFixed(2)
+        const newCurrency = { name, symbol, amount, purchasePriceUsd: priceUsd } as PurchasedCurrency
+
+        store.commit(MutationsType.AddCurrencyToBag, newCurrency)
+        this.saveBagLocal(store.getters.getBag)
+      })
+      .catch(e => console.log(e))
 
   }
-
+  saveBagLocal(bag: PurchasedCurrency[]) {
+    localStorage.setItem('bag', JSON.stringify(bag));
+  }
+  loadBagLocal() {
+    const bag = localStorage.getItem('bag')
+    if (bag) {
+      store.commit(MutationsType.LoadBagLocal, JSON.parse(bag))
+    }
+  }
 
 
 }

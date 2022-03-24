@@ -19,7 +19,7 @@
         <img class="nav__bag-image" src="@/assets/svg/bag-fill.svg" alt="bag" />
       </a>
       <div class="bag__tooltip p-1 bag--hide-tooltip">
-        Before: $4000
+        Last purchase: $4000
         <br />Today : $8000
         <span style="color: #555b6e">(+100%)</span>
       </div>

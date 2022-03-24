@@ -11,22 +11,36 @@
                 <th scope="col" class="col-2">Current price</th>
                 <th scope="col" class="col-2">Amount</th>
                 <th scope="col" class="col-2">Profit</th>
-                <th scope="col" class="col-1">Buy</th>
+                <!-- <th scope="col" class="col-1">Buy</th> -->
                 <th scope="col" class="col-1">Remove</th>
               </tr>
             </thead>
             <tbody>
+              >
               <tr v-for="(currency, index) of getBag" :key="currency.name">
                 <th scope="row" class="col-1">{{ index + 1 }}</th>
-                <td class="col-1">{{ currency.name }}</td>
-                <td class="col-2">${{ currency.currentPriceUsd }}</td>
+                <td class="col-1">{{ currency.symbol }}</td>
+                <td
+                  v-if="!getCustomIsLoading"
+                  class="col-2"
+                  v-cloak
+                >{{ (+bagCurrencyActualPrices[currency.name]).toFixed(2) }}</td>
+                <td style="position:relative" p-0 v-else class="col-2">
+                  <SpinnerLoader size="small"></SpinnerLoader>
+                </td>
                 <td class="col-2">{{ currency.amount }}</td>
                 <td
+                  v-if="!getCustomIsLoading"
                   class="col-2"
-                >{{ (((currency.currentPriceUsd / currency.purchasePriceUsd) - 1) * 100).toFixed(2) }}%</td>
-                <td class="col-1" @click="openModal(currency.name)">
-                  <div class="bag__buy-more-btn mx-auto"></div>
+                  v-cloak
+                >{{ ((((bagCurrencyActualPrices[currency.name]) / currency.purchasePriceUsd) - 1) * 100).toFixed(2) }}%</td>
+                <td style="position:relative" p-0 v-else class="col-2">
+                  <SpinnerLoader size="small"></SpinnerLoader>
                 </td>
+
+                <!--  <td class="col-1" @click="openModal(currency.name)">
+                  <div class="bag__buy-more-btn mx-auto"></div>
+                </td>-->
                 <td class="col-1" @click="removeCurrency(currency.name)">
                   <div class="bag__trash-btn mx-auto"></div>
                 </td>
@@ -39,24 +53,52 @@
   </div>
 </template>
 <script lang='ts'>
-import { computed, defineComponent } from 'vue';
+import { computed, defineComponent, ref } from 'vue';
 import BagService from '@/utils/BagService'
 import ModalService from '@/utils/ModalService';
+import ApiService from '@/utils/ApiService';
+import { Currency, PurchasedCurrency } from '@/store/state';
+import SpinnerLoader from './SpinnerLoader.vue';
+import { useStore } from '@/store';
 export default defineComponent({
-  setup(props) {
+  setup() {
 
-    const getBag = computed(() => BagService.getBag())
+    const customIsLoading = ref(true)
+    const getCustomIsLoading = computed(() => customIsLoading.value)
 
-    const removeCurrency = (currencyName: string) => BagService.deleteCurrencyFromBag(currencyName)
+    const bagCurrencyActualPrices: any = ref({});
+    // loading bag from LocalStorage
+    BagService.loadBagLocal();
+    const getBag = computed(() => BagService.getBag());
 
+
+    const actualizeCurrencyPrices = () => {
+      const bagCurrencyPromises = [] as Promise<Currency>[];
+      BagService.getBag().forEach((currency: PurchasedCurrency) =>
+        bagCurrencyPromises.push(ApiService.getSpecificCurrency(currency.name)));
+
+      Promise.all(bagCurrencyPromises)
+        .then((purchasedCurrencies: Currency[]) => {
+          purchasedCurrencies.forEach((purchasedCurrency: Currency) => {
+            bagCurrencyActualPrices.value[`${purchasedCurrency.id}`] = purchasedCurrency.priceUsd;
+          });
+        })
+        .then(() => customIsLoading.value = false)
+    };
+
+    // Get actual prices to purchased currency
+    actualizeCurrencyPrices();
+
+
+    const removeCurrency = (currencyName: string) => BagService.deleteCurrencyFromBag(currencyName);
     const openModal = (currentModalIndicator: string) => {
-      ModalService.changeCurrentModalIndicator(currentModalIndicator)
-      ModalService.changeModalState(true)
-    }
+      ModalService.changeCurrentModalIndicator(currentModalIndicator);
+      ModalService.changeModalState(true);
+    };
 
-    return { getBag, openModal, removeCurrency }
-
-  }
+    return { getBag, openModal, removeCurrency, bagCurrencyActualPrices, getCustomIsLoading };
+  },
+  components: { SpinnerLoader }
 })
 </script>
 <style lang='scss' scoped>

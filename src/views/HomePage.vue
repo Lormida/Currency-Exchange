@@ -86,6 +86,7 @@ export default defineComponent({
   height: 33%;
 }
 .main {
+  position: relative;
   height: 58%;
   // background-color: rgba(156, 197, 161, 0.35);
   background-color: rgba(22, 22, 22, 0.85);

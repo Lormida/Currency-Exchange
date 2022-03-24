@@ -67,12 +67,12 @@ export default defineComponent({
       return `${divide * 100}% of total supply`
     })
 
-    const openModal = (currentModalIndicator: string) => {   
+    const openModal = (currentModalIndicator: string) => {
       ModalService.changeCurrentModalIndicator(currentModalIndicator)
       ModalService.changeModalState(true)
     }
 
-    ApiService.getCurrentCurrency(props.id)
+    ApiService.loadCurrentCurrency(props.id)
       .then(() => {
         ApiService.setLoading(false)
       })

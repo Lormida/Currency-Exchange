@@ -26,9 +26,9 @@ type State = {
 }
 type PurchasedCurrency = {
   name: string,
+  symbol: string,
   amount: number
   purchasePriceUsd: number,
-  currentPriceUsd: number,
 }
 
 const state: State = {
@@ -39,20 +39,7 @@ const state: State = {
     currentModalIndicator: '',
     isModalOpen: false
   },
-  bag: [
-    {
-      name: 'BTC',
-      amount: 2,
-      purchasePriceUsd: 35000,
-      currentPriceUsd: 40000,
-    },
-    {
-      name: 'RPX',
-      amount: 141,
-      purchasePriceUsd: 4,
-      currentPriceUsd: 3,
-    }
-  ] as PurchasedCurrency[],
+  bag: [] as PurchasedCurrency[],
 }
 
 export { state, State, Currency, PurchasedCurrency }

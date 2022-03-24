@@ -5,8 +5,8 @@ import { Getters } from './getters'
 import axios from 'axios'
 
 export enum ActionsType {
-  getAllCurrencies = 'GET_ALL_ITEMS',
-  getCurrentCurrency = "GET_CURRENT_CURRENCY"
+  LoadAllCurrencies = 'GET_ALL_ITEMS',
+  LoadCurrentCurrency = "LOAD_CURRENT_CURRENCY",
 }
 
 type AugmentedAction = Omit<ActionContext<State, State>, 'commit'> & {
@@ -17,12 +17,12 @@ type AugmentedAction = Omit<ActionContext<State, State>, 'commit'> & {
 }
 
 export interface Actions {
-  [ActionsType.getAllCurrencies](context: AugmentedAction, params: { currentPage: number, limit: number }): void,
-  [ActionsType.getCurrentCurrency](context: AugmentedAction, currencyName: string): void
+  [ActionsType.LoadAllCurrencies](context: AugmentedAction, params: { currentPage: number, limit: number }): void,
+  [ActionsType.LoadCurrentCurrency](context: AugmentedAction, currencyName: string): void,
 }
 
 export const actions: ActionTree<State, State> & Actions = {
-  [ActionsType.getAllCurrencies](context, { currentPage, limit }) {
+  [ActionsType.LoadAllCurrencies](context, { currentPage, limit }) {
     context.commit(MutationsType.SetLoading, true)
 
     axios.get('https://api.coincap.io/v2/assets', { params: { offset: (currentPage - 1) * limit, limit } })
@@ -37,7 +37,7 @@ export const actions: ActionTree<State, State> & Actions = {
 
       })
   },
-  [ActionsType.getCurrentCurrency](context, currencyName) {
+  [ActionsType.LoadCurrentCurrency](context, currencyName) {
 
     context.commit(MutationsType.SetLoading, true)
 
