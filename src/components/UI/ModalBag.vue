@@ -22,7 +22,7 @@
                 <td
                   v-if="!getCustomIsLoading"
                   class="col-2"
-                >{{ (+bagCurrencyActualPrices[currency.name]).toFixed(2) }}</td>
+                >{{ (+getBagCurrencyActualPrices[currency.name]).toFixed(2) }}</td>
                 <td style="position:relative" p-0 v-else class="col-2">
                   <SpinnerLoader size="small"></SpinnerLoader>
                 </td>
@@ -30,7 +30,7 @@
                 <td
                   v-if="!getCustomIsLoading"
                   class="col-2"
-                >{{ ((((bagCurrencyActualPrices[currency.name]) / currency.purchasePriceUsd) - 1) * 100).toFixed(2) }}%</td>
+                >{{ ((((getBagCurrencyActualPrices[currency.name]) / currency.purchasePriceUsd) - 1) * 100).toFixed(2) }}%</td>
                 <td style="position:relative" p-0 v-else class="col-2">
                   <SpinnerLoader size="small"></SpinnerLoader>
                 </td>
@@ -50,41 +50,34 @@
   </div>
 </template>
 <script lang='ts'>
-import { computed, defineComponent, ref } from 'vue';
+import { computed, defineComponent, ref, reactive } from 'vue';
 import BagService from '@/utils/BagService'
 import ModalService from '@/utils/ModalService';
 import ApiService from '@/utils/ApiService';
 import { Currency, PurchasedCurrency } from '@/store/state';
 import SpinnerLoader from './SpinnerLoader.vue';
 import { useStore } from '@/store';
+import { getActualCurrencyPrices } from '@/hooks/getActualCurrencyPrices'
 export default defineComponent({
   setup() {
 
     const customIsLoading = ref(true)
-    const bagCurrencyActualPrices: any = ref({});
+
     const getCustomIsLoading = computed(() => customIsLoading.value)
+    const getBagCurrencyActualPrices = computed(() => bagCurrencyActualPrices.value)
 
     // loading bag from LocalStorage
     BagService.loadBagLocal();
     const getBag = computed(() => BagService.getBag());
 
 
-    const actualizeCurrencyPrices = () => {
-      const bagCurrencyPromises = [] as Promise<Currency>[];
-      BagService.getBag().forEach((currency: PurchasedCurrency) =>
-        bagCurrencyPromises.push(ApiService.getSpecificCurrency(currency.name)));
-
-      Promise.all(bagCurrencyPromises)
-        .then((purchasedCurrencies: Currency[]) => {
-          purchasedCurrencies.forEach((purchasedCurrency: Currency) => {
-            bagCurrencyActualPrices.value[`${purchasedCurrency.id}`] = purchasedCurrency.priceUsd;
-          });
-        })
-        .then(() => customIsLoading.value = false)
-    };
-
     // Get actual prices to purchased currency
-    actualizeCurrencyPrices();
+    let bagCurrencyActualPrices = ref<Record<string, number>>({})
+    getActualCurrencyPrices(BagService.getBag())
+      .then(actualCurrencyPrices => {
+        bagCurrencyActualPrices.value = actualCurrencyPrices
+        customIsLoading.value = false
+      })
 
 
     const removeCurrency = (currencyName: string) => BagService.deleteCurrencyFromBag(currencyName);
@@ -93,7 +86,7 @@ export default defineComponent({
       ModalService.changeModalState(true);
     };
 
-    return { getBag, openModal, removeCurrency, bagCurrencyActualPrices, getCustomIsLoading };
+    return { getBag, openModal, removeCurrency, getCustomIsLoading, getBagCurrencyActualPrices };
   },
   components: { SpinnerLoader }
 })

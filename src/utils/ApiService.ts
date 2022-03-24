@@ -8,7 +8,8 @@ import axios from 'axios'
 
 interface ApiFetching {
   getAllCurrencies(params: { currentPage: number, limit: number }): void,
-  getSpecificCurrency(currencyName: string): Promise<PurchasedCurrency>,
+  getSpecificCurrency(currencyName: string): Promise<Currency>,
+  getTop3Currencies(): Promise<Currency[]>,
   loadCurrentCurrency(currencyName: string): void,
   setLoading(loadingStatus: boolean): void,
 }
@@ -25,6 +26,10 @@ class ApiService implements ApiFetching {
   }
   async loadCurrentCurrency(currencyName: string) {
     await this.store.dispatch(ActionsType.LoadCurrentCurrency, currencyName)
+  }
+  async getTop3Currencies() {
+    const response = (await axios.get(`https://api.coincap.io/v2/assets?limit=3`)).data
+    return response.data
   }
   setLoading(loadingStatus: boolean) {
     this.store.commit(MutationsType.SetLoading, loadingStatus)

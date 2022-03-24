@@ -3,7 +3,7 @@
     <!-- Cards -->
     <div class="nav__card-currency-wrapper row p-3 col-7">
       <CardCurrency
-        v-for="(currency, index) of currencies.data"
+        v-for="(currency, index) of currencies"
         :key="currency.id"
         :name="currency.name"
         :changePercent24Hr="currency.changePercent24Hr"
@@ -19,24 +19,26 @@
         <img class="nav__bag-image" src="@/assets/svg/bag-fill.svg" alt="bag" />
       </a>
       <div class="bag__tooltip p-1 bag--hide-tooltip">
-        Before: ${{ oldBagValue }}
+        Before: ${{ actualBagData.oldBagValue }}
         <br />
-        Today : ${{ actualBagValue }}
-        <span style="color: #555b6e">({{ profitPercent }}%)</span>
+        Today : ${{ actualBagData.actualBagValue }}
+        <span
+          style="color: #555b6e"
+        >({{ actualBagData.profitPercent }}%)</span>
       </div>
       <div
         class="bag__label m-1 flex-grow-1 py-2 fs-5 text-center align-self-start mt-4 border border-dark border-2"
       >
-        ${{ actualBagValue }}
+        ${{ actualBagData.actualBagValue }}
         <span
           style="color: #555b6e; border-bottom: 1px #222 solid;"
-        >({{ profitPercent }}%)</span>
+        >({{ actualBagData.profitPercent }}%)</span>
       </div>
     </div>
   </nav>
 </template>
 <script lang="ts">
-import { onMounted, ref } from 'vue';
+import { onMounted, reactive, ref } from 'vue';
 import axios from 'axios'
 import ModalService from '@/utils/ModalService'
 import { defineComponent } from 'vue';
@@ -44,89 +46,84 @@ import CardCurrency from '@/components/UI/CardCurrency.vue';
 import { Currency, PurchasedCurrency } from '@/store/state';
 import ApiService from '@/utils/ApiService';
 import BagService from '@/utils/BagService';
+import { getActualCurrencyPrices } from '@/hooks/getActualCurrencyPrices'
 export default defineComponent({
   components: { CardCurrency },
   setup() {
     let currencies = ref()
     let isLoading = ref(true)
-    const bagCurrencyActualPrices: any = ref({});
-
-    const oldBagValue = ref(0)
-    const actualBagValue = ref(0)
-
-    const profitPercent = ref(0)
-    const profitAbsolute = ref(0)
-
-
-    /////////////
-    // loading bag from LocalStorage
-    BagService.loadBagLocal();
-
-    const actualizeCurrencyPrices = () => {
-      const bagCurrencyPromises = [] as Promise<Currency>[];
-      BagService.getBag().forEach((currency: PurchasedCurrency) => {
-        bagCurrencyPromises.push(ApiService.getSpecificCurrency(currency.name))
-      });
-
-      Promise.all(bagCurrencyPromises)
-        .then((purchasedCurrencies: Currency[]) => {
-          purchasedCurrencies.forEach((purchasedCurrency: Currency) => {
-            bagCurrencyActualPrices.value[`${purchasedCurrency.id}`] = purchasedCurrency.priceUsd;
-          });
-        })
-        // .then(() => customIsLoading.value = false)
-        .then(() => {
-          oldBagValue.value = +BagService.getBag().reduce((acc: number, purchasedCurrency: PurchasedCurrency) => {
-            return acc + purchasedCurrency.purchasePriceUsd * purchasedCurrency.amount
-          }, 0).toFixed(2)
-
-          actualBagValue.value = +BagService.getBag().reduce((acc: number, purchasedCurrency: PurchasedCurrency) => {
-            return acc + bagCurrencyActualPrices.value[purchasedCurrency.name] * purchasedCurrency.amount
-          }, 0).toFixed(2)
-
-
-          profitPercent.value = +(((actualBagValue.value - oldBagValue.value) / oldBagValue.value) * 100).toFixed(2)
-          profitAbsolute.value = +(actualBagValue.value - oldBagValue.value).toFixed(2)
-
-          console.log(profitPercent.value);
-          console.log(profitAbsolute.value);
-
-
-          console.log(oldBagValue.value);
-          console.log(actualBagValue.value);
-
-        })
-    };
-
-    // Get actual prices to purchased currency
-    actualizeCurrencyPrices();
-    /////////////
-
-    onMounted(() => {
-
-      axios.get('https://api.coincap.io/v2/assets?limit=3')
-        .then(({ data }) => {
-          currencies.value = data
-          isLoading.value = false
-        })
-        .then(() => {
-          const tooltip = document.querySelector('.bag__tooltip') as Element
-          const tooltipParent = document.querySelector('.nav__bag-link') as Element
-          tooltipParent.addEventListener('mouseenter', () => {
-            tooltip.classList.remove('bag--hide-tooltip')
-          })
-          tooltipParent.addEventListener('mouseleave', () => {
-            tooltip.classList.add('bag--hide-tooltip')
-          })
-        })
+    const actualBagData = reactive({
+      oldBagValue: 0,
+      actualBagValue: 0,
+      profitPercent: 0,
+      profitAbsolute: 0,
     })
 
+    const calculateActualBagProfit = ({ ...actualBagData }: any, actualCurrencyPrices: Record<string, number>) => {
+
+      actualBagData.oldBagValue = +BagService.getBag().reduce((acc: number, purchasedCurrency: PurchasedCurrency) => {
+        return acc + purchasedCurrency.purchasePriceUsd * purchasedCurrency.amount
+      }, 0).toFixed(2)
+
+      actualBagData.actualBagValue = +BagService.getBag().reduce((acc: number, purchasedCurrency: PurchasedCurrency) => {
+        return acc + actualCurrencyPrices[purchasedCurrency.name] * purchasedCurrency.amount
+      }, 0).toFixed(2)
+
+      actualBagData.profitPercent =
+        +(((actualBagData.actualBagValue - actualBagData.oldBagValue) / actualBagData.oldBagValue) * 100).toFixed(2)
+
+      actualBagData.profitAbsolute = +(actualBagData.actualBagValue - actualBagData.oldBagValue).toFixed(2)
+
+      return actualBagData
+    }
+    const initTooltip = () => {
+      const tooltip = document.querySelector('.bag__tooltip') as Element
+      const tooltipParent = document.querySelector('.nav__bag-link') as Element
+      tooltipParent.addEventListener('mouseenter', () => {
+        tooltip.classList.remove('bag--hide-tooltip')
+      })
+      tooltipParent.addEventListener('mouseleave', () => {
+        tooltip.classList.add('bag--hide-tooltip')
+      })
+    }
     const openModal = (currentModalIndicator: string) => {
       ModalService.changeCurrentModalIndicator(currentModalIndicator)
       ModalService.changeModalState(true)
     }
+    const analyzeBag = () => {
+      getActualCurrencyPrices(BagService.getBag())
+        .then(actualCurrencyPrices => {
+          const { oldBagValue, actualBagValue, profitPercent, profitAbsolute } = calculateActualBagProfit(actualBagData, actualCurrencyPrices)
 
-    return { currencies, isLoading, openModal, profitPercent, profitAbsolute, oldBagValue, actualBagValue }
+          actualBagData.oldBagValue = oldBagValue
+          actualBagData.actualBagValue = actualBagValue
+          actualBagData.profitPercent = profitPercent
+          actualBagData.profitAbsolute = profitAbsolute
+
+        })
+    }
+
+    //* loading bag from LocalStorage
+    BagService.loadBagLocal();
+
+    //* Get info about bag
+    analyzeBag()
+
+    onMounted(() => {
+
+      ApiService.getTop3Currencies()
+        .then((data) => {
+          currencies.value = data
+          isLoading.value = false
+        })
+        .then(() => {
+          initTooltip()
+        })
+    })
+
+
+
+    return { currencies, isLoading, openModal, actualBagData }
   }
 })
 </script>
