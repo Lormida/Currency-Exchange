@@ -37,4 +37,4 @@ const useStore = () => {
 }
 
 
-export { useStore }
+export { useStore, SuperStore }

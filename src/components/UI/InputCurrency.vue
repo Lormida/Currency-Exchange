@@ -1,6 +1,7 @@
 <template>
-  <div class="form-currency__input-wrapper">
+  <div class="form-currency__input-wrapper mx-auto">
     <input
+      @input="recalcValidate"
       v-model="inputRef"
       :class="{ 'error-input': getErrorStatus }"
       class="form-control"
@@ -41,16 +42,17 @@ export default defineComponent({
 
     const { value, errorMessage } = useField("fullName", validateField);
 
+
     let inputRef = ref(value)
 
     const getErrorStatus = computed(() => {
       return typeof validateField(inputRef.value) === 'string' && !(validateField(inputRef.value) === suspendPhrase)
     })
-    const getDisabledBtn = computed(() => typeof validateField(inputRef.value) === 'string')
+    const getDisabledBtn = computed(() => (typeof validateField(inputRef.value) === 'string'))
 
-    watch(getDisabledBtn, (status) => {
-      ctx.emit('recalc-validate', status)
-    })
+    const recalcValidate = () => {
+      ctx.emit('recalc-validate', getDisabledBtn.value, inputRef.value)
+    }
 
 
     return {
@@ -59,6 +61,7 @@ export default defineComponent({
       validateField,
       getErrorStatus,
       getDisabledBtn,
+      recalcValidate
     };
   }
 })
@@ -68,6 +71,7 @@ export default defineComponent({
   // .form-currency__input-wrapper
 
   &__input-wrapper {
+    width: 70%;
   }
 
   // .form-currency__form-message

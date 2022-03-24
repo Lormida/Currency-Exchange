@@ -1,12 +1,15 @@
 import { MutationTree } from 'vuex'
-import { State, Currency } from './state'
+import { State, Currency, PurchasedCurrency } from './state'
 
 export enum MutationsType {
   SetLoading = 'SET_LOADING',
   SaveCurrenciesLocal = 'SAVE_DATA_LOCAL',
   SaveCurrentCurrencyLocal = 'SAVE_CURRENT_CURRENCY_LOCAL',
   ChangeModalState = 'CHANGE_MODAL_STATE',
-  ChangeCurrentModalIndicator = 'CHANGE_CURRENT_MODAL_INDICATOR'
+  ChangeCurrentModalIndicator = 'CHANGE_CURRENT_MODAL_INDICATOR',
+  SavaBagLocal = 'SAVE_BAG_LOCAL',
+  DeleteCurrencyFromBag = 'DELETE_CURRENCY_FROM_BAG',
+  AddCurrencyToBag = 'ADD_CURRENCY_TO_BAG',
 }
 
 export interface Mutations {
@@ -15,6 +18,9 @@ export interface Mutations {
   [MutationsType.SaveCurrentCurrencyLocal](state: State, currentCurrency: Currency): void,
   [MutationsType.ChangeModalState](state: State, stateModal: boolean): void,
   [MutationsType.ChangeCurrentModalIndicator](state: State, currentModalIndicator: string): void,
+  [MutationsType.DeleteCurrencyFromBag](state: State, currencyName: string): void,
+  [MutationsType.AddCurrencyToBag](state: State, newCurrency: PurchasedCurrency): void,
+
 }
 
 export const mutations: MutationTree<State> & Mutations = {
@@ -38,5 +44,30 @@ export const mutations: MutationTree<State> & Mutations = {
   },
   [MutationsType.ChangeCurrentModalIndicator](state, currentModalIndicator) {
     state.modal.currentModalIndicator = currentModalIndicator
+  },
+  [MutationsType.DeleteCurrencyFromBag](state, currencyName: string) {
+    state.bag =
+      [].filter.call(state.bag, ((currency: PurchasedCurrency) => currency.name !== currencyName))
+  },
+  [MutationsType.AddCurrencyToBag](state, newCurrency: PurchasedCurrency) {
+
+    const findIndex = state.bag.findIndex((currency: PurchasedCurrency) => currency.name === newCurrency.name)
+
+    // If currency already exists - increase its amount
+    if (findIndex != - 1) {
+      const oldCurrency = state.bag[findIndex]
+
+      state.bag[findIndex] = {
+        name: newCurrency.name,
+        purchasePriceUsd: newCurrency.currentPriceUsd,
+        currentPriceUsd: newCurrency.currentPriceUsd,
+        amount: +oldCurrency.amount + +newCurrency.amount,
+      }
+    }
+    // If currency doesn't exist in bag - add it
+    else {
+      state.bag.push(newCurrency)
+    }
+
   }
 }

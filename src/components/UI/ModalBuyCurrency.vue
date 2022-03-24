@@ -1,17 +1,17 @@
 <template>
-  <form class="form-currency">
+  <form class="form-currency d-flex flex-column">
     <h3 class="form-currency__title mb-3">
       Specify the sum
       <br />
       <span class="form-currency__label">[{{ String(currency).toUpperCase() }}]</span>
     </h3>
 
-    <InputCurrency @recalc-validate="calcDisabledBtn" :currency="currency"></InputCurrency>
+    <InputCurrency @recalc-validate="recalcValidate" :currency="currency"></InputCurrency>
 
     <button
       :disabled="getDisabledBtn"
-      @click.prevent
-      class="w-100 btn btn-lg btn-primary"
+      @click.prevent="buyCurrency(currency, getCurrentAmount)"
+      class="w-50 mx-auto btn btn-lg btn-primary"
       type="submit"
     >Buy currency</button>
   </form>
@@ -19,19 +19,33 @@
 
 <script lang='ts'>
 import InputCurrency from '@/components/UI/InputCurrency.vue'
+import BagService from '@/utils/BagService';
+import ModalService from '@/utils/ModalService';
 import { computed, defineComponent, ref } from 'vue';
 export default defineComponent({
   props: ['currency'],
   components: { InputCurrency },
   setup(props) {
     const disabledBtnStatus = ref(false)
+    const currentAmount = ref(0)
 
-    const calcDisabledBtn = (state: boolean) => disabledBtnStatus.value = state
+    const getCurrentAmount = computed(() => currentAmount.value)
+
+    const recalcValidate = (state: boolean, amount: number) => {
+      disabledBtnStatus.value = state
+      currentAmount.value = amount
+    }
     const getDisabledBtn = computed(() => disabledBtnStatus.value)
 
+    const buyCurrency = (currencyName: string, amount: number) => {
+      BagService.addCurrencyToBag(currencyName, amount)
+        .then(() => {
+          ModalService.changeModalState(false)
+        })
+    }
 
     return {
-      currency: props.currency, calcDisabledBtn, getDisabledBtn
+      currency: props.currency, recalcValidate, getDisabledBtn, buyCurrency, currentAmount, getCurrentAmount
     };
   }
 })

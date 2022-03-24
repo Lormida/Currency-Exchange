@@ -8,27 +8,26 @@
               <tr>
                 <th scope="col" class="col-1">#</th>
                 <th scope="col" class="col-2">Currency</th>
-                <th scope="col" class="col-3">Current price</th>
-                <th scope="col" class="col-3">Currency gain</th>
-                <th scope="col" class="col-3">Remove</th>
+                <th scope="col" class="col-2">Current price</th>
+                <th scope="col" class="col-2">Amount</th>
+                <th scope="col" class="col-2">Profit</th>
+                <th scope="col" class="col-1">Buy</th>
+                <th scope="col" class="col-1">Remove</th>
               </tr>
             </thead>
             <tbody>
-              <tr>
-                <th scope="row" class="col-1">1</th>
-                <td class="col-2">BTC</td>
-                <td class="col-3">$41414.14</td>
-                <td class="col-3">+25%</td>
-                <td class="col-3">
-                  <div class="bag__trash-btn mx-auto"></div>
+              <tr v-for="(currency, index) of getBag" :key="currency.name">
+                <th scope="row" class="col-1">{{ index + 1 }}</th>
+                <td class="col-1">{{ currency.name }}</td>
+                <td class="col-2">${{ currency.currentPriceUsd }}</td>
+                <td class="col-2">{{ currency.amount }}</td>
+                <td
+                  class="col-2"
+                >{{ (((currency.currentPriceUsd / currency.purchasePriceUsd) - 1) * 100).toFixed(2) }}%</td>
+                <td class="col-1" @click="openModal(currency.name)">
+                  <div class="bag__buy-more-btn mx-auto"></div>
                 </td>
-              </tr>
-              <tr>
-                <th scope="row" class="col-3">2</th>
-                <td class="col-3">RPX</td>
-                <td class="col-3">$4.33</td>
-                <td class="col-3">+12%</td>
-                <td class="col-3">
+                <td class="col-1" @click="removeCurrency(currency.name)">
                   <div class="bag__trash-btn mx-auto"></div>
                 </td>
               </tr>
@@ -40,9 +39,22 @@
   </div>
 </template>
 <script lang='ts'>
-import { defineComponent } from 'vue';
+import { computed, defineComponent } from 'vue';
+import BagService from '@/utils/BagService'
+import ModalService from '@/utils/ModalService';
 export default defineComponent({
   setup(props) {
+
+    const getBag = computed(() => BagService.getBag())
+
+    const removeCurrency = (currencyName: string) => BagService.deleteCurrencyFromBag(currencyName)
+
+    const openModal = (currentModalIndicator: string) => {
+      ModalService.changeCurrentModalIndicator(currentModalIndicator)
+      ModalService.changeModalState(true)
+    }
+
+    return { getBag, openModal, removeCurrency }
 
   }
 })
@@ -57,6 +69,7 @@ export default defineComponent({
   // .bag__table
 
   &__table {
+    th,
     td {
       vertical-align: middle;
     }
@@ -65,8 +78,6 @@ export default defineComponent({
   // .bag__trash-btn
 
   &__trash-btn {
-    // position: absolute;
-    // right: 0;
     width: 33px;
     height: 33px;
     background-color: #000;
@@ -74,6 +85,25 @@ export default defineComponent({
     justify-content: center;
     align-items: center;
     mask-image: url("@/assets/svg/trash.svg");
+    background-color: rgba(0, 0, 0, 0.6);
+    mask-size: contain;
+    mask-position: center;
+    transition: transform 0.3s ease;
+
+    &:hover {
+      cursor: pointer;
+      transform: scale(1.3);
+      background-color: rgba(0, 0, 0, 1);
+    }
+  }
+  &__buy-more-btn {
+    width: 33px;
+    height: 33px;
+    background-color: #000;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    mask-image: url("@/assets/svg/plus.svg");
     background-color: rgba(0, 0, 0, 0.6);
     mask-size: contain;
     mask-position: center;

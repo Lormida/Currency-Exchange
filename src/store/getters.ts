@@ -1,5 +1,5 @@
 import { GetterTree } from 'vuex'
-import { State, state, Currency } from './state'
+import { State, state, Currency, PurchasedCurrency } from './state'
 
 type CustomGetter = (currencyName: string) => number
 
@@ -11,6 +11,7 @@ export type Getters = {
   getIsModalOpen(state: State): boolean,
   getCurrentModalIndicator(state: State): string,
   getDetailCurrency(state: State, getters: Getters): CustomGetter;
+  getBag(state: State, getters: Getters): PurchasedCurrency[];
 }
 
 export const getters: GetterTree<State, State> & Getters = {
@@ -36,6 +37,9 @@ export const getters: GetterTree<State, State> & Getters = {
       const foundCurrency: Currency = ([].filter.call(getters.getCurrencies, fnFit))[0]
       return (+foundCurrency?.supply)
     }
+  },
+  getBag(state) {
+    return state.bag
   }
 
 }
