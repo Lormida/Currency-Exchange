@@ -35,18 +35,13 @@
 </template>
 <script lang='ts'>
 
-import { defineComponent, onMounted, ref } from 'vue';
-import ModalService from '@/utils/ModalService'
+import { defineComponent } from 'vue';
 import {getFormatCurrency} from '@/hooks/getFormatCurrency'
+import { openModal } from '@/hooks/openModal';
 
 export default defineComponent({
   props: ['name', 'changePercent24Hr', 'priceUsd', 'marketCapUsd', 'id', 'index'],
   setup(props) {
-
-    const openModal = (currentModalIndicator: string) => {
-      ModalService.changeCurrentModalIndicator(currentModalIndicator)
-      ModalService.changeModalState(true)
-    }
 
     return {
       name: props.name,

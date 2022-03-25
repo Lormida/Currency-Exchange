@@ -13,28 +13,21 @@ export default defineComponent({
   setup(props) {
 
     const getLoaderAnimation = computed(() => {
-      if (props.size === 'small') {
-        return 'loader-small'
-      } else {
-        return 'loader-default'
-      }
+      if (props.size === 'small') return 'loader-small'
+      else return 'loader-default'
     })
 
     const getLoaderBackground = computed(() => {
       if (props.size === 'small') {
         //
-      } else {
-        return 'background-color: rgba(22, 22, 22, 0.9);'
-      }
+      } else return 'background-color: rgba(22, 22, 22, 0.9);'
     })
 
     const getLoaderColor = computed(() => {
-      if (props.size === 'small') {
-        return 'background-color: rgb(255,255,255);'
-      } else {
-        return 'background-color: #2c2c2c;'
-      }
+      if (props.size === 'small') return 'background-color: rgb(255,255,255);'
+      else return 'background-color: #2c2c2c;'
     })
+
     return { getLoaderAnimation, getLoaderBackground, getLoaderColor }
   }
 })
@@ -83,7 +76,6 @@ export default defineComponent({
     transform: scale(0.7) rotate(360deg);
   }
 }
-
 .loader:before {
   content: "";
   position: absolute;

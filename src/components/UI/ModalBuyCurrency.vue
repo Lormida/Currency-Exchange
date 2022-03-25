@@ -30,12 +30,12 @@ export default defineComponent({
     const currentAmount = ref(0)
 
     const getCurrentAmount = computed(() => currentAmount.value)
+    const getDisabledBtn = computed(() => disabledBtnStatus.value)
 
     const recalcValidate = (state: boolean, amount: number) => {
       disabledBtnStatus.value = state
       currentAmount.value = amount
     }
-    const getDisabledBtn = computed(() => disabledBtnStatus.value)
 
     const buyCurrency = (currencyName: string, amount: number) => {
       BagService.addCurrencyToBag(currencyName, amount)

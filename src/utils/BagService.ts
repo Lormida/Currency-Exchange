@@ -2,42 +2,33 @@ import { MutationsType } from '@/store/mutations'
 import { PurchasedCurrency } from '@/store/state'
 import { SuperStore, useStore } from '@/store'
 import { Currency } from '@/store/state'
-import { State } from '@/store/state'
 import axios from 'axios'
 import { reactive } from 'vue'
 import ApiService from './ApiService'
-
-type bagProfitData = {
-  oldBagValue: number,
-  actualBagValue: number,
-  profitPercent: number,
-  profitAbsolute: number,
-}
-type getActualCurrencyPrices = {
-  (bag: PurchasedCurrency[]): Promise<Record<string, number>>
-}
+import { actualBagDataType, getActualCurrencyPrices } from './types'
 
 interface BagActions {
   getBag(): PurchasedCurrency[],
   deleteCurrencyFromBag(currencyName: string): void,
-  addCurrencyToBag(currencyName: string, amount: number): any,
+  addCurrencyToBag(currencyName: string, amount: number): Promise<any>,
   saveBagLocal(bag: PurchasedCurrency[]): void,
   loadBagLocal(): void,
-  analyzeBag(currencyPrices: getActualCurrencyPrices, bag: any): Promise<bagProfitData>,
-  calculateActualBagProfit(actualCurrencyPrices: object): bagProfitData,
-  getActualCurrencyPrices(bag: PurchasedCurrency[]): Promise<object>
+  analyzeBag(currencyPrices: getActualCurrencyPrices, bag: PurchasedCurrency[]): Promise<actualBagDataType>,
+  calculateActualBagProfit(actualCurrencyPrices: Record<string,number>): actualBagDataType,
+  getActualCurrencyPrices(bag: PurchasedCurrency[]): Promise<Record<string,number>>
 }
 
 class BagService implements BagActions {
   constructor(private store: SuperStore) { }
+
   getBag(): PurchasedCurrency[] {
-    return store.getters.getBag
+    return this.store.getters.getBag
   }
   deleteCurrencyFromBag(currencyName: string): void {
-    store.commit(MutationsType.DeleteCurrencyFromBag, currencyName)
-    this.saveBagLocal(store.getters.getBag)
+    this.store.commit(MutationsType.DeleteCurrencyFromBag, currencyName)
+    this.saveBagLocal(this.store.getters.getBag)
   }
-  addCurrencyToBag(currencyName: string, amount: number): any {
+  addCurrencyToBag(currencyName: string, amount: number): Promise<any> {
 
     return axios.get(`https://api.coincap.io/v2/assets/${currencyName}`)
       .then(response => response.data)
@@ -46,8 +37,8 @@ class BagService implements BagActions {
         priceUsd = (+priceUsd)
         const newCurrency = { name, symbol, amount, purchasePriceUsd: priceUsd } as PurchasedCurrency
 
-        store.commit(MutationsType.AddCurrencyToBag, newCurrency)
-        this.saveBagLocal(store.getters.getBag)
+        this.store.commit(MutationsType.AddCurrencyToBag, newCurrency)
+        this.saveBagLocal(this.store.getters.getBag)
       })
       .catch(e => console.log(e))
 
@@ -58,23 +49,21 @@ class BagService implements BagActions {
   loadBagLocal() {
     const bag = localStorage.getItem('bag')
     if (bag) {
-      store.commit(MutationsType.LoadBagLocal, JSON.parse(bag))
+      this.store.commit(MutationsType.LoadBagLocal, JSON.parse(bag))
     }
   }
-  analyzeBag(currencyPrices: getActualCurrencyPrices, bag: any) {
+  analyzeBag(currencyPrices: getActualCurrencyPrices, bag: PurchasedCurrency[]) {
     return currencyPrices(bag)
       .then((actualCurrencyPrices: Record<string, number>) => {
         return this.calculateActualBagProfit(actualCurrencyPrices)
       })
   }
-
-  updateInfoBag(currencyPrices: getActualCurrencyPrices, bag: any) {
+  updateInfoBag(currencyPrices: getActualCurrencyPrices, bag: PurchasedCurrency[]) {
     this.analyzeBag(currencyPrices, bag)
       .then(actualBagProfit => {
-        store.commit(MutationsType.ChangeActualBagData, actualBagProfit)
+        this.store.commit(MutationsType.ChangeActualBagData, actualBagProfit)
       })
   }
-
   calculateActualBagProfit(actualCurrencyPrices: Record<string, number>) {
     const oldBagValue = +this.getBag().reduce((acc: number, purchasedCurrency: PurchasedCurrency) => {
       return acc + purchasedCurrency.purchasePriceUsd * purchasedCurrency.amount
@@ -85,10 +74,11 @@ class BagService implements BagActions {
     }, 0).toFixed(2)
 
     let profitPercent = +(((actualBagValue - oldBagValue) / oldBagValue) * 100).toFixed(2)
+
     if (Number.isNaN(profitPercent)) {
       profitPercent = 0
     }
-    
+
     const profitAbsolute = +(actualBagValue - oldBagValue).toFixed(2)
 
     return { oldBagValue, actualBagValue, profitPercent, profitAbsolute }
@@ -111,10 +101,7 @@ class BagService implements BagActions {
 
     return bagCurrencyActualPrices
   };
-
-
 }
-const store = useStore()
 
-const instanceBagService = new BagService(store)
+const instanceBagService = new BagService(useStore())
 export default instanceBagService

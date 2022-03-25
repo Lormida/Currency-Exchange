@@ -1,3 +1,4 @@
+import { actualBagDataType } from '@/utils/types';
 import { MutationTree } from 'vuex'
 import { State, Currency, PurchasedCurrency } from './state'
 
@@ -26,7 +27,7 @@ export interface Mutations {
   [MutationsType.DeleteCurrencyFromBag](state: State, currencyName: string): void,
   [MutationsType.AddCurrencyToBag](state: State, newCurrency: PurchasedCurrency): void,
   [MutationsType.LoadBagLocal](state: State, bag: PurchasedCurrency[]): void,
-  [MutationsType.ChangeActualBagData](state: State, actualBagProfit: any): void,
+  [MutationsType.ChangeActualBagData](state: State, actualBagProfit: actualBagDataType): void,
 }
 
 export const mutations: MutationTree<State> & Mutations = {

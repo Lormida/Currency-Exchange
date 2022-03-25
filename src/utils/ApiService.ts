@@ -1,9 +1,7 @@
-import { Actions, ActionsType } from '@/store/actions'
-import { Getters } from '@/store/getters'
-import { Mutations, MutationsType } from '@/store/mutations'
-import { Currency, PurchasedCurrency, State } from '@/store/state'
-import { useStore } from '@/store'
-import { Store } from 'vuex'
+import { ActionsType } from '@/store/actions'
+import { MutationsType } from '@/store/mutations'
+import { Currency } from '@/store/state'
+import { SuperStore, useStore } from '@/store'
 import axios from 'axios'
 
 interface ApiFetching {
@@ -15,7 +13,7 @@ interface ApiFetching {
 }
 
 class ApiService implements ApiFetching {
-  constructor(private store: Store<State>) { }
+  constructor(private store: SuperStore) { }
 
   async getAllCurrencies(params: { currentPage: number, limit: number }) {
     await this.store.dispatch(ActionsType.LoadAllCurrencies, params)
@@ -40,12 +38,10 @@ class ApiService implements ApiFetching {
     }
   }
 
-
   setLoading(loadingStatus: boolean) {
     this.store.commit(MutationsType.SetLoading, loadingStatus)
   }
 }
-const store = useStore()
 
-const instanceApiService = new ApiService(store)
+const instanceApiService = new ApiService(useStore())
 export default instanceApiService

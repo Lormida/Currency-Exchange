@@ -53,10 +53,8 @@
 import { computed, defineComponent, ref, reactive } from 'vue';
 import BagService from '@/utils/BagService'
 import ModalService from '@/utils/ModalService';
-import ApiService from '@/utils/ApiService';
-import { Currency, PurchasedCurrency } from '@/store/state';
 import SpinnerLoader from './SpinnerLoader.vue';
-import { useStore } from '@/store';
+import { openModal } from '@/hooks/openModal';
 export default defineComponent({
   setup() {
 
@@ -64,10 +62,10 @@ export default defineComponent({
 
     const getCustomIsLoading = computed(() => customIsLoading.value)
     const getBagCurrencyActualPrices = computed(() => bagCurrencyActualPrices.value)
-
-    // loading bag from LocalStorage
-    BagService.loadBagLocal();
     const getBag = computed(() => BagService.getBag());
+
+    // Loading bag from LocalStorage
+    BagService.loadBagLocal();
 
 
     // Get actual prices to purchased currency
@@ -85,11 +83,6 @@ export default defineComponent({
       //* Update info about bag
       BagService.updateInfoBag(BagService.getActualCurrencyPrices, BagService.getBag())
     }
-
-    const openModal = (currentModalIndicator: string) => {
-      ModalService.changeCurrentModalIndicator(currentModalIndicator);
-      ModalService.changeModalState(true);
-    };
 
     return { getBag, openModal, removeCurrency, getCustomIsLoading, getBagCurrencyActualPrices };
   },

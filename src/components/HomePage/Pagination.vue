@@ -31,12 +31,10 @@
   </nav>
 </template>
 <script lang='ts'>
-import { computed, defineComponent, watch } from 'vue';
+import { computed, defineComponent } from 'vue';
 export default defineComponent({
   props: ['totalPage', 'currentPage'],
-
   setup(props, ctx) {
-
 
     const getCurrentPage = computed(() => {
       return props.currentPage;
@@ -52,7 +50,6 @@ export default defineComponent({
         ctx.emit('change-current-page', pageNumber)
       }
     }
-
 
     return { changeCurrentPage, getCurrentPage, currentPage: props.currentPage }
   }

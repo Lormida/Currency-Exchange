@@ -45,8 +45,9 @@
 </template>
 <script lang='ts'>
 import { getFormatCurrency } from '@/hooks/getFormatCurrency';
+import { openModal } from '@/hooks/openModal';
 import ModalService from '@/utils/ModalService';
-import { computed, defineComponent, onMounted, ref } from 'vue';
+import { computed, defineComponent } from 'vue';
 
 export default defineComponent({
   props: ['currencies', 'currentPage', 'limit'],
@@ -54,12 +55,6 @@ export default defineComponent({
 
     const getCurrencies = computed(() => props.currencies)
     const getCurrentPage = computed(() => props.currentPage)
-
-    const openModal = (currentModalIndicator: string) => {
-      ModalService.changeCurrentModalIndicator(currentModalIndicator)
-      ModalService.changeModalState(true)
-    }
-
 
 
 
@@ -72,7 +67,6 @@ export default defineComponent({
   background-color: #f8f7ff;
   box-shadow: rgba(0, 0, 0, 0.08) 0px 4px 12px;
   border-radius: 10px;
-  // border-bottom: none;
   border-collapse: collapse;
 }
 .currency-table__row:last-child {

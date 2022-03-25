@@ -1,7 +1,5 @@
 import { MutationsType } from '@/store/mutations'
-import { State } from '@/store/state'
-import { useStore } from '@/store'
-import { Store } from 'vuex'
+import { SuperStore, useStore } from '@/store'
 
 interface ModalActions {
   changeModalState(modalState: boolean): void,
@@ -9,15 +7,14 @@ interface ModalActions {
 }
 
 class ModalService implements ModalActions {
-  constructor(private store: Store<State>) { }
+  constructor(private store: SuperStore) { }
   changeModalState(modalState: boolean) {
-    store.commit(MutationsType.ChangeModalState, modalState)
+    this.store.commit(MutationsType.ChangeModalState, modalState)
   }
   changeCurrentModalIndicator(currentModalIndicator: string) {
-    store.commit(MutationsType.ChangeCurrentModalIndicator, currentModalIndicator)
+    this.store.commit(MutationsType.ChangeCurrentModalIndicator, currentModalIndicator)
   }
 }
-const store = useStore()
 
-const instanceModdalService = new ModalService(store)
+const instanceModdalService = new ModalService(useStore())
 export default instanceModdalService

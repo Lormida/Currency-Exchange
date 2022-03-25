@@ -13,6 +13,7 @@
         :index="index + 1"
       ></CardCurrency>
     </div>
+
     <!-- Bag currency -->
     <div class="nav__bag bag d-flex p-0 align-items-center col-3">
       <a href="#" class="nav__bag-link" @click="openModal('bag')">
@@ -34,7 +35,7 @@
         <span
           :class="getFormatCurrency(getActualBagData.profitAbsolute)"
         >{{ getActualBagData.profitAbsolute }}</span>
- USD
+        USD
         <span
           style="border-bottom: 1px #222 solid;"
           :class="getFormatCurrency(+getActualBagData.profitPercent)"
@@ -44,16 +45,15 @@
   </nav>
 </template>
 <script lang="ts">
-import { computed, onMounted, reactive, ref } from 'vue';
-import axios from 'axios'
+import { computed, onMounted, ref } from 'vue';
 import ModalService from '@/utils/ModalService'
 import { defineComponent } from 'vue';
 import CardCurrency from '@/components/UI/CardCurrency.vue';
-import { Currency, PurchasedCurrency } from '@/store/state';
 import ApiService from '@/utils/ApiService';
 import BagService from '@/utils/BagService';
 import { useStore } from '@/store';
 import { getFormatCurrency } from '@/hooks/getFormatCurrency';
+import { openModal } from '@/hooks/openModal';
 export default defineComponent({
   components: { CardCurrency },
   setup() {
@@ -71,10 +71,7 @@ export default defineComponent({
         tooltip.classList.add('bag--hide-tooltip')
       })
     }
-    const openModal = (currentModalIndicator: string) => {
-      ModalService.changeCurrentModalIndicator(currentModalIndicator)
-      ModalService.changeModalState(true)
-    }
+
     const getActualBagData = computed(() => store.getters.getActualBagData)
 
     //* loading bag from LocalStorage
@@ -100,8 +97,6 @@ export default defineComponent({
           initTooltip()
         })
     })
-
-
 
     return { currencies, isLoading, openModal, getActualBagData, getFormatCurrency }
   }

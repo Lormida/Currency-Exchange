@@ -1,8 +1,8 @@
+import { actualBagDataType } from '@/utils/types';
 import { GetterTree } from 'vuex'
-import { State, state, Currency, PurchasedCurrency } from './state'
+import { State, Currency, PurchasedCurrency } from './state'
 
 type CustomGetter = (currencyName: string) => number
-
 
 export type Getters = {
   getCurrencies(state: State): Currency[],
@@ -12,7 +12,7 @@ export type Getters = {
   getCurrentModalIndicator(state: State): string,
   getDetailCurrency(state: State, getters: Getters): CustomGetter;
   getBag(state: State, getters: Getters): PurchasedCurrency[];
-  getActualBagData(state: State): any
+  getActualBagData(state: State): actualBagDataType
 }
 
 export const getters: GetterTree<State, State> & Getters = {

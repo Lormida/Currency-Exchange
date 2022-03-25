@@ -54,7 +54,6 @@ export default defineComponent({
       ctx.emit('recalc-validate', getDisabledBtn.value, inputRef.value)
     }
 
-
     return {
       inputRef,
       errorMessage,

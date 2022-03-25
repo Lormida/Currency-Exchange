@@ -15,9 +15,8 @@
           <span class="currency__title-name currency__buy-text">Buy</span>
         </div>
       </header>
-      <!-- /Currency Header -->
 
-      <!-- /Currency Main -->
+      <!-- Currency Main -->
       <main class="currency__main">
         <div class="card currency__card">
           <div class="card__header chart">
@@ -40,7 +39,6 @@
           <MarketStats :getDataCurrency="getDataCurrency" :getRelativeSupply="getRelativeSupply"></MarketStats>
         </div>
       </main>
-      <!-- /Currency Main -->
     </div>
     <SpinnerLoader v-else></SpinnerLoader>
   </div>
@@ -54,13 +52,14 @@ import { Currency } from '@/store/state'
 import { useStore } from '@/store'
 import ModalService from '@/utils/ModalService';
 import { getFormatCurrency } from '@/hooks/getFormatCurrency';
+import { openModal } from '@/hooks/openModal';
 export default defineComponent({
   components: { Chart, MarketStats },
   props: ['id'],
   setup(props) {
 
     const store = useStore()
-    let dataCurrency: Currency = {} as Currency
+    let dataCurrency = {} as Currency
 
     const getIsLoading = computed(() => store.getters.getIsLoading)
     const getDataCurrency = computed(() => store.getters.getCurrentCurrency)
@@ -71,10 +70,6 @@ export default defineComponent({
       return `${divide * 100}% of total supply`
     })
 
-    const openModal = (currentModalIndicator: string) => {
-      ModalService.changeCurrentModalIndicator(currentModalIndicator)
-      ModalService.changeModalState(true)
-    }
 
     ApiService.loadCurrentCurrency(props.id)
       .then(() => {

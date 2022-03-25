@@ -1,23 +1,5 @@
-import { reactive } from "vue"
-
-type Currency = {
-  id: string
-  rank: string,
-  symbol: string,
-  name: string,
-  supply: string,
-  maxSupply: string,
-  marketCapUsd: string,
-  volumeUsd24Hr: string,
-  priceUsd: string,
-  changePercent24Hr: string,
-  vwap24Hr: string,
-  explorer: string,
-}
-type Modal = {
-  currentModalIndicator: string,
-  isModalOpen: boolean
-}
+import { Currency, PurchasedCurrency, Modal, actualBagDataType } from "@/utils/types"
+import { reactive } from 'vue'
 
 type State = {
   currencies: Currency[],
@@ -25,13 +7,7 @@ type State = {
   isLoading: boolean,
   modal: Modal,
   bag: PurchasedCurrency[]
-  actualBagData: typeof reactive | any,
-}
-type PurchasedCurrency = {
-  name: string,
-  symbol: string,
-  amount: number
-  purchasePriceUsd: number,
+  actualBagData: actualBagDataType,
 }
 
 const state: State = {

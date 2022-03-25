@@ -17,7 +17,10 @@
         <div
           class="market__volume-24h-value value"
         >{{ ((+getDataCurrency.volumeUsd24Hr) / 1e9).toFixed(2) }} Milliards</div>
-        <!-- <div class="market__volume-24h-stats stats">+56.4%</div> -->
+        <div
+          :class="getFormatCurrency(+getDataCurrency.changePercent24Hr)"
+          class="market__volume-24h-stats stats"
+        >{{ (+getDataCurrency.changePercent24Hr).toFixed(2) }}%</div>
       </div>
 
       <div class="market__circulating-supply">
@@ -42,12 +45,15 @@
     </main>
   </div>
 </template>
+
 <script lang='ts'>
+import { getFormatCurrency } from '@/hooks/getFormatCurrency';
 import { defineComponent } from 'vue';
 export default defineComponent({
   props: ['getRelativeSupply', 'getDataCurrency'],
   setup(props) {
-    return { getRelativeSupply: props.getRelativeSupply, getDataCurrency: props.getDataCurrency }
+
+    return { getRelativeSupply: props.getRelativeSupply, getDataCurrency: props.getDataCurrency, getFormatCurrency }
   }
 })
 </script>
@@ -75,7 +81,7 @@ export default defineComponent({
   display: flex;
   flex-direction: column;
   background-color: rgba(238, 226, 223, 0.5);
-  // height:181px;
+
   // .market__header
 
   &__header {

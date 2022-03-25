@@ -21,7 +21,6 @@
         @change-current-page="setNewPage"
       ></Pagination>
     </footer>
-
   </div>
 </template>
 
@@ -31,13 +30,14 @@ import { useStore } from '@/store'
 import TableCurrencies from '@/components/HomePage/TableCurrencies.vue'
 import Navbar from '@/components/HomePage/Navbar.vue'
 import Pagination from '@/components/HomePage/Pagination.vue';
-import { computed, defineComponent, onMounted, ref } from 'vue';
+import { computed, defineComponent, onMounted, Ref, ref } from 'vue';
 import SpinnerLoader from '../components/UI/SpinnerLoader.vue';
 
 export default defineComponent({
   components: { TableCurrencies, Navbar, Pagination, SpinnerLoader },
   setup() {
 
+    //* Initialization
     const store = useStore()
     const limit = 7
     const currentPage = ref(1)
@@ -49,7 +49,7 @@ export default defineComponent({
       await fetchData(currentPage, limit)
     }
 
-    const fetchData = async (currentPage: any, limit: number) => {
+    const fetchData = async (currentPage: Ref<number>, limit: number) => {
       ApiService.setLoading(true)
 
       ApiService.getAllCurrencies({ currentPage: currentPage.value, limit })
@@ -88,7 +88,6 @@ export default defineComponent({
 .main {
   position: relative;
   height: 58%;
-  // background-color: rgba(156, 197, 161, 0.35);
   background-color: rgba(22, 22, 22, 0.85);
   display: flex;
   justify-content: center;
