@@ -47,4 +47,14 @@ export default defineComponent({
 html {
   background-color: #9a8c98;
 }
+
+.currency-fall {
+  color: rgb(187, 36, 36);
+}
+.currency-growth {
+  color: green;
+  &::before {
+    content: "+";
+  }
+}
 </style>

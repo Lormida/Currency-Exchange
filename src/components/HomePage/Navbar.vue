@@ -18,20 +18,26 @@
       <a href="#" class="nav__bag-link" @click="openModal('bag')">
         <img class="nav__bag-image" src="@/assets/svg/bag-fill.svg" alt="bag" />
       </a>
-      <div class="bag__tooltip  p-1 bag--hide-tooltip">
+      <div class="bag__tooltip p-1 bag--hide-tooltip">
         Before: ${{ getActualBagData.oldBagValue }}
         <br />
         Today : ${{ getActualBagData.actualBagValue }}
         <span
-          style="color: #555b6e"
+          :class="getFormatCurrency(getActualBagData.profitPercent)"
         >({{ getActualBagData.profitPercent }}%)</span>
       </div>
+
       <div
         class="bag__label m-1 flex-grow-1 p-1 text-center align-self-start mt-4 border border-dark border-2"
       >
-        {{ getActualBagData.actualBagValue }}USD {{getActualBagData.profitAbsolute}}USD
+        {{ getActualBagData.actualBagValue }} USD
         <span
-          style="color: #555b6e; border-bottom: 1px #222 solid;"
+          :class="getFormatCurrency(getActualBagData.profitAbsolute)"
+        >{{ getActualBagData.profitAbsolute }}</span>
+ USD
+        <span
+          style="border-bottom: 1px #222 solid;"
+          :class="getFormatCurrency(+getActualBagData.profitPercent)"
         >({{ getActualBagData.profitPercent }}%)</span>
       </div>
     </div>
@@ -46,8 +52,8 @@ import CardCurrency from '@/components/UI/CardCurrency.vue';
 import { Currency, PurchasedCurrency } from '@/store/state';
 import ApiService from '@/utils/ApiService';
 import BagService from '@/utils/BagService';
-import { getActualCurrencyPrices } from '@/hooks/getActualCurrencyPrices'
 import { useStore } from '@/store';
+import { getFormatCurrency } from '@/hooks/getFormatCurrency';
 export default defineComponent({
   components: { CardCurrency },
   setup() {
@@ -75,11 +81,11 @@ export default defineComponent({
     BagService.loadBagLocal();
 
     //* Update info about bag
-    BagService.updateInfoBag(getActualCurrencyPrices, BagService.getBag())
+    BagService.updateInfoBag(BagService.getActualCurrencyPrices, BagService.getBag())
 
     //* Interval updating bag data
     setInterval(() => {
-      BagService.updateInfoBag(getActualCurrencyPrices, BagService.getBag())
+      BagService.updateInfoBag(BagService.getActualCurrencyPrices, BagService.getBag())
     }, 30000)
 
 
@@ -97,7 +103,7 @@ export default defineComponent({
 
 
 
-    return { currencies, isLoading, openModal, getActualBagData }
+    return { currencies, isLoading, openModal, getActualBagData, getFormatCurrency }
   }
 })
 </script>
@@ -156,7 +162,7 @@ export default defineComponent({
       rgba(0, 0, 0, 0.09) 0px 32px 16px;
     background-color: #f8edeb;
     border-radius: 10px;
-    font-size:14px;
+    font-size: 14px;
   }
 
   // .bag__tooltip

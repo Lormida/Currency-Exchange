@@ -18,10 +18,7 @@
         <p class="card__text card-text my-1">
           <span class="card__small-title">Change for 24h :</span>
           <span
-            :class="{
-              'card--currency-fall': changePercent24Hr < 0,
-              'card-table--currency-growth': changePercent24Hr >= 0
-            }"
+            :class="getFormatCurrency(changePercent24Hr)"
           >{{ (+changePercent24Hr).toFixed(2) }}%</span>
         </p>
       </div>
@@ -40,6 +37,7 @@
 
 import { defineComponent, onMounted, ref } from 'vue';
 import ModalService from '@/utils/ModalService'
+import {getFormatCurrency} from '@/hooks/getFormatCurrency'
 
 export default defineComponent({
   props: ['name', 'changePercent24Hr', 'priceUsd', 'marketCapUsd', 'id', 'index'],
@@ -57,7 +55,8 @@ export default defineComponent({
       marketCapUsd: props.marketCapUsd,
       id: props.id,
       index: props.index,
-      openModal
+      openModal,
+      getFormatCurrency
     }
   }
 })

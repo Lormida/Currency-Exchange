@@ -24,7 +24,10 @@
             <header class="chart__header">
               <span class="chart__currency-short">$</span>
               <span class="chart__currency-price">{{ (+getDataCurrency.priceUsd).toFixed(2) }}</span>
-              <span class="chart__currency-price-change">+5.08%</span>
+              <span
+                :class="getFormatCurrency(+getDataCurrency.changePercent24Hr)"
+                class="chart__currency-price-change"
+              >{{ (+getDataCurrency.changePercent24Hr).toFixed(2) }}%</span>
             </header>
 
             <main class="chart__content">
@@ -50,6 +53,7 @@ import ApiService from '@/utils/ApiService'
 import { Currency } from '@/store/state'
 import { useStore } from '@/store'
 import ModalService from '@/utils/ModalService';
+import { getFormatCurrency } from '@/hooks/getFormatCurrency';
 export default defineComponent({
   components: { Chart, MarketStats },
   props: ['id'],
@@ -77,7 +81,7 @@ export default defineComponent({
         ApiService.setLoading(false)
       })
 
-    return { id: props.id, getDataCurrency, getIsLoading, getRelativeSupply, openModal }
+    return { id: props.id, getDataCurrency, getIsLoading, getRelativeSupply, openModal, getFormatCurrency }
   }
 })
 </script>
@@ -223,7 +227,6 @@ export default defineComponent({
     right: 0;
     font-size: 18px;
     transform: translateX(100%);
-    color: rgb(9, 133, 81);
   }
 
   // .chart__content

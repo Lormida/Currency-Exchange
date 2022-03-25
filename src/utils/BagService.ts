@@ -84,7 +84,11 @@ class BagService implements BagActions {
       return acc + actualCurrencyPrices[purchasedCurrency.name] * purchasedCurrency.amount
     }, 0).toFixed(2)
 
-    const profitPercent = +(((actualBagValue - oldBagValue) / oldBagValue) * 100).toFixed(2)
+    let profitPercent = +(((actualBagValue - oldBagValue) / oldBagValue) * 100).toFixed(2)
+    if (Number.isNaN(profitPercent)) {
+      profitPercent = 0
+    }
+    
     const profitAbsolute = +(actualBagValue - oldBagValue).toFixed(2)
 
     return { oldBagValue, actualBagValue, profitPercent, profitAbsolute }
@@ -104,7 +108,7 @@ class BagService implements BagActions {
         });
       })
       .catch(e => console.log(e))
-      
+
     return bagCurrencyActualPrices
   };
 

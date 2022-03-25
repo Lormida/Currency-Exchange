@@ -57,7 +57,6 @@ import ApiService from '@/utils/ApiService';
 import { Currency, PurchasedCurrency } from '@/store/state';
 import SpinnerLoader from './SpinnerLoader.vue';
 import { useStore } from '@/store';
-import { getActualCurrencyPrices } from '@/hooks/getActualCurrencyPrices'
 export default defineComponent({
   setup() {
 
@@ -73,7 +72,7 @@ export default defineComponent({
 
     // Get actual prices to purchased currency
     let bagCurrencyActualPrices = ref<Record<string, number>>({})
-    getActualCurrencyPrices(BagService.getBag())
+    BagService.getActualCurrencyPrices(BagService.getBag())
       .then(actualCurrencyPrices => {
         bagCurrencyActualPrices.value = actualCurrencyPrices
         customIsLoading.value = false
@@ -84,7 +83,7 @@ export default defineComponent({
       BagService.deleteCurrencyFromBag(currencyName);
 
       //* Update info about bag
-      BagService.updateInfoBag(getActualCurrencyPrices, BagService.getBag())
+      BagService.updateInfoBag(BagService.getActualCurrencyPrices, BagService.getBag())
     }
 
     const openModal = (currentModalIndicator: string) => {

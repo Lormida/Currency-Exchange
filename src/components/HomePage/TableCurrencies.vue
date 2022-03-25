@@ -28,12 +28,7 @@
           </td>
           <td class="align-middle">$ {{ (+currency.priceUsd).toFixed(2) }}</td>
           <td class="text-start align-middle">
-            <span
-              :class="{
-                'currency-table--currency-fall': currency.changePercent24Hr < 0,
-                'currency-table--currency-growth': currency.changePercent24Hr >= 0
-              }"
-            >{{ (+currency.changePercent24Hr).toFixed(2) }}%</span>
+            <span :class="getFormatCurrency(currency.changePercent24Hr)">{{ (+currency.changePercent24Hr).toFixed(2) }}%</span>
           </td>
           <td class="align-middle">chart</td>
           <td class="align-middle">
@@ -49,6 +44,7 @@
   </table>
 </template>
 <script lang='ts'>
+import { getFormatCurrency } from '@/hooks/getFormatCurrency';
 import ModalService from '@/utils/ModalService';
 import { computed, defineComponent, onMounted, ref } from 'vue';
 
@@ -65,7 +61,9 @@ export default defineComponent({
     }
 
 
-    return { openModal, getCurrencies, getCurrentPage, limit: props.limit }
+
+
+    return { openModal, getCurrencies, getCurrentPage, limit: props.limit, getFormatCurrency }
   }
 })
 </script>
@@ -87,15 +85,7 @@ export default defineComponent({
   text-decoration: none;
   color: #222;
 }
-.currency-table--currency-fall {
-  color: red;
-}
-.currency-table--currency-growth {
-  color: green;
-  &::before {
-    content: "+";
-  }
-}
+
 .currency-table__btn {
   //
 }
