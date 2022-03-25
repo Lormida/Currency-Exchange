@@ -19,7 +19,6 @@
 
 <script lang='ts'>
 import InputCurrency from '@/components/UI/InputCurrency.vue'
-import { getActualCurrencyPrices } from '@/hooks/getActualCurrencyPrices';
 import BagService from '@/utils/BagService';
 import ModalService from '@/utils/ModalService';
 import { computed, defineComponent, ref } from 'vue';
@@ -44,7 +43,7 @@ export default defineComponent({
           ModalService.changeModalState(false)
 
           //* Update info about bag
-          BagService.updateInfoBag(getActualCurrencyPrices, BagService.getBag())
+          BagService.updateInfoBag(BagService.getActualCurrencyPrices, BagService.getBag())
         })
     }
 

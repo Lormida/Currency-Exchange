@@ -16,5 +16,7 @@ export const getActualCurrencyPrices = async (bag: PurchasedCurrency[]) => {
         bagCurrencyActualPrices[`${purchasedCurrency.id}`] = +purchasedCurrency.priceUsd;
       });
     })
+    .catch(e => console.log(e))
+    
   return bagCurrencyActualPrices
 };

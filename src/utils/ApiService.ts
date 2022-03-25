@@ -20,17 +20,27 @@ class ApiService implements ApiFetching {
   async getAllCurrencies(params: { currentPage: number, limit: number }) {
     await this.store.dispatch(ActionsType.LoadAllCurrencies, params)
   }
-  async getSpecificCurrency(currencyName: string) {
-    const response = (await axios.get(`https://api.coincap.io/v2/assets/${currencyName}`)).data
-    return response.data
-  }
   async loadCurrentCurrency(currencyName: string) {
     await this.store.dispatch(ActionsType.LoadCurrentCurrency, currencyName)
   }
-  async getTop3Currencies() {
-    const response = (await axios.get(`https://api.coincap.io/v2/assets?limit=3`)).data
-    return response.data
+  async getSpecificCurrency(currencyName: string) {
+    try {
+      const response = (await axios.get(`https://api.coincap.io/v2/assets/${currencyName}`)).data
+      return response.data
+    } catch (e) {
+      console.log(e);
+    }
   }
+  async getTop3Currencies() {
+    try {
+      const response = (await axios.get(`https://api.coincap.io/v2/assets?limit=3`)).data
+      return response.data
+    } catch (e) {
+      console.log(e);
+    }
+  }
+
+
   setLoading(loadingStatus: boolean) {
     this.store.commit(MutationsType.SetLoading, loadingStatus)
   }

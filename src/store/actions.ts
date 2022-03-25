@@ -36,6 +36,7 @@ export const actions: ActionTree<State, State> & Actions = {
         })
 
       })
+      .catch(e => console.log(e))
   },
   [ActionsType.LoadCurrentCurrency](context, currencyName) {
 
@@ -51,5 +52,6 @@ export const actions: ActionTree<State, State> & Actions = {
           }, 0);
         })
       })
+      .catch(e => console.log(e))
   }
 }

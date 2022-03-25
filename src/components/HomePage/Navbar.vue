@@ -18,7 +18,7 @@
       <a href="#" class="nav__bag-link" @click="openModal('bag')">
         <img class="nav__bag-image" src="@/assets/svg/bag-fill.svg" alt="bag" />
       </a>
-      <div class="bag__tooltip p-1 bag--hide-tooltip">
+      <div class="bag__tooltip  p-1 bag--hide-tooltip">
         Before: ${{ getActualBagData.oldBagValue }}
         <br />
         Today : ${{ getActualBagData.actualBagValue }}
@@ -27,9 +27,9 @@
         >({{ getActualBagData.profitPercent }}%)</span>
       </div>
       <div
-        class="bag__label m-1 flex-grow-1 py-2 fs-5 text-center align-self-start mt-4 border border-dark border-2"
+        class="bag__label m-1 flex-grow-1 p-1 text-center align-self-start mt-4 border border-dark border-2"
       >
-        ${{ getActualBagData.actualBagValue }}
+        {{ getActualBagData.actualBagValue }}USD {{getActualBagData.profitAbsolute}}USD
         <span
           style="color: #555b6e; border-bottom: 1px #222 solid;"
         >({{ getActualBagData.profitPercent }}%)</span>
@@ -156,12 +156,15 @@ export default defineComponent({
       rgba(0, 0, 0, 0.09) 0px 32px 16px;
     background-color: #f8edeb;
     border-radius: 10px;
+    font-size:14px;
   }
+
+  // .bag__tooltip
   &__tooltip {
     width: auto;
     box-shadow: rgba(0, 0, 0, 0.15) 0px 2px 8px;
     position: absolute;
-    right: 3%;
+    right: -10%;
     padding: 2%;
     border-radius: 5px;
     background-color: #edf2fb;

@@ -24,11 +24,16 @@ export default defineComponent({
 
 
     const fetchData = async () => {
-      let { data } = (await axios.get(baseURL)).data
-      data.forEach((item: any) => {
-        dataX.push(new Date(item.time).toLocaleTimeString().slice(0, -6))
-        dataY.push(item.priceUsd)
-      })
+      try {
+        let { data } = (await axios.get(baseURL)).data
+        data.forEach((item: any) => {
+          dataX.push(new Date(item.time).toLocaleTimeString().slice(0, -6))
+          dataY.push(item.priceUsd)
+        })
+      }
+      catch(e) {
+        console.log(e);
+      }
 
       testData = {
         labels: dataX,
@@ -57,5 +62,4 @@ export default defineComponent({
 </script>
 
 <style lang="scss" scope>
-
 </style>

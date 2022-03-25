@@ -4,13 +4,17 @@ import { SuperStore, useStore } from '@/store'
 import { Currency } from '@/store/state'
 import { State } from '@/store/state'
 import axios from 'axios'
-import { getActualCurrencyPrices } from '@/hooks/getActualCurrencyPrices'
+import { reactive } from 'vue'
+import ApiService from './ApiService'
 
 type bagProfitData = {
   oldBagValue: number,
   actualBagValue: number,
   profitPercent: number,
   profitAbsolute: number,
+}
+type getActualCurrencyPrices = {
+  (bag: PurchasedCurrency[]): Promise<Record<string, number>>
 }
 
 interface BagActions {
@@ -19,8 +23,9 @@ interface BagActions {
   addCurrencyToBag(currencyName: string, amount: number): any,
   saveBagLocal(bag: PurchasedCurrency[]): void,
   loadBagLocal(): void,
-  analyzeBag(currencyPrices: typeof getActualCurrencyPrices, bag: any): Promise<bagProfitData>,
-  calculateActualBagProfit(actualCurrencyPrices: Record<string, number>): bagProfitData
+  analyzeBag(currencyPrices: getActualCurrencyPrices, bag: any): Promise<bagProfitData>,
+  calculateActualBagProfit(actualCurrencyPrices: object): bagProfitData,
+  getActualCurrencyPrices(bag: PurchasedCurrency[]): Promise<object>
 }
 
 class BagService implements BagActions {
@@ -56,20 +61,19 @@ class BagService implements BagActions {
       store.commit(MutationsType.LoadBagLocal, JSON.parse(bag))
     }
   }
-  analyzeBag(currencyPrices: typeof getActualCurrencyPrices, bag: any) {
+  analyzeBag(currencyPrices: getActualCurrencyPrices, bag: any) {
     return currencyPrices(bag)
-      .then(actualCurrencyPrices => {
+      .then((actualCurrencyPrices: Record<string, number>) => {
         return this.calculateActualBagProfit(actualCurrencyPrices)
       })
   }
 
-  updateInfoBag(currencyPrices: typeof getActualCurrencyPrices, bag: any) {
+  updateInfoBag(currencyPrices: getActualCurrencyPrices, bag: any) {
     this.analyzeBag(currencyPrices, bag)
       .then(actualBagProfit => {
         store.commit(MutationsType.ChangeActualBagData, actualBagProfit)
       })
   }
-
 
   calculateActualBagProfit(actualCurrencyPrices: Record<string, number>) {
     const oldBagValue = +this.getBag().reduce((acc: number, purchasedCurrency: PurchasedCurrency) => {
@@ -85,6 +89,24 @@ class BagService implements BagActions {
 
     return { oldBagValue, actualBagValue, profitPercent, profitAbsolute }
   }
+
+  async getActualCurrencyPrices(bag: PurchasedCurrency[]): Promise<Record<string, number>> {
+
+    const bagCurrencyActualPrices: Record<string, number> = reactive({});
+    const bagCurrencyPromises = [] as Promise<Currency>[];
+    bag.forEach((currency: PurchasedCurrency) =>
+      bagCurrencyPromises.push(ApiService.getSpecificCurrency(currency.name)));
+
+    await Promise.all(bagCurrencyPromises)
+      .then((purchasedCurrencies: Currency[]) => {
+        purchasedCurrencies.forEach((purchasedCurrency: Currency) => {
+          bagCurrencyActualPrices[`${purchasedCurrency.id}`] = +purchasedCurrency.priceUsd;
+        });
+      })
+      .catch(e => console.log(e))
+      
+    return bagCurrencyActualPrices
+  };
 
 
 }
