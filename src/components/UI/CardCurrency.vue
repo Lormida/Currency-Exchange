@@ -1,3 +1,21 @@
+<script setup lang='ts'>
+
+import { getFormatCurrency } from '@/hooks/getFormatCurrency'
+import { openModal } from '@/hooks/openModal';
+import { getDegreeCalc } from '@/hooks/getDegreeCalc'
+
+interface Props {
+  name: string,
+  changePercent24Hr: number,
+  priceUsd: number,
+  marketCapUsd: number,
+  id: string,
+  index: number
+}
+const props = defineProps<Props>()
+
+</script>
+
 <template>
   <div class="col-4 h-100">
     <div class="card">
@@ -13,13 +31,11 @@
         </p>
         <p class="card__text card-text my-1">
           <span class="card__small-title">Market capital :</span>
-          ${{ ((+marketCapUsd) / 1e9).toFixed(2) }} Milliards
+          ${{ getDegreeCalc(marketCapUsd, 9) }} Milliards
         </p>
         <p class="card__text card-text my-1">
           <span class="card__small-title">Change for 24h :</span>
-          <span
-            :class="getFormatCurrency(changePercent24Hr)"
-          >{{ (+changePercent24Hr).toFixed(2) }}%</span>
+          <span :class="getFormatCurrency(changePercent24Hr)">{{ (+changePercent24Hr).toFixed(2) }}%</span>
         </p>
       </div>
 
@@ -33,29 +49,8 @@
     </div>
   </div>
 </template>
-<script lang='ts'>
 
-import { defineComponent } from 'vue';
-import {getFormatCurrency} from '@/hooks/getFormatCurrency'
-import { openModal } from '@/hooks/openModal';
 
-export default defineComponent({
-  props: ['name', 'changePercent24Hr', 'priceUsd', 'marketCapUsd', 'id', 'index'],
-  setup(props) {
-
-    return {
-      name: props.name,
-      changePercent24Hr: props.changePercent24Hr,
-      priceUsd: props.priceUsd,
-      marketCapUsd: props.marketCapUsd,
-      id: props.id,
-      index: props.index,
-      openModal,
-      getFormatCurrency
-    }
-  }
-})
-</script>
 <style lang='scss' scoped>
 .card {
   box-shadow: rgba(0, 0, 0, 0.19) 0px 10px 20px, rgba(0, 0, 0, 0.23) 0px 6px 6px;

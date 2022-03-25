@@ -1,3 +1,16 @@
+<script setup lang='ts'>
+import { getFormatCurrency } from '@/hooks/getFormatCurrency';
+import { Currency } from '@/utils/types';
+import { getDegreeCalc } from '@/hooks/getDegreeCalc'
+
+interface Props {
+  getRelativeSupply: string | null,
+  getDataCurrency: Currency
+}
+const props = defineProps<Props>()
+
+</script>
+
 <template>
   <div class="card-body currency__body market">
     <header class="market__header">
@@ -9,25 +22,25 @@
         <div class="market__cap-title title">Market Cap</div>
         <div
           class="market__cap-value value"
-        >${{ ((+getDataCurrency.marketCapUsd) / 1e9).toFixed(3) }} Milliards</div>
+        >${{ getDegreeCalc(getDataCurrency.marketCapUsd, 9) }} Milliards</div>
       </div>
 
       <div class="market__volume-24h">
         <div class="market__volume-24h-title title">Volume (24h)</div>
         <div
           class="market__volume-24h-value value"
-        >{{ ((+getDataCurrency.volumeUsd24Hr) / 1e9).toFixed(2) }} Milliards</div>
+        >{{ getDegreeCalc(getDataCurrency.volumeUsd24Hr, 9) }} Milliards</div>
         <div
           :class="getFormatCurrency(+getDataCurrency.changePercent24Hr)"
           class="market__volume-24h-stats stats"
-        >{{ (+getDataCurrency.changePercent24Hr).toFixed(2) }}%</div>
+        >{{ getDegreeCalc(getDataCurrency.changePercent24Hr, 9) }}%</div>
       </div>
 
       <div class="market__circulating-supply">
         <div class="market__circulating-supply-title title">Circulating supply</div>
         <div
           class="market__circulating-supply-value value"
-        >{{ (+getDataCurrency.supply / 1e9).toFixed(2) }} Milliards {{ getDataCurrency.symbol }}</div>
+        >{{ getDegreeCalc(getDataCurrency.supply, 9) }} Milliards {{ getDataCurrency.symbol }}</div>
         <div class="market__circulating-supply-stats stats">{{ getRelativeSupply }}</div>
       </div>
 
@@ -46,17 +59,7 @@
   </div>
 </template>
 
-<script lang='ts'>
-import { getFormatCurrency } from '@/hooks/getFormatCurrency';
-import { defineComponent } from 'vue';
-export default defineComponent({
-  props: ['getRelativeSupply', 'getDataCurrency'],
-  setup(props) {
 
-    return { getRelativeSupply: props.getRelativeSupply, getDataCurrency: props.getDataCurrency, getFormatCurrency }
-  }
-})
-</script>
 <style lang='scss' scoped>
 .title {
   font-size: 16px;

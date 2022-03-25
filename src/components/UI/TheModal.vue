@@ -1,43 +1,38 @@
+<script setup lang='ts'>
+import TheModalBag from './TheModalBag.vue';
+import TheModalBuyCurrency from './TheModalBuyCurrency.vue';
+
+import ModalService from '@/utils/ModalService'
+import { useStore } from '@/store'
+import { computed } from 'vue';
+
+const store = useStore()
+const getCurrentModalIndicator = computed(() => store.getters.getCurrentModalIndicator)
+
+const closeModal = () => {
+  ModalService.changeModalState(false)
+}
+
+</script>
+
 <template>
   <div class="modal__overlay" @click.self="closeModal">
     <div class="modal-window">
       <div class="modal-window__content">
         <span class="modal-window__close-btn" @click.self="closeModal"></span>
 
-        <ModalBuyCurrency
+        <TheModalBuyCurrency
           v-if="getCurrentModalIndicator !== 'bag'"
           :currency="getCurrentModalIndicator.toLowerCase()"
-        ></ModalBuyCurrency>
-        <ModalBag v-else></ModalBag>
+        ></TheModalBuyCurrency>
+
+        <TheModalBag v-else />
       </div>
     </div>
   </div>
 </template>
 
-<script lang='ts'>
 
-import { useStore } from '@/store'
-import ModalService from '@/utils/ModalService'
-import ModalBag from './ModalBag.vue';
-import ModalBuyCurrency from './ModalBuyCurrency.vue';
-import { computed, defineComponent, ref } from 'vue';
-export default defineComponent({
-  components: { ModalBuyCurrency, ModalBag },
-  setup() {
-    let amountCurrency = ref('')
-    const store = useStore()
-    const getCurrentModalIndicator = computed(() => store.getters.getCurrentModalIndicator)
-
-    const closeModal = () => {
-      ModalService.changeModalState(false)
-    }
-
-    return {
-      amountCurrency, closeModal, getCurrentModalIndicator
-    }
-  }
-})
-</script>
 
 <style lang="scss" scoped>
 .modal__overlay {

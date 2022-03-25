@@ -1,3 +1,55 @@
+<script setup lang="ts">
+import { computed, onMounted, ref } from 'vue';
+import CardCurrency from '@/components/UI/CardCurrency.vue';
+import ApiService from '@/utils/ApiService';
+import BagService from '@/utils/BagService';
+import { useStore } from '@/store';
+import { getFormatCurrency } from '@/hooks/getFormatCurrency';
+import { openModal } from '@/hooks/openModal';
+
+let currencies = ref()
+let isLoading = ref(true)
+const store = useStore()
+
+const initTooltip = () => {
+  const tooltip = document.querySelector('.bag__tooltip') as Element
+  const tooltipParent = document.querySelector('.nav__bag-link') as Element
+  tooltipParent.addEventListener('mouseenter', () => {
+    tooltip.classList.remove('bag--hide-tooltip')
+  })
+  tooltipParent.addEventListener('mouseleave', () => {
+    tooltip.classList.add('bag--hide-tooltip')
+  })
+}
+
+const getActualBagData = computed(() => store.getters.getActualBagData)
+
+//* loading bag from LocalStorage
+BagService.loadBagLocal();
+
+//* Update info about bag
+BagService.updateInfoBag(BagService.getActualCurrencyPrices, BagService.getBag())
+
+//* Interval updating bag data
+setInterval(() => {
+  BagService.updateInfoBag(BagService.getActualCurrencyPrices, BagService.getBag())
+}, 30000)
+
+
+onMounted(() => {
+
+  ApiService.getTop3Currencies()
+    .then((data) => {
+      currencies.value = data
+      isLoading.value = false
+    })
+    .then(() => {
+      initTooltip()
+    })
+})
+
+</script>
+
 <template>
   <nav class="nav" v-if="!isLoading">
     <!-- Cards -->
@@ -6,9 +58,9 @@
         v-for="(currency, index) of currencies"
         :key="currency.id"
         :name="currency.name"
-        :changePercent24Hr="currency.changePercent24Hr"
-        :marketCapUsd="currency.marketCapUsd"
-        :priceUsd="currency.priceUsd"
+        :changePercent24Hr="+currency.changePercent24Hr"
+        :marketCapUsd="+currency.marketCapUsd"
+        :priceUsd="+currency.priceUsd"
         :id="currency.id"
         :index="index + 1"
       ></CardCurrency>
@@ -24,7 +76,7 @@
         <br />
         Today : ${{ getActualBagData.actualBagValue }}
         <span
-          :class="getFormatCurrency(getActualBagData.profitPercent)"
+          :class="getFormatCurrency(+getActualBagData.profitPercent)"
         >({{ getActualBagData.profitPercent }}%)</span>
       </div>
 
@@ -33,7 +85,7 @@
       >
         {{ getActualBagData.actualBagValue }} USD
         <span
-          :class="getFormatCurrency(getActualBagData.profitAbsolute)"
+          :class="getFormatCurrency(+getActualBagData.profitAbsolute)"
         >{{ getActualBagData.profitAbsolute }}</span>
         USD
         <span
@@ -44,64 +96,7 @@
     </div>
   </nav>
 </template>
-<script lang="ts">
-import { computed, onMounted, ref } from 'vue';
-import ModalService from '@/utils/ModalService'
-import { defineComponent } from 'vue';
-import CardCurrency from '@/components/UI/CardCurrency.vue';
-import ApiService from '@/utils/ApiService';
-import BagService from '@/utils/BagService';
-import { useStore } from '@/store';
-import { getFormatCurrency } from '@/hooks/getFormatCurrency';
-import { openModal } from '@/hooks/openModal';
-export default defineComponent({
-  components: { CardCurrency },
-  setup() {
-    let currencies = ref()
-    let isLoading = ref(true)
-    const store = useStore()
 
-    const initTooltip = () => {
-      const tooltip = document.querySelector('.bag__tooltip') as Element
-      const tooltipParent = document.querySelector('.nav__bag-link') as Element
-      tooltipParent.addEventListener('mouseenter', () => {
-        tooltip.classList.remove('bag--hide-tooltip')
-      })
-      tooltipParent.addEventListener('mouseleave', () => {
-        tooltip.classList.add('bag--hide-tooltip')
-      })
-    }
-
-    const getActualBagData = computed(() => store.getters.getActualBagData)
-
-    //* loading bag from LocalStorage
-    BagService.loadBagLocal();
-
-    //* Update info about bag
-    BagService.updateInfoBag(BagService.getActualCurrencyPrices, BagService.getBag())
-
-    //* Interval updating bag data
-    setInterval(() => {
-      BagService.updateInfoBag(BagService.getActualCurrencyPrices, BagService.getBag())
-    }, 30000)
-
-
-    onMounted(() => {
-
-      ApiService.getTop3Currencies()
-        .then((data) => {
-          currencies.value = data
-          isLoading.value = false
-        })
-        .then(() => {
-          initTooltip()
-        })
-    })
-
-    return { currencies, isLoading, openModal, getActualBagData, getFormatCurrency }
-  }
-})
-</script>
 <style lang='scss' scoped>
 .nav {
   height: 100%;

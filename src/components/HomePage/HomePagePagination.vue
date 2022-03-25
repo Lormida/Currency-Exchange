@@ -1,10 +1,39 @@
+<script setup lang='ts'>
+import { computed, defineProps } from 'vue';
+
+interface Props {
+  totalPage: number,
+  currentPage: number,
+}
+
+const props = defineProps<Props>()
+const emit = defineEmits<{
+  (e: 'change-current-page', currentPage: number): void,
+}>()
+
+const getCurrentPage = computed(() => {
+  return props.currentPage;
+})
+
+const changeCurrentPage = (pageNumber: number, direction?: boolean) => {
+  if (direction === true && props.currentPage < props.totalPage) {
+    emit('change-current-page', props.currentPage + 1)
+  }
+  else if (direction === false && props.currentPage > 1) {
+    emit('change-current-page', props.currentPage - 1)
+  } else {
+    emit('change-current-page', pageNumber)
+  }
+}
+</script>
+
 <template>
   <nav
     class="footer-nav container-fluid d-flex justify-content-center align-items-stretch"
     aria-label="Page navigation example"
   >
     <ul class="pagination pagination-lg m-0 d-flex align-items-center">
-      <li class="page-item ">
+      <li class="page-item">
         <a
           class="page-link"
           href="#"
@@ -30,31 +59,7 @@
     </ul>
   </nav>
 </template>
-<script lang='ts'>
-import { computed, defineComponent } from 'vue';
-export default defineComponent({
-  props: ['totalPage', 'currentPage'],
-  setup(props, ctx) {
 
-    const getCurrentPage = computed(() => {
-      return props.currentPage;
-    })
-
-    const changeCurrentPage = (pageNumber: number, direction?: boolean) => {
-      if (direction === true && props.currentPage < props.totalPage) {
-        ctx.emit('change-current-page', props.currentPage + 1)
-      }
-      else if (direction === false && props.currentPage > 1) {
-        ctx.emit('change-current-page', props.currentPage - 1)
-      } else {
-        ctx.emit('change-current-page', pageNumber)
-      }
-    }
-
-    return { changeCurrentPage, getCurrentPage, currentPage: props.currentPage }
-  }
-})
-</script>
 <style lang='scss' scoped>
 span {
   display: block;

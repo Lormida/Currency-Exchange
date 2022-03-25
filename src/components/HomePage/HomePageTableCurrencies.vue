@@ -1,3 +1,20 @@
+<script setup lang='ts'>
+import { getFormatCurrency } from '@/hooks/getFormatCurrency';
+import { openModal } from '@/hooks/openModal';
+import { Currency } from '@/utils/types';
+import { computed } from 'vue';
+
+interface Props {
+  currencies: Currency[],
+  currentPage: number,
+  limit: number
+}
+const props = defineProps<Props>()
+
+const getCurrencies = computed(() => props.currencies)
+
+</script>
+
 <template>
   <table class="currency-table container mx-auto table table-hover w-80 m-0">
     <thead>
@@ -28,7 +45,9 @@
           </td>
           <td class="align-middle">$ {{ (+currency.priceUsd).toFixed(2) }}</td>
           <td class="text-start align-middle">
-            <span :class="getFormatCurrency(currency.changePercent24Hr)">{{ (+currency.changePercent24Hr).toFixed(2) }}%</span>
+            <span
+              :class="getFormatCurrency(+currency.changePercent24Hr)"
+            >{{ (+currency.changePercent24Hr).toFixed(2) }}%</span>
           </td>
           <td class="align-middle">chart</td>
           <td class="align-middle">
@@ -43,25 +62,7 @@
     </tbody>
   </table>
 </template>
-<script lang='ts'>
-import { getFormatCurrency } from '@/hooks/getFormatCurrency';
-import { openModal } from '@/hooks/openModal';
-import ModalService from '@/utils/ModalService';
-import { computed, defineComponent } from 'vue';
 
-export default defineComponent({
-  props: ['currencies', 'currentPage', 'limit'],
-  setup(props) {
-
-    const getCurrencies = computed(() => props.currencies)
-    const getCurrentPage = computed(() => props.currentPage)
-
-
-
-    return { openModal, getCurrencies, getCurrentPage, limit: props.limit, getFormatCurrency }
-  }
-})
-</script>
 <style lang='scss' scoped>
 .currency-table {
   background-color: #f8f7ff;

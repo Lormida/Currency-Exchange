@@ -1,3 +1,38 @@
+<script setup lang='ts'>
+import { computed } from 'vue';
+import TheChart from '@/components/CurrencyPage/TheChart.vue'
+import CurrencyPageMarketStats from '@/components/CurrencyPage/CurrencyPageMarketStats.vue'
+import ApiService from '@/utils/ApiService'
+import { useStore } from '@/store'
+import { defineProps } from 'vue';
+import { getFormatCurrency } from '@/hooks/getFormatCurrency';
+import { openModal } from '@/hooks/openModal';
+
+interface Props {
+  id: string
+}
+const props = defineProps<Props>()
+
+const store = useStore()
+
+const getIsLoading = computed(() => store.getters.getIsLoading)
+const getDataCurrency = computed(() => store.getters.getCurrentCurrency)
+
+const getRelativeSupply = computed(() => {
+  if (getDataCurrency.value.maxSupply == null) return null
+  const divide = Number(((+getDataCurrency.value.supply) / (+getDataCurrency.value.maxSupply)).toFixed(2))
+  return `${divide * 100}% of total supply`
+})
+
+
+ApiService.loadCurrentCurrency(props.id)
+  .then(() => {
+    ApiService.setLoading(false)
+  })
+
+
+</script>
+
 <template>
   <div class="container-currency">
     <div v-if="!getIsLoading && Object.keys(getDataCurrency).length > 0" class="container currency">
@@ -31,55 +66,22 @@
 
             <main class="chart__content">
               <!-- Chart -->
-              <Chart :currency="id"></Chart>
+              <TheChart :currency="id"></TheChart>
             </main>
           </div>
 
           <!-- Market Stats -->
-          <MarketStats :getDataCurrency="getDataCurrency" :getRelativeSupply="getRelativeSupply"></MarketStats>
+          <CurrencyPageMarketStats
+            :getDataCurrency="getDataCurrency"
+            :getRelativeSupply="getRelativeSupply"
+          ></CurrencyPageMarketStats>
         </div>
       </main>
     </div>
     <SpinnerLoader v-else></SpinnerLoader>
   </div>
 </template>
-<script lang='ts'>
-import { defineComponent, ref, computed } from 'vue';
-import Chart from '@/components/CurrencyPage/Chart.vue'
-import MarketStats from '@/components/CurrencyPage/MarketStats.vue'
-import ApiService from '@/utils/ApiService'
-import { Currency } from '@/store/state'
-import { useStore } from '@/store'
-import ModalService from '@/utils/ModalService';
-import { getFormatCurrency } from '@/hooks/getFormatCurrency';
-import { openModal } from '@/hooks/openModal';
-export default defineComponent({
-  components: { Chart, MarketStats },
-  props: ['id'],
-  setup(props) {
 
-    const store = useStore()
-    let dataCurrency = {} as Currency
-
-    const getIsLoading = computed(() => store.getters.getIsLoading)
-    const getDataCurrency = computed(() => store.getters.getCurrentCurrency)
-
-    const getRelativeSupply = computed(() => {
-      if (dataCurrency.maxSupply == null) return
-      const divide = Number(((+dataCurrency.supply) / (+dataCurrency.maxSupply)).toFixed(2))
-      return `${divide * 100}% of total supply`
-    })
-
-
-    ApiService.loadCurrentCurrency(props.id)
-      .then(() => {
-        ApiService.setLoading(false)
-      })
-
-    return { id: props.id, getDataCurrency, getIsLoading, getRelativeSupply, openModal, getFormatCurrency }
-  }
-})
-</script>
 <style lang='scss' scoped>
 .container-currency {
   position: fixed;

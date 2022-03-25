@@ -1,37 +1,37 @@
+<script setup lang='ts'>
+import { computed } from 'vue';
+
+interface Props {
+  size?: string,
+}
+const props = defineProps<Props>()
+
+const getLoader = computed(() => {
+  if (props.size === 'small') {
+    return {
+      animationName: 'loader-small',
+      background: 'background-color: transparent',
+      colorLoader: 'background-color: rgb(255,255,255)'
+    }
+  } else {
+    return {
+      animationName: 'loader-default',
+      background: 'background-color: rgba(22, 22, 22, 0.9)',
+      colorLoader: 'background-color: #2c2c2c'
+    }
+  }
+})
+
+</script>
+
 <template>
-  <div :style="getLoaderBackground" class="container-loader">
-    <div :class="getLoaderAnimation" class="loader">
-      <span :style="getLoaderColor"></span>
+  <div :style="getLoader.background" class="container-loader">
+    <div :class="getLoader.animationName" class="loader">
+      <span :style="getLoader.colorLoader"></span>
     </div>
   </div>
 </template>
-<script lang='ts'>
-import { computed, defineComponent } from 'vue';
-export default defineComponent({
-  name: 'SpinnerLoader',
-  props: ['size'],
-  setup(props) {
 
-    const getLoaderAnimation = computed(() => {
-      if (props.size === 'small') return 'loader-small'
-      else return 'loader-default'
-    })
-
-    const getLoaderBackground = computed(() => {
-      if (props.size === 'small') {
-        //
-      } else return 'background-color: rgba(22, 22, 22, 0.9);'
-    })
-
-    const getLoaderColor = computed(() => {
-      if (props.size === 'small') return 'background-color: rgb(255,255,255);'
-      else return 'background-color: #2c2c2c;'
-    })
-
-    return { getLoaderAnimation, getLoaderBackground, getLoaderColor }
-  }
-})
-</script>
 <style lang='scss' scoped>
 .container-loader {
   top: 0;
