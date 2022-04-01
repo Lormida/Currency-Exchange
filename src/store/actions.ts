@@ -2,59 +2,56 @@ import { ActionContext, ActionTree } from 'vuex'
 import { State, Currency } from './state'
 import { Mutations, MutationsType } from './mutations'
 import { Getters } from './getters'
-import axios from 'axios'
+import axios, { AxiosResponse } from 'axios'
 
 export enum ActionsType {
   LoadAllCurrencies = 'GET_ALL_ITEMS',
-  LoadCurrentCurrency = "LOAD_CURRENT_CURRENCY",
+  LoadCurrentCurrency = 'LOAD_CURRENT_CURRENCY',
 }
 
 type AugmentedAction = Omit<ActionContext<State, State>, 'commit'> & {
-  commit<K extends keyof Mutations>(
-    key: K,
-    payload: Parameters<Mutations[K]>[1]
-  ): ReturnType<Mutations[K]>
+  commit<K extends keyof Mutations>(key: K, payload: Parameters<Mutations[K]>[1]): ReturnType<Mutations[K]>
 }
 
 export interface Actions {
-  [ActionsType.LoadAllCurrencies](context: AugmentedAction, params: { currentPage: number, limit: number }): Promise<any>,
-  [ActionsType.LoadCurrentCurrency](context: AugmentedAction, currencyName: string): Promise<any>,
+  [ActionsType.LoadAllCurrencies](context: AugmentedAction, params: { currentPage: number; limit: number }): Promise<any>
+  [ActionsType.LoadCurrentCurrency](context: AugmentedAction, currencyName: string): Promise<any>
 }
 
 export const actions: ActionTree<State, State> & Actions = {
-
   [ActionsType.LoadAllCurrencies](context, { currentPage, limit }) {
-
     context.commit(MutationsType.SetLoading, true)
 
-    return axios.get('https://api.coincap.io/v2/assets', { params: { offset: (currentPage - 1) * limit, limit } })
-      .then(response => response.data)
+    const regArgs = { params: { offset: (currentPage - 1) * limit, limit } }
+
+    return axios
+      .get(`${context.getters.getBaseApiURL}`, regArgs)
+      .then((response) => response.data)
       .then(({ data }) => {
-        new Promise<void>(resolve => {
+        new Promise<void>((resolve) => {
           setTimeout(() => {
             context.commit(MutationsType.SaveCurrenciesLocal, data)
             resolve()
-          }, 0);
+          }, 0)
         })
-
       })
-      .catch(e => console.log(e))
+      .catch((e) => console.log(e))
   },
 
   [ActionsType.LoadCurrentCurrency](context, currencyName) {
-
     context.commit(MutationsType.SetLoading, true)
 
-    return axios.get(`https://api.coincap.io/v2/assets/${currencyName}`)
-      .then(response => response.data)
+    return axios
+      .get(`${context.getters.getBaseApiURL}/${currencyName}`)
+      .then((response) => response.data)
       .then(({ data }) => {
-        new Promise<void>(resolve => {
+        new Promise<void>((resolve) => {
           setTimeout(() => {
             context.commit(MutationsType.SaveCurrentCurrencyLocal, data)
             resolve()
-          }, 0);
+          }, 0)
         })
       })
-      .catch(e => console.log(e))
-  }
+      .catch((e) => console.log(e))
+  },
 }

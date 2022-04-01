@@ -1,12 +1,12 @@
-<script setup lang='ts'>
-import { computed } from 'vue';
+<script setup lang="ts">
+import { computed } from 'vue'
 import TheChart from '@/components/CurrencyPage/TheChart.vue'
 import CurrencyPageMarketStats from '@/components/CurrencyPage/CurrencyPageMarketStats.vue'
 import ApiService from '@/utils/ApiService'
 import { useStore } from '@/store'
-import { defineProps } from 'vue';
-import { getFormatCurrency } from '@/hooks/getFormatCurrency';
-import { openModal } from '@/hooks/openModal';
+import { defineProps } from 'vue'
+import { getFormatCurrency } from '@/hooks/getFormatCurrency'
+import { openModal } from '@/hooks/openModal'
 
 interface Props {
   id: string
@@ -20,17 +20,13 @@ const getDataCurrency = computed(() => store.getters.getCurrentCurrency)
 
 const getRelativeSupply = computed(() => {
   if (getDataCurrency.value.maxSupply == null) return null
-  const divide = Number(((+getDataCurrency.value.supply) / (+getDataCurrency.value.maxSupply)).toFixed(2))
+  const divide = Number((+getDataCurrency.value.supply / +getDataCurrency.value.maxSupply).toFixed(2))
   return `${divide * 100}% of total supply`
 })
 
-
-ApiService.loadCurrentCurrency(props.id)
-  .then(() => {
-    ApiService.setLoading(false)
-  })
-
-
+ApiService.loadCurrentCurrency(props.id).then(() => {
+  ApiService.setLoading(false)
+})
 </script>
 
 <template>
@@ -43,10 +39,7 @@ ApiService.loadCurrentCurrency(props.id)
           <span class="currency__title-currency">{{ getDataCurrency.symbol }}</span>
         </div>
 
-        <div
-          class="currency__title-wrapper currency__buy-wrapper"
-          @click="openModal(getDataCurrency.name)"
-        >
+        <div class="currency__title-wrapper currency__buy-wrapper" @click="openModal(getDataCurrency.name)">
           <span class="currency__title-name currency__buy-text">Buy</span>
         </div>
       </header>
@@ -58,10 +51,9 @@ ApiService.loadCurrentCurrency(props.id)
             <header class="chart__header">
               <span class="chart__currency-short">$</span>
               <span class="chart__currency-price">{{ (+getDataCurrency.priceUsd).toFixed(2) }}</span>
-              <span
-                :class="getFormatCurrency(+getDataCurrency.changePercent24Hr)"
-                class="chart__currency-price-change"
-              >{{ (+getDataCurrency.changePercent24Hr).toFixed(2) }}%</span>
+              <span :class="getFormatCurrency(+getDataCurrency.changePercent24Hr)" class="chart__currency-price-change"
+                >{{ (+getDataCurrency.changePercent24Hr).toFixed(2) }}%</span
+              >
             </header>
 
             <main class="chart__content">
@@ -71,10 +63,7 @@ ApiService.loadCurrentCurrency(props.id)
           </div>
 
           <!-- Market Stats -->
-          <CurrencyPageMarketStats
-            :getDataCurrency="getDataCurrency"
-            :getRelativeSupply="getRelativeSupply"
-          ></CurrencyPageMarketStats>
+          <CurrencyPageMarketStats :getDataCurrency="getDataCurrency" :getRelativeSupply="getRelativeSupply"></CurrencyPageMarketStats>
         </div>
       </main>
     </div>
@@ -82,7 +71,7 @@ ApiService.loadCurrentCurrency(props.id)
   </div>
 </template>
 
-<style lang='scss' scoped>
+<style lang="scss" scoped>
 .container-currency {
   position: fixed;
   top: 0;
@@ -172,8 +161,7 @@ ApiService.loadCurrentCurrency(props.id)
   // .currency__card
 
   &__card {
-    box-shadow: rgba(14, 30, 37, 0.12) 0px 2px 4px 0px,
-      rgba(14, 30, 37, 0.32) 0px 2px 16px 0px;
+    box-shadow: rgba(14, 30, 37, 0.12) 0px 2px 4px 0px, rgba(14, 30, 37, 0.32) 0px 2px 16px 0px;
     height: 100%;
   }
 

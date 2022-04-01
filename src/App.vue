@@ -1,11 +1,10 @@
-<script setup lang='ts'>
-import TheModal from '@/components/UI/TheModal.vue';
+<script setup lang="ts">
+import TheModal from '@/components/UI/TheModal.vue'
 import { useStore } from '@/store'
-import { computed } from 'vue';
+import { computed } from 'vue'
 
 const store = useStore()
 const getIsModalOpen = computed(() => store.getters.getIsModalOpen)
-
 </script>
 
 <template>
@@ -19,10 +18,9 @@ const getIsModalOpen = computed(() => store.getters.getIsModalOpen)
   <TheModal v-if="getIsModalOpen"></TheModal>
 </template>
 
-
-<style lang='scss'>
+<style lang="scss">
 * {
-  font-family: "Inter", sans-serif;
+  font-family: 'Inter', sans-serif;
   box-sizing: border-box;
 }
 .page-enter-from,
@@ -51,7 +49,7 @@ html {
 .currency-growth {
   color: green;
   &::before {
-    content: "+";
+    content: '+';
   }
 }
 </style>

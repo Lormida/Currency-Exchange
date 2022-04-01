@@ -1,4 +1,4 @@
-import ModalService from "@/utils/ModalService"
+import ModalService from '@/utils/ModalService'
 
 export const openModal = (currentModalIndicator: string) => {
   ModalService.changeCurrentModalIndicator(currentModalIndicator)

@@ -1,18 +1,17 @@
-<script setup lang='ts'>
+<script setup lang="ts">
 import ApiService from '@/utils/ApiService'
 import { useStore } from '@/store'
 import HomePageTableCurrencies from '@/components/HomePage/HomePageTableCurrencies.vue'
 import HomePageNavbar from '@/components/HomePage/HomePageNavbar.vue'
-import HomePagePagination from '@/components/HomePage/HomePagePagination.vue';
-import { computed, onMounted, Ref, ref } from 'vue';
-import SpinnerLoader from '../components/UI/SpinnerLoader.vue';
+import HomePagePagination from '@/components/HomePage/HomePagePagination.vue'
+import { computed, onMounted, Ref, ref } from 'vue'
+import SpinnerLoader from '../components/UI/SpinnerLoader.vue'
 
 //* Initialization
 const store = useStore()
 const limit = 7
 const currentPage = ref(1)
 const totalPage = Math.ceil(100 / limit)
-
 
 const setNewPage = async (pageNumber: number) => {
   currentPage.value = pageNumber
@@ -22,10 +21,9 @@ const setNewPage = async (pageNumber: number) => {
 const fetchData = async (currentPage: Ref<number>, limit: number) => {
   ApiService.setLoading(true)
 
-  ApiService.getAllCurrencies({ currentPage: currentPage.value, limit })
-    .then(() => {
-      ApiService.setLoading(false)
-    })
+  ApiService.getAllCurrencies({ currentPage: currentPage.value, limit }).then(() => {
+    ApiService.setLoading(false)
+  })
 }
 
 const getCurrentPage = computed(() => currentPage.value)
@@ -35,7 +33,6 @@ const getIsLoading = computed(() => store.getters.getIsLoading)
 onMounted(async () => {
   await fetchData(currentPage, limit)
 })
-
 </script>
 
 <template>
@@ -55,17 +52,12 @@ onMounted(async () => {
     </main>
 
     <footer class="footer">
-      <HomePagePagination
-        :currentPage="getCurrentPage"
-        :totalPage="totalPage"
-        @change-current-page="setNewPage"
-      ></HomePagePagination>
+      <HomePagePagination :currentPage="getCurrentPage" :totalPage="totalPage" @change-current-page="setNewPage"></HomePagePagination>
     </footer>
   </div>
 </template>
 
-
-<style lang='scss' scoped>
+<style lang="scss" scoped>
 .home-container {
   position: fixed;
   height: 100%;

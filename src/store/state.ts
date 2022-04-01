@@ -1,13 +1,14 @@
-import { Currency, PurchasedCurrency, Modal, actualBagDataType } from "@/utils/types"
+import { Currency, PurchasedCurrency, Modal, actualBagDataType } from '@/utils/types'
 import { reactive } from 'vue'
 
 type State = {
-  currencies: Currency[],
-  currentCurrency: Currency,
-  isLoading: boolean,
-  modal: Modal,
+  currencies: Currency[]
+  currentCurrency: Currency
+  isLoading: boolean
+  modal: Modal
   bag: PurchasedCurrency[]
-  actualBagData: actualBagDataType,
+  actualBagData: actualBagDataType
+  baseApiURL: string
 }
 
 const state: State = {
@@ -16,7 +17,7 @@ const state: State = {
   isLoading: true,
   modal: {
     currentModalIndicator: '',
-    isModalOpen: false
+    isModalOpen: false,
   },
   bag: [] as PurchasedCurrency[],
   actualBagData: reactive({
@@ -25,6 +26,7 @@ const state: State = {
     profitPercent: 0,
     profitAbsolute: 0,
   }),
+  baseApiURL: 'https://api.coincap.io/v2/assets',
 }
 
 export { state, State, Currency, PurchasedCurrency }

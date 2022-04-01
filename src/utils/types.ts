@@ -1,51 +1,51 @@
-import { reactive } from "vue"
+import { reactive } from 'vue'
 
 export type Currency = {
   id: string
-  rank: string,
-  symbol: string,
-  name: string,
-  supply: string,
-  maxSupply: string,
-  marketCapUsd: string,
-  volumeUsd24Hr: string,
-  priceUsd: string,
-  changePercent24Hr: string,
-  vwap24Hr: string,
-  explorer: string,
+  rank: string
+  symbol: string
+  name: string
+  supply: string
+  maxSupply: string
+  marketCapUsd: string
+  volumeUsd24Hr: string
+  priceUsd: string
+  changePercent24Hr: string
+  vwap24Hr: string
+  explorer: string
 }
 export type PurchasedCurrency = {
-  name: string,
-  symbol: string,
+  name: string
+  symbol: string
   amount: number
-  purchasePriceUsd: number,
+  purchasePriceUsd: number
 }
 
 export type historyCurrency = {
-  priceUsd: string,
+  priceUsd: string
   time: number
 }
 
 export type chartDataType = {
-  labels: Array<string>,
-  datasets : [
+  labels: Array<string>
+  datasets: [
     {
-      label: string,
+      label: string
       data: Array<number>
     }
   ]
 }
 
 export type Modal = {
-  currentModalIndicator: string,
+  currentModalIndicator: string
   isModalOpen: boolean
 }
 
 export type actualBagDataType = {
-  oldBagValue: number,
-  actualBagValue: number,
-  profitPercent: number,
-  profitAbsolute: number,
+  oldBagValue: number
+  actualBagValue: number
+  profitPercent: number
+  profitAbsolute: number
 }
 
 export type getActualCurrencyPrices = {

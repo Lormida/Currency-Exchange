@@ -1,18 +1,17 @@
-<script setup lang='ts'>
-import { getFormatCurrency } from '@/hooks/getFormatCurrency';
-import { openModal } from '@/hooks/openModal';
-import { Currency } from '@/utils/types';
-import { computed } from 'vue';
+<script setup lang="ts">
+import { getFormatCurrency } from '@/hooks/getFormatCurrency'
+import { openModal } from '@/hooks/openModal'
+import { Currency } from '@/utils/types'
+import { computed } from 'vue'
 
 interface Props {
-  currencies: Currency[],
-  currentPage: number,
+  currencies: Currency[]
+  currentPage: number
   limit: number
 }
 const props = defineProps<Props>()
 
 const getCurrencies = computed(() => props.currencies)
-
 </script>
 
 <template>
@@ -30,32 +29,20 @@ const getCurrencies = computed(() => props.currencies)
     <tbody>
       <template v-for="(currency, index) of getCurrencies" :key="currency.id">
         <tr class="currency-table__row">
-          <th
-            class="align-middle text-center"
-            scope="row"
-          >{{ (currentPage - 1) * limit + index + 1 }}</th>
+          <th class="align-middle text-center" scope="row">{{ (currentPage - 1) * limit + index + 1 }}</th>
           <td class="align-middle">
-            <router-link
-              class="currency-table__link-detail"
-              :to="{ name: 'currency', params: { id: currency.id } }"
-            >
+            <router-link class="currency-table__link-detail" :to="{ name: 'currency', params: { id: currency.id } }">
               {{ currency.name }}
               <span class="currency-table__currency-symbol">{{ currency.symbol }}</span>
             </router-link>
           </td>
           <td class="align-middle">$ {{ (+currency.priceUsd).toFixed(2) }}</td>
           <td class="text-start align-middle">
-            <span
-              :class="getFormatCurrency(+currency.changePercent24Hr)"
-            >{{ (+currency.changePercent24Hr).toFixed(2) }}%</span>
+            <span :class="getFormatCurrency(+currency.changePercent24Hr)">{{ (+currency.changePercent24Hr).toFixed(2) }}%</span>
           </td>
           <td class="align-middle">chart</td>
           <td class="align-middle">
-            <button
-              type="button"
-              class="currency-table__btn btn btn-success px-3"
-              @click="openModal(currency.id)"
-            >Buy</button>
+            <button type="button" class="currency-table__btn btn btn-success px-3" @click="openModal(currency.id)">Buy</button>
           </td>
         </tr>
       </template>
@@ -63,7 +50,7 @@ const getCurrencies = computed(() => props.currencies)
   </table>
 </template>
 
-<style lang='scss' scoped>
+<style lang="scss" scoped>
 .currency-table {
   background-color: #f8f7ff;
   box-shadow: rgba(0, 0, 0, 0.08) 0px 4px 12px;

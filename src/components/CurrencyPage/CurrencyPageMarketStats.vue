@@ -1,14 +1,13 @@
-<script setup lang='ts'>
-import { getFormatCurrency } from '@/hooks/getFormatCurrency';
-import { Currency } from '@/utils/types';
+<script setup lang="ts">
+import { getFormatCurrency } from '@/hooks/getFormatCurrency'
+import { Currency } from '@/utils/types'
 import { getDegreeCalc } from '@/hooks/getDegreeCalc'
 
 interface Props {
-  getRelativeSupply: string | null,
+  getRelativeSupply: string | null
   getDataCurrency: Currency
 }
 const props = defineProps<Props>()
-
 </script>
 
 <template>
@@ -20,35 +19,28 @@ const props = defineProps<Props>()
     <main class="market__body">
       <div class="market__cap-wrapper">
         <div class="market__cap-title title">Market Cap</div>
-        <div
-          class="market__cap-value value"
-        >${{ getDegreeCalc(getDataCurrency.marketCapUsd, 9) }} Milliards</div>
+        <div class="market__cap-value value">${{ getDegreeCalc(getDataCurrency.marketCapUsd, 9) }} Milliards</div>
       </div>
 
       <div class="market__volume-24h">
         <div class="market__volume-24h-title title">Volume (24h)</div>
-        <div
-          class="market__volume-24h-value value"
-        >{{ getDegreeCalc(getDataCurrency.volumeUsd24Hr, 9) }} Milliards</div>
-        <div
-          :class="getFormatCurrency(+getDataCurrency.changePercent24Hr)"
-          class="market__volume-24h-stats stats"
-        >{{ getDegreeCalc(getDataCurrency.changePercent24Hr, 9) }}%</div>
+        <div class="market__volume-24h-value value">{{ getDegreeCalc(getDataCurrency.volumeUsd24Hr, 9) }} Milliards</div>
+        <div :class="getFormatCurrency(+getDataCurrency.changePercent24Hr)" class="market__volume-24h-stats stats">
+          {{ getDegreeCalc(getDataCurrency.changePercent24Hr, 9) }}%
+        </div>
       </div>
 
       <div class="market__circulating-supply">
         <div class="market__circulating-supply-title title">Circulating supply</div>
-        <div
-          class="market__circulating-supply-value value"
-        >{{ getDegreeCalc(getDataCurrency.supply, 9) }} Milliards {{ getDataCurrency.symbol }}</div>
+        <div class="market__circulating-supply-value value">
+          {{ getDegreeCalc(getDataCurrency.supply, 9) }} Milliards {{ getDataCurrency.symbol }}
+        </div>
         <div class="market__circulating-supply-stats stats">{{ getRelativeSupply }}</div>
       </div>
 
       <div class="market__typical-hold-time">
         <div class="market__typical-hold-time-title title">Average price (24h)</div>
-        <div
-          class="market__typical-hold-time-value value"
-        >${{ (+getDataCurrency.vwap24Hr).toFixed(2) }}</div>
+        <div class="market__typical-hold-time-value value">${{ (+getDataCurrency.vwap24Hr).toFixed(2) }}</div>
       </div>
 
       <div class="market__popularity">
@@ -59,8 +51,7 @@ const props = defineProps<Props>()
   </div>
 </template>
 
-
-<style lang='scss' scoped>
+<style lang="scss" scoped>
 .title {
   font-size: 16px;
   font-weight: bolder;

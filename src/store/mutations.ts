@@ -1,4 +1,4 @@
-import { actualBagDataType } from '@/utils/types';
+import { actualBagDataType } from '@/utils/types'
 import { MutationTree } from 'vuex'
 import { State, Currency, PurchasedCurrency } from './state'
 
@@ -17,17 +17,17 @@ export enum MutationsType {
 }
 
 export interface Mutations {
-  [MutationsType.SetLoading](state: State, status: boolean): void,
-  [MutationsType.SaveCurrenciesLocal](state: State, currencies: Currency[]): void,
-  [MutationsType.SaveCurrentCurrencyLocal](state: State, currentCurrency: Currency): void,
+  [MutationsType.SetLoading](state: State, status: boolean): void
+  [MutationsType.SaveCurrenciesLocal](state: State, currencies: Currency[]): void
+  [MutationsType.SaveCurrentCurrencyLocal](state: State, currentCurrency: Currency): void
 
-  [MutationsType.ChangeModalState](state: State, stateModal: boolean): void,
-  [MutationsType.ChangeCurrentModalIndicator](state: State, currentModalIndicator: string): void,
+  [MutationsType.ChangeModalState](state: State, stateModal: boolean): void
+  [MutationsType.ChangeCurrentModalIndicator](state: State, currentModalIndicator: string): void
 
-  [MutationsType.DeleteCurrencyFromBag](state: State, currencyName: string): void,
-  [MutationsType.AddCurrencyToBag](state: State, newCurrency: PurchasedCurrency): void,
-  [MutationsType.LoadBagLocal](state: State, bag: PurchasedCurrency[]): void,
-  [MutationsType.ChangeActualBagData](state: State, actualBagProfit: actualBagDataType): void,
+  [MutationsType.DeleteCurrencyFromBag](state: State, currencyName: string): void
+  [MutationsType.AddCurrencyToBag](state: State, newCurrency: PurchasedCurrency): void
+  [MutationsType.LoadBagLocal](state: State, bag: PurchasedCurrency[]): void
+  [MutationsType.ChangeActualBagData](state: State, actualBagProfit: actualBagDataType): void
 }
 
 export const mutations: MutationTree<State> & Mutations = {
@@ -35,7 +35,7 @@ export const mutations: MutationTree<State> & Mutations = {
     if (status === false) {
       setTimeout(() => {
         state.isLoading = status
-      }, 1000);
+      }, 1000)
     } else {
       state.isLoading = status
     }
@@ -55,14 +55,13 @@ export const mutations: MutationTree<State> & Mutations = {
   },
 
   [MutationsType.DeleteCurrencyFromBag](state, currencyName: string) {
-    state.bag = [].filter.call(state.bag, ((currency: PurchasedCurrency) => currency.name !== currencyName))
+    state.bag = [].filter.call(state.bag, (currency: PurchasedCurrency) => currency.name !== currencyName)
   },
   [MutationsType.AddCurrencyToBag](state, newCurrency: PurchasedCurrency) {
-
     const findIndex = state.bag.findIndex((currency: PurchasedCurrency) => currency.name === newCurrency.name)
 
     // If currency already exists - increase its amount
-    if (findIndex != - 1) {
+    if (findIndex != -1) {
       const oldCurrency = state.bag[findIndex]
 
       state.bag[findIndex] = {
@@ -74,7 +73,6 @@ export const mutations: MutationTree<State> & Mutations = {
     else {
       state.bag.push(newCurrency)
     }
-
   },
   [MutationsType.LoadBagLocal](state, bag) {
     state.bag = bag
@@ -86,5 +84,5 @@ export const mutations: MutationTree<State> & Mutations = {
     state.actualBagData.actualBagValue = actualBagValue
     state.actualBagData.profitPercent = profitPercent
     state.actualBagData.profitAbsolute = profitAbsolute
-  }
+  },
 }

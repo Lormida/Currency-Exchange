@@ -1,11 +1,11 @@
 <script setup lang="ts">
-import { computed, onMounted, ref } from 'vue';
-import CardCurrency from '@/components/UI/CardCurrency.vue';
-import ApiService from '@/utils/ApiService';
-import BagService from '@/utils/BagService';
-import { useStore } from '@/store';
-import { getFormatCurrency } from '@/hooks/getFormatCurrency';
-import { openModal } from '@/hooks/openModal';
+import { computed, onMounted, ref } from 'vue'
+import CardCurrency from '@/components/UI/CardCurrency.vue'
+import ApiService from '@/utils/ApiService'
+import BagService from '@/utils/BagService'
+import { useStore } from '@/store'
+import { getFormatCurrency } from '@/hooks/getFormatCurrency'
+import { openModal } from '@/hooks/openModal'
 
 let currencies = ref()
 let isLoading = ref(true)
@@ -25,7 +25,7 @@ const initTooltip = () => {
 const getActualBagData = computed(() => store.getters.getActualBagData)
 
 //* loading bag from LocalStorage
-BagService.loadBagLocal();
+BagService.loadBagLocal()
 
 //* Update info about bag
 BagService.updateInfoBag(BagService.getActualCurrencyPrices, BagService.getBag())
@@ -35,9 +35,7 @@ setInterval(() => {
   BagService.updateInfoBag(BagService.getActualCurrencyPrices, BagService.getBag())
 }, 30000)
 
-
 onMounted(() => {
-
   ApiService.getTop3Currencies()
     .then((data) => {
       currencies.value = data
@@ -47,7 +45,6 @@ onMounted(() => {
       initTooltip()
     })
 })
-
 </script>
 
 <template>
@@ -75,29 +72,22 @@ onMounted(() => {
         Before: ${{ getActualBagData.oldBagValue }}
         <br />
         Today : ${{ getActualBagData.actualBagValue }}
-        <span
-          :class="getFormatCurrency(+getActualBagData.profitPercent)"
-        >({{ getActualBagData.profitPercent }}%)</span>
+        <span :class="getFormatCurrency(+getActualBagData.profitPercent)">({{ getActualBagData.profitPercent }}%)</span>
       </div>
 
-      <div
-        class="bag__label m-1 flex-grow-1 p-1 text-center align-self-start mt-4 border border-dark border-2"
-      >
+      <div class="bag__label m-1 flex-grow-1 p-1 text-center align-self-start mt-4 border border-dark border-2">
         {{ getActualBagData.actualBagValue }} USD
-        <span
-          :class="getFormatCurrency(+getActualBagData.profitAbsolute)"
-        >{{ getActualBagData.profitAbsolute }}</span>
+        <span :class="getFormatCurrency(+getActualBagData.profitAbsolute)">{{ getActualBagData.profitAbsolute }}</span>
         USD
-        <span
-          style="border-bottom: 1px #222 solid;"
-          :class="getFormatCurrency(+getActualBagData.profitPercent)"
-        >({{ getActualBagData.profitPercent }}%)</span>
+        <span style="border-bottom: 1px #222 solid" :class="getFormatCurrency(+getActualBagData.profitPercent)"
+          >({{ getActualBagData.profitPercent }}%)</span
+        >
       </div>
     </div>
   </nav>
 </template>
 
-<style lang='scss' scoped>
+<style lang="scss" scoped>
 .nav {
   height: 100%;
   padding: 15px;
@@ -108,8 +98,7 @@ onMounted(() => {
   // .nav__card-currency-wrapper
 
   &__card-currency-wrapper {
-    box-shadow: rgba(50, 50, 93, 0.25) 0px 13px 27px -5px,
-      rgba(0, 0, 0, 0.3) 0px 8px 16px -8px;
+    box-shadow: rgba(50, 50, 93, 0.25) 0px 13px 27px -5px, rgba(0, 0, 0, 0.3) 0px 8px 16px -8px;
     border: 3px #222 dashed;
     background-color: #ece4db;
     height: 100%;
@@ -118,8 +107,7 @@ onMounted(() => {
   // .nav__bag
 
   &__bag {
-    box-shadow: rgba(50, 50, 93, 0.25) 0px 13px 27px -5px,
-      rgba(0, 0, 0, 0.3) 0px 8px 16px -8px;
+    box-shadow: rgba(50, 50, 93, 0.25) 0px 13px 27px -5px, rgba(0, 0, 0, 0.3) 0px 8px 16px -8px;
     position: relative;
     border: 3px #222 dashed;
     background-color: #f8edeb;
@@ -147,9 +135,8 @@ onMounted(() => {
   // .bag__label
 
   &__label {
-    box-shadow: rgba(0, 0, 0, 0.09) 0px 2px 1px, rgba(0, 0, 0, 0.09) 0px 4px 2px,
-      rgba(0, 0, 0, 0.09) 0px 8px 4px, rgba(0, 0, 0, 0.09) 0px 16px 8px,
-      rgba(0, 0, 0, 0.09) 0px 32px 16px;
+    box-shadow: rgba(0, 0, 0, 0.09) 0px 2px 1px, rgba(0, 0, 0, 0.09) 0px 4px 2px, rgba(0, 0, 0, 0.09) 0px 8px 4px,
+      rgba(0, 0, 0, 0.09) 0px 16px 8px, rgba(0, 0, 0, 0.09) 0px 32px 16px;
     background-color: #f8edeb;
     border-radius: 10px;
     font-size: 14px;

@@ -1,18 +1,19 @@
-import { actualBagDataType } from '@/utils/types';
+import { actualBagDataType } from '@/utils/types'
 import { GetterTree } from 'vuex'
 import { State, Currency, PurchasedCurrency } from './state'
 
 type CustomGetter = (currencyName: string) => number
 
 export type Getters = {
-  getCurrencies(state: State): Currency[],
-  getCurrentCurrency(state: State): Currency,
-  getIsLoading(state: State): boolean,
-  getIsModalOpen(state: State): boolean,
-  getCurrentModalIndicator(state: State): string,
-  getDetailCurrency(state: State, getters: Getters): CustomGetter;
-  getBag(state: State, getters: Getters): PurchasedCurrency[];
+  getCurrencies(state: State): Currency[]
+  getCurrentCurrency(state: State): Currency
+  getIsLoading(state: State): boolean
+  getIsModalOpen(state: State): boolean
+  getCurrentModalIndicator(state: State): string
+  getDetailCurrency(state: State, getters: Getters): CustomGetter
+  getBag(state: State, getters: Getters): PurchasedCurrency[]
   getActualBagData(state: State): actualBagDataType
+  getBaseApiURL(state: State): string
 }
 
 export const getters: GetterTree<State, State> & Getters = {
@@ -33,10 +34,11 @@ export const getters: GetterTree<State, State> & Getters = {
   },
   getDetailCurrency(_, getters) {
     return function (currencyName: string) {
-      currencyName = currencyName.toLowerCase();
+      currencyName = currencyName.toLowerCase()
       const fnFit = (currency: Currency) => currency.id == currencyName
-      const foundCurrency: Currency = ([].filter.call(getters.getCurrencies, fnFit))[0]
-      return (+foundCurrency?.supply)
+
+      const foundCurrency: Currency = [].filter.call(getters.getCurrencies, fnFit)[0]
+      return +foundCurrency?.supply
     }
   },
   getBag(state) {
@@ -44,6 +46,8 @@ export const getters: GetterTree<State, State> & Getters = {
   },
   getActualBagData(state) {
     return state.actualBagData
-  }
-
+  },
+  getBaseApiURL(state) {
+    return state.baseApiURL
+  },
 }
