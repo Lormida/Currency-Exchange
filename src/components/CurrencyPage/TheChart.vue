@@ -2,12 +2,8 @@
 import { ref, onMounted, computed } from 'vue'
 import { LineChart } from 'vue-chart-3'
 import { Chart, registerables } from 'chart.js'
-import axios from 'axios'
 import { chartDataType, historyCurrency } from '@/utils/types'
-import { useStore } from '@/store'
-import { apiCoincap } from '@/hooks/apiCoincap'
-
-const store = useStore()
+import ApiService from '@/utils/ApiService'
 
 Chart.register(...registerables)
 
@@ -24,10 +20,7 @@ let chartData = {} as chartDataType
 
 const fetchData = async () => {
   try {
-    const reqArgs = { params: { interval: 'm1' } }
-    const response = (await apiCoincap.get(`${props.currency}/history`, reqArgs)).data
-
-    const data: historyCurrency[] = response.data
+    const data = await ApiService.getChartCurrencyData(props.currency)
 
     data.forEach((item: historyCurrency) => {
       dataX.push(new Date(item.time).toLocaleTimeString().slice(0, -6))

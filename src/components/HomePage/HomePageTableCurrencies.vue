@@ -22,7 +22,6 @@ const getCurrencies = computed(() => props.currencies)
         <th class="lead" scope="col">Name</th>
         <th class="lead" scope="col">Price</th>
         <th class="lead" scope="col">Change</th>
-        <th class="lead" scope="col">Chart</th>
         <th class="lead" scope="col">Trade</th>
       </tr>
     </thead>
@@ -40,7 +39,6 @@ const getCurrencies = computed(() => props.currencies)
           <td class="text-start align-middle">
             <span :class="getFormatCurrency(+currency.changePercent24Hr)">{{ (+currency.changePercent24Hr).toFixed(2) }}%</span>
           </td>
-          <td class="align-middle">chart</td>
           <td class="align-middle">
             <button type="button" class="currency-table__btn btn btn-success px-3" @click="openModal(currency.id)">Buy</button>
           </td>

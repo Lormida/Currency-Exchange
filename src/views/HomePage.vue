@@ -1,11 +1,12 @@
 <script setup lang="ts">
 import ApiService from '@/utils/ApiService'
+import { getIsLoading } from '@/hooks/getIsLoading'
 import { useStore } from '@/store'
 import HomePageTableCurrencies from '@/components/HomePage/HomePageTableCurrencies.vue'
 import HomePageNavbar from '@/components/HomePage/HomePageNavbar.vue'
 import HomePagePagination from '@/components/HomePage/HomePagePagination.vue'
 import { computed, onMounted, Ref, ref } from 'vue'
-import SpinnerLoader from '../components/UI/SpinnerLoader.vue'
+import SpinnerLoader from '@/components/UI/SpinnerLoader.vue'
 
 //* Initialization
 const store = useStore()
@@ -28,7 +29,6 @@ const fetchData = async (currentPage: Ref<number>, limit: number) => {
 
 const getCurrentPage = computed(() => currentPage.value)
 const getCurrencies = computed(() => store.getters.getCurrencies)
-const getIsLoading = computed(() => store.getters.getIsLoading)
 
 onMounted(async () => {
   await fetchData(currentPage, limit)

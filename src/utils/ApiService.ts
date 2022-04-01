@@ -4,6 +4,7 @@ import { Currency } from '@/store/state'
 import { SuperStore, useStore } from '@/store'
 import axios from 'axios'
 import { apiCoincap } from '@/hooks/apiCoincap'
+import { historyCurrency } from './types'
 
 interface ApiFetching {
   getAllCurrencies(params: { currentPage: number; limit: number }): void
@@ -11,6 +12,7 @@ interface ApiFetching {
   getTop3Currencies(): Promise<Currency[]>
   loadCurrentCurrency(currencyName: string): void
   setLoading(loadingStatus: boolean): void
+  getChartCurrencyData(currency: string): Promise<historyCurrency[]>
 }
 
 class ApiService implements ApiFetching {
@@ -34,6 +36,15 @@ class ApiService implements ApiFetching {
     try {
       const reqArgs = { params: { limit: 3 } }
       const response = (await apiCoincap(reqArgs)).data
+      return response.data
+    } catch (e) {
+      console.log(e)
+    }
+  }
+  async getChartCurrencyData(currency: string) {
+    try {
+      const reqArgs = { params: { interval: 'm1' } }
+      const response = (await apiCoincap.get(`${currency}/history`, reqArgs)).data
       return response.data
     } catch (e) {
       console.log(e)

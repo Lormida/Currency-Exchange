@@ -1,19 +1,17 @@
-<script setup lang='ts'>
-
+<script setup lang="ts">
 import { getFormatCurrency } from '@/hooks/getFormatCurrency'
-import { openModal } from '@/hooks/openModal';
+import { openModal } from '@/hooks/openModal'
 import { getDegreeCalc } from '@/hooks/getDegreeCalc'
 
 interface Props {
-  name: string,
-  changePercent24Hr: number,
-  priceUsd: number,
-  marketCapUsd: number,
-  id: string,
+  name: string
+  changePercent24Hr: number
+  priceUsd: number
+  marketCapUsd: number
+  id: string
   index: number
 }
 const props = defineProps<Props>()
-
 </script>
 
 <template>
@@ -40,18 +38,13 @@ const props = defineProps<Props>()
       </div>
 
       <div class="card__footer">
-        <button
-          type="button"
-          class="card__btn-buy btn mx-auto my-2 px-4 btn-sm btn-outline-success"
-          @click="openModal(id)"
-        >Buy</button>
+        <button type="button" class="card__btn-buy btn mx-auto my-2 px-4 btn-sm btn-outline-success" @click="openModal(id)">Buy</button>
       </div>
     </div>
   </div>
 </template>
 
-
-<style lang='scss' scoped>
+<style lang="scss" scoped>
 .card {
   box-shadow: rgba(0, 0, 0, 0.19) 0px 10px 20px, rgba(0, 0, 0, 0.23) 0px 6px 6px;
   height: 100%;
@@ -100,7 +93,7 @@ const props = defineProps<Props>()
 .card-table--currency-growth {
   color: green;
   &::before {
-    content: "+";
+    content: '+';
   }
 }
 </style>
