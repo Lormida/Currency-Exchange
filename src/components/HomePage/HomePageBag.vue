@@ -49,7 +49,8 @@ const getActualBagData = computed(() => store.getters.getActualBagData)
     </div>
 
     <div class="bag__label m-1 flex-grow-1 p-1 text-center align-self-start mt-4 border border-dark border-2">
-      {{ getActualBagData.actualBagValue }} USD
+      <span class="h5" style="font-weight: bold; color: #2b2d42; text-shadow: 0 0 1px #10002b">{{ getActualBagData.actualBagValue }} USD</span>
+      <br />
       <span :class="getFormatCurrency(+getActualBagData.profitAbsolute)">{{ getActualBagData.profitAbsolute }}</span>
       USD
       <span style="border-bottom: 1px #222 solid" :class="getFormatCurrency(+getActualBagData.profitPercent)"

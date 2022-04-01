@@ -51,7 +51,6 @@ ApiService.loadCurrentCurrency(props.id).then(() => {
 
   &__main {
     height: 89%;
-    // height: 672px;
     // height: 86%;
   }
 

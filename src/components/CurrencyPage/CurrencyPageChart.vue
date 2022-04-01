@@ -6,7 +6,6 @@ import { getDataCurrency } from '@/hooks/getDataCurrency'
 const props = defineProps<{
   id: string
 }>()
-
 </script>
 
 <template>
@@ -52,6 +51,8 @@ const props = defineProps<{
 
   &__currency-price {
     font-size: 48px;
+    font-weight: bolder;
+    text-shadow: 0 0 4px rgb(72, 68, 68);
   }
 
   // .chart__currency-price-change
@@ -67,6 +68,8 @@ const props = defineProps<{
   // .chart__content
 
   &__content {
+    position: relative;
+    top: -15px;
     flex-grow: 1;
   }
 }

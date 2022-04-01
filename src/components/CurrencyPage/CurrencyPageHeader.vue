@@ -10,7 +10,7 @@ import { getDataCurrency } from '@/hooks/getDataCurrency'
       <span class="currency__title-currency">{{ getDataCurrency.symbol }}</span>
     </div>
 
-    <div class="currency__title-wrapper currency__buy-wrapper" @click="openModal(getDataCurrency.name)">
+    <div class="currency__title-wrapper currency__buy-wrapper" @click="openModal(getDataCurrency.id)">
       <span class="currency__title-name currency__buy-text">Buy</span>
     </div>
   </header>

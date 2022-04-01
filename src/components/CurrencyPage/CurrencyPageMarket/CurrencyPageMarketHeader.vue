@@ -17,9 +17,10 @@
   &__header-title {
     font-size: 20px;
     width: fit-content;
-    padding: 3px;
+    padding:4px;
     font-weight: bold;
-    border: 1px solid #000;
+    border: 2px solid #222;
+    border-radius: 10px;
   }
 }
 </style>

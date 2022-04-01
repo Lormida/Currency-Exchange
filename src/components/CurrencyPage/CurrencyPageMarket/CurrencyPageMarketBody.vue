@@ -59,6 +59,7 @@ import { getRelativeSupply } from '@/hooks/getRelativeSupply'
 }
 
 .market {
+  
   // .market__body
 
   &__body {
