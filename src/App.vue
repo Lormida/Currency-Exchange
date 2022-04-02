@@ -11,6 +11,7 @@ const TheModal = defineAsyncComponent(() => import(/* webpackChunkName: 'TheModa
     </transition>
   </router-view>
 
+
   <!-- Modal-->
   <TheModal v-if="getIsModalOpen"></TheModal>
 </template>
