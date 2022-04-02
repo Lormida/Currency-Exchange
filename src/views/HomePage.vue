@@ -1,16 +1,14 @@
 <script setup lang="ts">
 import HomePageTableCurrencies from '@/components/HomePage/HomePageTableCurrencies.vue'
-
+import HomePageNavbar from '@/components/HomePage/HomePageNavbar.vue'
 import HomePagePagination from '@/components/HomePage/HomePagePagination.vue'
 import SpinnerLoader from '@/components/UI/SpinnerLoader.vue'
 
-import { computed, defineAsyncComponent, onMounted, Ref, ref } from 'vue'
+import { computed, onMounted, Ref, ref } from 'vue'
 
 import { getIsLoading } from '@/hooks/getIsLoading'
 import { getCurrencies } from '@/hooks/getCurrencies'
 import ApiService from '@/utils/ApiService'
-
-const HomePageNavbar = defineAsyncComponent(() => import('@/components/HomePage/HomePageNavbar.vue'))
 
 //* Initialization
 const limit = 7
@@ -40,14 +38,7 @@ onMounted(async () => {
 <template>
   <div class="home-container d-flex flex-column">
     <header class="header mw-100 p-0 m-0 container-fluid">
-      <Suspense>
-        <template #default>
-          <HomePageNavbar />
-        </template>
-        <template #fallback>
-          <SpinnerLoader size="middle"></SpinnerLoader>
-        </template>
-      </Suspense>
+      <HomePageNavbar />
     </header>
 
     <main class="main">
@@ -80,7 +71,7 @@ onMounted(async () => {
 .main {
   position: relative;
   height: 58%;
-  background-color: rgba(22, 22, 22, 0.85);
+  background-color: $homeMainBg;
   display: flex;
   justify-content: center;
   align-items: center;

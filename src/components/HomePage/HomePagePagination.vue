@@ -55,12 +55,12 @@ span {
   display: flex;
   align-items: center;
   justify-content: center;
-  background-color: #f0e6ef;
+  background-color: $paginationBg;
 }
 .pagination {
 }
 .active {
-  background-color: #bcd4e6;
+  background-color: $paginationActive;
 }
 .page-item {
 }

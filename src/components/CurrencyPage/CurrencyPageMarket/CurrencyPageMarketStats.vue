@@ -18,6 +18,6 @@ import CurrencyPageMarketHeader from '@/components/CurrencyPage/CurrencyPageMark
   margin-top: 10px;
   display: flex;
   flex-direction: column;
-  background-color: rgba(238, 226, 223, 0.5);
+  background-color: $marketFooterBg;
 }
 </style>

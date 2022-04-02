@@ -44,7 +44,7 @@ import { getRelativeSupply } from '@/hooks/getRelativeSupply'
 .title {
   font-size: 16px;
   font-weight: bolder;
-  color: #403d39;
+  color: $lightGrey;
   text-align: left;
   margin: 5px 0;
 }
@@ -59,13 +59,12 @@ import { getRelativeSupply } from '@/hooks/getRelativeSupply'
 }
 
 .market {
-  
   // .market__body
 
   &__body {
     border-radius: 10px;
     padding: 10px;
-    border: 2px dashed #222;
+    border: 2px dashed $darkGrey;
     display: flex;
     justify-content: space-between;
     height: 100%;

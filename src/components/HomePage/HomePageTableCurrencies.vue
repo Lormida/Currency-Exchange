@@ -51,7 +51,7 @@ const getCurrencies = computed(() => props.currencies)
 
 <style lang="scss" scoped>
 .currency-table {
-  background-color: #f8f7ff;
+  background-color: $white;
   box-shadow: rgba(0, 0, 0, 0.08) 0px 4px 12px;
   border-radius: 10px;
   border-collapse: collapse;
@@ -64,7 +64,7 @@ const getCurrencies = computed(() => props.currencies)
 }
 .currency-table__link-detail {
   text-decoration: none;
-  color: #222;
+  color: $darkGrey;
 }
 
 .currency-table__btn {

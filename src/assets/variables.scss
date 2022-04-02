@@ -1,0 +1,25 @@
+$red: rgb(187, 36, 36);
+$lightRed: #e15554;
+$green: #198754;
+$white: #f8f7ff;
+$darkGrey: rgba(22, 22, 22, 1);
+$lightGrey: #484444;
+$white8: rgba(255, 255, 255, 0.8);
+$green8: rgba(82, 221, 156, 0.8);
+
+//* color page during transtion
+$transitionColor: #9a8c98;
+$paginationBg: #f0e6ef;
+$paginationActive: #bcd4e6;
+$modalOverlay: rgba(22, 22, 22, 0.5);
+$trashBtnColor: rgba(0, 0, 0, 0.6);
+$trashBtnColorHover: rgba(0, 0, 0, 1);
+$modalBagBg: rgba(22, 22, 22, 0.6);
+$modalBuyBg: rgba(22, 22, 22, 0.6);
+$homeMainBg: rgba(22, 22, 22, 0.85);
+$leftGradientCurrencyPage: #d7dde8;
+$rightGradientCurrencyPage: #757f9a;
+
+$creamy: #f8edeb;
+// $marketFooterBg: rgba(255, 255, 255, 0.1);
+$marketFooterBg: lighten($white, 20%);

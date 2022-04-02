@@ -37,14 +37,14 @@ const TheModal = defineAsyncComponent(() => import(/* webpackChunkName: 'TheModa
   transition: all 0.25s ease-in-out 0s;
 }
 html {
-  background-color: #9a8c98;
+  background-color: $transitionColor;
 }
 
 .currency-fall {
-  color: rgb(187, 36, 36);
+  color: $red;
 }
 .currency-growth {
-  color: green;
+  color: $green;
   &::before {
     content: '+';
   }

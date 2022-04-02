@@ -33,7 +33,7 @@ const props = defineProps<{
   height: 70%;
   display: flex;
   flex-direction: column;
-  background-color: #f7f9fd;
+  background-color: $white;
   border-top-left-radius: 10px;
   border-top-right-radius: 10px;
 

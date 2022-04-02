@@ -37,14 +37,14 @@ ApiService.loadCurrentCurrency(props.id).then(() => {
       <!-- Currency Header -->
       <CurrencyPageHeader />
 
-      <!-- Currency Main -->
       <Suspense>
         <template #default>
+          <!-- Currency Main -->
           <CurrencyPageMain :id="id"></CurrencyPageMain>
         </template>
 
         <template #fallback>
-          <SpinnerLoader></SpinnerLoader>
+          <SpinnerLoader size="middle"></SpinnerLoader>
         </template>
       </Suspense>
     </div>
@@ -57,7 +57,7 @@ ApiService.loadCurrentCurrency(props.id).then(() => {
   position: fixed;
   top: 0;
   left: 0;
-  background: linear-gradient(to right, #d7dde8, #757f9a);
+  background: linear-gradient(to right, $leftGradientCurrencyPage, $rightGradientCurrencyPage);
   height: 100%;
   width: 100%;
 }

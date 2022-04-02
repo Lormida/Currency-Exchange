@@ -35,14 +35,14 @@ import { getDataCurrency } from '@/hooks/getDataCurrency'
     border-radius: 5px;
     width: fit-content;
     justify-content: space-between;
-    background-color: rgba(255, 255, 255, 0.8);
+    background-color: $white8;
     padding: 10px;
     margin-bottom: 10px;
     transition: all 0.3s ease;
     box-shadow: rgba(0, 0, 0, 0.15) 0px 3px 3px 0px;
     &:hover {
-      color: rgba(255, 255, 255, 0.8);
-      background-color: #222;
+      color: $white8;
+      background-color: $darkGrey;
     }
   }
 
@@ -68,11 +68,11 @@ import { getDataCurrency } from '@/hooks/getDataCurrency'
     padding: 0 80px;
     transition: all 0.3s ease;
     box-shadow: rgba(0, 0, 0, 0.15) 0px 3px 3px 0px;
-    background-color: rgba(82, 221, 156, 0.9);
+    background-color: $green8;
     &:hover {
       cursor: pointer;
-      color: rgba(82, 221, 156, 0.9);
-      background-color: #222;
+      color: $green8;
+      background-color: $darkGrey;
     }
   }
 

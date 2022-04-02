@@ -87,13 +87,4 @@ const props = defineProps<Props>()
     // border: 1px #000 solid;
   }
 }
-.card--currency-fall {
-  color: red;
-}
-.card-table--currency-growth {
-  color: green;
-  &::before {
-    content: '+';
-  }
-}
 </style>

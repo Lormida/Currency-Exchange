@@ -19,7 +19,7 @@
     width: fit-content;
     padding:4px;
     font-weight: bold;
-    border: 2px solid #222;
+    border: 2px solid $darkGrey;
     border-radius: 10px;
   }
 }

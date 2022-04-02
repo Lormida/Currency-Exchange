@@ -38,7 +38,6 @@ const closeModal = () => {
             <SpinnerLoader size="middle"></SpinnerLoader>
           </template>
         </Suspense>
-
       </div>
     </div>
   </div>
@@ -46,7 +45,7 @@ const closeModal = () => {
 
 <style lang="scss" scoped>
 .modal__overlay {
-  background-color: rgba(22, 22, 22, 0.5);
+  background-color: $modalOverlay;
   height: 100vh;
   width: 100vw;
   display: flex;
@@ -70,12 +69,11 @@ const closeModal = () => {
     right: 0;
     width: 50px;
     height: 50px;
-    background-color: #000;
     display: flex;
     justify-content: center;
     align-items: center;
     mask-image: url('@/assets/svg/close.svg');
-    background-color: white;
+    background-color: $white;
     transform: translateX(50%) translateY(-50%);
     mask-size: contain;
     transition: transform 0.3s ease;

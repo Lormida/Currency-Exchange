@@ -1,8 +1,8 @@
-<script setup lang='ts'>
+<script setup lang="ts">
 import TheModalInputCurrency from '@/components/UI/TheModalInputCurrency.vue'
-import BagService from '@/utils/BagService';
-import ModalService from '@/utils/ModalService';
-import { computed, ref } from 'vue';
+import BagService from '@/utils/BagService'
+import ModalService from '@/utils/ModalService'
+import { computed, ref } from 'vue'
 
 interface Props {
   currency: string
@@ -24,15 +24,13 @@ const recalcValidate = (state: boolean, amount: number) => {
 }
 
 const buyCurrency = (currencyName: string, amount: number) => {
-  BagService.addCurrencyToBag(currencyName, amount)
-    .then(() => {
-      ModalService.changeModalState(false)
+  BagService.addCurrencyToBag(currencyName, amount).then(() => {
+    ModalService.changeModalState(false)
 
-      //* Update info about bag
-      BagService.updateInfoBag(BagService.getActualCurrencyPrices, BagService.getBag())
-    })
+    //* Update info about bag
+    BagService.updateInfoBag(BagService.getActualCurrencyPrices, BagService.getBag())
+  })
 }
-
 </script>
 
 <template>
@@ -50,20 +48,20 @@ const buyCurrency = (currencyName: string, amount: number) => {
       @click.prevent="buyCurrency(currency, getCurrentAmount)"
       class="w-50 mx-auto btn btn-lg btn-primary"
       type="submit"
-    >Buy currency</button>
+    >
+      Buy currency
+    </button>
   </form>
 </template>
 
-
-
-<style lang='scss' scoped>
+<style lang="scss" scoped>
 .form-currency__label {
   font-size: 15px;
   font-weight: 800;
-  color: rgb(0, 255, 149);
+  color: lighten($green, 20%);
 }
 .form-currency {
-  background-color: rgba(31, 36, 33, 0.8);
+  background-color: $modalBuyBg;
   padding: 50px 80px;
   box-shadow: 0px 0px 13px 10px rgba(41, 61, 77, 0.2);
   &__title {
