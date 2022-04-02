@@ -1,25 +1,26 @@
 <script setup lang="ts">
 import { computed, ref } from 'vue'
+
 import BagService from '@/utils/BagService'
 import SpinnerLoader from './SpinnerLoader.vue'
 import { PurchasedCurrency } from '@/utils/types'
 
 const customIsLoading = ref(true)
-
 const getCustomIsLoading = computed(() => customIsLoading.value)
 const getBagCurrencyActualPrices = computed(() => bagCurrencyActualPrices.value)
 const getBag = computed(() => BagService.getBag())
 
-// Loading bag from LocalStorage
+//* Loading bag from LocalStorage
 BagService.loadBagLocal()
 
-// Get actual prices to purchased currency
+//* Get actual prices to purchased currency
 let bagCurrencyActualPrices = ref<Record<string, number>>({})
 BagService.getActualCurrencyPrices(BagService.getBag()).then((actualCurrencyPrices) => {
   bagCurrencyActualPrices.value = actualCurrencyPrices
   customIsLoading.value = false
 })
 
+//* Remove currency from bag
 const removeCurrency = (currencyName: string) => {
   BagService.deleteCurrencyFromBag(currencyName)
 
@@ -48,7 +49,6 @@ const getProfitCurrencyPercent = computed(() => {
                   <th scope="col" class="col-2">Current price</th>
                   <th scope="col" class="col-2">Amount</th>
                   <th scope="col" class="col-2">Profit</th>
-                  <!-- <th scope="col" class="col-1">Buy</th> -->
                   <th scope="col" class="col-1">Remove</th>
                 </tr>
               </thead>
@@ -65,10 +65,6 @@ const getProfitCurrencyPercent = computed(() => {
                   <td style="position: relative" p-0 v-else class="col-2">
                     <SpinnerLoader size="small"></SpinnerLoader>
                   </td>
-
-                  <!--  <td class="col-1" @click="openModal(currency.name)">
-                  <div class="bag__buy-more-btn mx-auto"></div>
-                </td>-->
                   <td class="col-1" @click="removeCurrency(currency.name)">
                     <div class="bag__trash-btn mx-auto"></div>
                   </td>

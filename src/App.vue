@@ -1,10 +1,7 @@
 <script setup lang="ts">
-import TheModal from '@/components/UI/TheModal.vue'
-import { useStore } from '@/store'
-import { computed } from 'vue'
-
-const store = useStore()
-const getIsModalOpen = computed(() => store.getters.getIsModalOpen)
+import { defineAsyncComponent } from 'vue'
+import { getIsModalOpen } from '@/hooks/getIsModalOpen'
+const TheModal = defineAsyncComponent(() => import(/* webpackChunkName: 'TheModal' */ '@/components/UI/TheModal.vue'))
 </script>
 
 <template>
@@ -13,8 +10,8 @@ const getIsModalOpen = computed(() => store.getters.getIsModalOpen)
       <component :is="Component" />
     </transition>
   </router-view>
-  <!-- Modal buy-->
 
+  <!-- Modal-->
   <TheModal v-if="getIsModalOpen"></TheModal>
 </template>
 

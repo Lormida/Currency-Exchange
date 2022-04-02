@@ -1,12 +1,25 @@
 <script setup lang="ts">
-import CurrencyPageHeader from '@/components/CurrencyPage/CurrencyPageHeader.vue'
-import CurrencyPageMain from '@/components/CurrencyPage/CurrencyPageMain.vue'
 import SpinnerLoader from '@/components/UI/SpinnerLoader.vue'
+
+import { defineAsyncComponent } from 'vue'
 
 import { getDataCurrency } from '@/hooks/getDataCurrency'
 import { getIsLoading } from '@/hooks/getIsLoading'
-
 import ApiService from '@/utils/ApiService'
+
+const CurrencyPageHeader = defineAsyncComponent(
+  () => import(/* webpackChunkName: 'CurrencyPageHeader' */ '@/components/CurrencyPage/CurrencyPageHeader.vue')
+)
+
+const CurrencyPageMain = defineAsyncComponent(() => {
+  return new Promise((resolve) => {
+    import(/* webpackChunkName: 'CurrencyPageMain' */ '@/components/CurrencyPage/CurrencyPageMain.vue').then((component: any) => {
+      setTimeout(() => {
+        resolve(component)
+      }, 250)
+    })
+  })
+})
 
 interface Props {
   id: string
@@ -25,7 +38,15 @@ ApiService.loadCurrentCurrency(props.id).then(() => {
       <CurrencyPageHeader />
 
       <!-- Currency Main -->
-      <CurrencyPageMain :id="id"></CurrencyPageMain>
+      <Suspense>
+        <template #default>
+          <CurrencyPageMain :id="id"></CurrencyPageMain>
+        </template>
+
+        <template #fallback>
+          <SpinnerLoader></SpinnerLoader>
+        </template>
+      </Suspense>
     </div>
     <SpinnerLoader v-else></SpinnerLoader>
   </div>

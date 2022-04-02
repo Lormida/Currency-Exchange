@@ -1,15 +1,18 @@
 <script setup lang="ts">
-import ApiService from '@/utils/ApiService'
-import { getIsLoading } from '@/hooks/getIsLoading'
-import { useStore } from '@/store'
 import HomePageTableCurrencies from '@/components/HomePage/HomePageTableCurrencies.vue'
-import HomePageNavbar from '@/components/HomePage/HomePageNavbar.vue'
+
 import HomePagePagination from '@/components/HomePage/HomePagePagination.vue'
-import { computed, onMounted, Ref, ref } from 'vue'
 import SpinnerLoader from '@/components/UI/SpinnerLoader.vue'
 
+import { computed, defineAsyncComponent, onMounted, Ref, ref } from 'vue'
+
+import { getIsLoading } from '@/hooks/getIsLoading'
+import { getCurrencies } from '@/hooks/getCurrencies'
+import ApiService from '@/utils/ApiService'
+
+const HomePageNavbar = defineAsyncComponent(() => import('@/components/HomePage/HomePageNavbar.vue'))
+
 //* Initialization
-const store = useStore()
 const limit = 7
 const currentPage = ref(1)
 const totalPage = Math.ceil(100 / limit)
@@ -28,7 +31,6 @@ const fetchData = async (currentPage: Ref<number>, limit: number) => {
 }
 
 const getCurrentPage = computed(() => currentPage.value)
-const getCurrencies = computed(() => store.getters.getCurrencies)
 
 onMounted(async () => {
   await fetchData(currentPage, limit)
@@ -38,7 +40,14 @@ onMounted(async () => {
 <template>
   <div class="home-container d-flex flex-column">
     <header class="header mw-100 p-0 m-0 container-fluid">
-      <HomePageNavbar />
+      <Suspense>
+        <template #default>
+          <HomePageNavbar />
+        </template>
+        <template #fallback>
+          <SpinnerLoader size="middle"></SpinnerLoader>
+        </template>
+      </Suspense>
     </header>
 
     <main class="main">

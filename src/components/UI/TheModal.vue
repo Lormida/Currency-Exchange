@@ -1,18 +1,26 @@
-<script setup lang='ts'>
-import TheModalBag from './TheModalBag.vue';
-import TheModalBuyCurrency from './TheModalBuyCurrency.vue';
+<script setup lang="ts">
+import SpinnerLoader from './SpinnerLoader.vue'
+
+import { computed, defineAsyncComponent } from 'vue'
 
 import ModalService from '@/utils/ModalService'
 import { useStore } from '@/store'
-import { computed } from 'vue';
 
 const store = useStore()
-const getCurrentModalIndicator = computed(() => store.getters.getCurrentModalIndicator)
 
+const getCurrentModalIndicator = computed(() => store.getters.getCurrentModalIndicator)
+const getCurrentModal = computed(() => {
+  let currentComponentName = 'TheModalBag'
+
+  if (getCurrentModalIndicator.value !== 'bag') {
+    currentComponentName = 'TheModalBuyCurrency'
+  }
+
+  return defineAsyncComponent(() => import(`@/components/UI/${currentComponentName}.vue`))
+})
 const closeModal = () => {
   ModalService.changeModalState(false)
 }
-
 </script>
 
 <template>
@@ -21,18 +29,20 @@ const closeModal = () => {
       <div class="modal-window__content">
         <span class="modal-window__close-btn" @click.self="closeModal"></span>
 
-        <TheModalBuyCurrency
-          v-if="getCurrentModalIndicator !== 'bag'"
-          :currency="getCurrentModalIndicator.toLowerCase()"
-        ></TheModalBuyCurrency>
+        <Suspense>
+          <template #default>
+            <component :is="getCurrentModal" :currency="getCurrentModalIndicator.toLowerCase()"></component>
+          </template>
 
-        <TheModalBag v-else />
+          <template #fallback>
+            <SpinnerLoader size="middle"></SpinnerLoader>
+          </template>
+        </Suspense>
+
       </div>
     </div>
   </div>
 </template>
-
-
 
 <style lang="scss" scoped>
 .modal__overlay {
@@ -64,7 +74,7 @@ const closeModal = () => {
     display: flex;
     justify-content: center;
     align-items: center;
-    mask-image: url("@/assets/svg/close.svg");
+    mask-image: url('@/assets/svg/close.svg');
     background-color: white;
     transform: translateX(50%) translateY(-50%);
     mask-size: contain;

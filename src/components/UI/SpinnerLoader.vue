@@ -12,10 +12,15 @@ const getLoader = computed(() => {
       animationName: 'loader-small',
       background: 'background-color: transparent',
     }
+  } else if (props.size === 'middle') {
+    return {
+      animationName: 'loader-middle',
+      background: 'background-color: transparent',
+    }
   } else {
     return {
       animationName: 'loader-default',
-      background: 'background-color: rgba(22, 22, 22, 0.9)',
+      background: 'background-color: transparent',
     }
   }
 })
@@ -29,11 +34,7 @@ const getLoader = computed(() => {
 
 <style lang="scss" scoped>
 .container-loader {
-  top: 0;
-  left: 0;
   display: flex;
-  position: absolute;
-
   justify-content: center;
   align-items: center;
   width: 100%;
@@ -43,40 +44,51 @@ const getLoader = computed(() => {
 .loader-default {
   animation: animate 1.2s linear infinite;
 }
+.loader-middle {
+  animation: animate-middle 1.2s linear infinite;
+}
 .loader-small {
   animation: animate-small 1.2s linear infinite;
 }
 
 @keyframes animate {
   from {
-    transform: scale(4) rotate(0deg);
+    transform: scale(5) rotate(0deg);
   }
   to {
-    transform: scale(4) rotate(360deg);
+    transform: scale(5) rotate(360deg);
+  }
+}
+@keyframes animate-middle {
+  from {
+    transform: scale(3) rotate(0deg);
+  }
+  to {
+    transform: scale(3) rotate(360deg);
   }
 }
 
 @keyframes animate-small {
   from {
-    transform: scale(0.7) rotate(0deg);
+    transform: scale(1) rotate(0deg);
   }
   to {
-    transform: scale(0.7) rotate(360deg);
+    transform: scale(1) rotate(360deg);
   }
 }
 
 .lds-dual-ring {
   display: inline-block;
-  width: 50px;
-  height: 50px;
+  width: 30px;
+  height: 30px;
 }
 .lds-dual-ring:after {
-  content: ' ';
+  content: '';
   display: block;
-  width: 50px;
-  height: 50px;
+  width: 30px;
+  height: 30px;
   border-radius: 50%;
-  border: 6px solid #fff;
+  border: 5px solid #fff;
   border-color: rgb(196, 141, 141) transparent #fff transparent;
 }
 @keyframes lds-dual-ring {

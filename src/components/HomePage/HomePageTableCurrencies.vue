@@ -1,8 +1,9 @@
 <script setup lang="ts">
+import { computed } from 'vue'
+
 import { getFormatCurrency } from '@/hooks/getFormatCurrency'
 import { openModal } from '@/hooks/openModal'
 import { Currency } from '@/utils/types'
-import { computed } from 'vue'
 
 interface Props {
   currencies: Currency[]

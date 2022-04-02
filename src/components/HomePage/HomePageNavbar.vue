@@ -1,8 +1,12 @@
 <script setup lang="ts">
-import { onMounted, ref } from 'vue'
-import CardCurrency from '@/components/UI/CardCurrency.vue'
 import HomePageBag from '@/components/HomePage/HomePageBag.vue'
+
+import { defineAsyncComponent, onMounted, ref } from 'vue'
+
 import ApiService from '@/utils/ApiService'
+import SpinnerLoader from '@/components/UI/SpinnerLoader.vue'
+
+const CardCurrency = defineAsyncComponent(() => import('@/components/UI/CardCurrency.vue'))
 
 let currencies = ref()
 let isLoading = ref(true)
@@ -19,16 +23,23 @@ onMounted(() => {
   <nav class="nav" v-if="!isLoading">
     <!-- Cards -->
     <div class="nav__card-currency-wrapper row p-3 col-7">
-      <CardCurrency
-        v-for="(currency, index) of currencies"
-        :key="currency.id"
-        :name="currency.name"
-        :changePercent24Hr="+currency.changePercent24Hr"
-        :marketCapUsd="+currency.marketCapUsd"
-        :priceUsd="+currency.priceUsd"
-        :id="currency.id"
-        :index="index + 1"
-      ></CardCurrency>
+      <Suspense>
+        <template #default>
+          <CardCurrency
+            v-for="(currency, index) of currencies"
+            :key="currency.id"
+            :name="currency.name"
+            :changePercent24Hr="+currency.changePercent24Hr"
+            :marketCapUsd="+currency.marketCapUsd"
+            :priceUsd="+currency.priceUsd"
+            :id="currency.id"
+            :index="index + 1"
+          ></CardCurrency>
+        </template>
+        <template #fallback>
+          <SpinnerLoader size="middle"></SpinnerLoader>
+        </template>
+      </Suspense>
     </div>
 
     <!-- Bag currency -->

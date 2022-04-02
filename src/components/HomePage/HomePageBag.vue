@@ -1,11 +1,10 @@
 <script setup lang="ts">
+import { onMounted } from 'vue'
+
 import { getFormatCurrency } from '@/hooks/getFormatCurrency'
 import { openModal } from '@/hooks/openModal'
-import { useStore } from '@/store'
+import { getActualBagData } from '@/hooks/getActualBagData'
 import BagService from '@/utils/BagService'
-import { computed, onMounted } from 'vue'
-
-const store = useStore()
 
 const initTooltip = () => {
   const tooltip = document.querySelector('.bag__tooltip') as Element
@@ -32,8 +31,6 @@ setInterval(() => {
 onMounted(() => {
   initTooltip()
 })
-
-const getActualBagData = computed(() => store.getters.getActualBagData)
 </script>
 
 <template>
@@ -48,8 +45,11 @@ const getActualBagData = computed(() => store.getters.getActualBagData)
       <span :class="getFormatCurrency(+getActualBagData.profitPercent)">({{ getActualBagData.profitPercent }}%)</span>
     </div>
 
+    
     <div class="bag__label m-1 flex-grow-1 p-1 text-center align-self-start mt-4 border border-dark border-2">
-      <span class="h5" style="font-weight: bold; color: #2b2d42; text-shadow: 0 0 1px #10002b">{{ getActualBagData.actualBagValue }} USD</span>
+      <span class="h5" style="font-weight: bold; color: #2b2d42; text-shadow: 0 0 1px #10002b"
+        >{{ getActualBagData.actualBagValue }} USD</span
+      >
       <br />
       <span :class="getFormatCurrency(+getActualBagData.profitAbsolute)">{{ getActualBagData.profitAbsolute }}</span>
       USD

@@ -1,6 +1,10 @@
 <script setup lang="ts">
-import CurrencyPageChart from '@/components/CurrencyPage/CurrencyPageChart.vue'
 import CurrencyPageMarketStats from '@/components/CurrencyPage/CurrencyPageMarket/CurrencyPageMarketStats.vue'
+import { defineAsyncComponent } from 'vue'
+
+const CurrencyPageChart = defineAsyncComponent(
+  () => import(/* webpackChunkName: 'CurrencyPageChart' */ '@/components/CurrencyPage/CurrencyPageChart.vue')
+)
 
 const props = defineProps<{
   id: string

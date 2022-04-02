@@ -1,7 +1,10 @@
 <script setup lang="ts">
-import TheChart from '@/components/CurrencyPage/TheChart.vue'
+import { defineAsyncComponent } from 'vue'
+
 import { getFormatCurrency } from '@/hooks/getFormatCurrency'
 import { getDataCurrency } from '@/hooks/getDataCurrency'
+
+const TheChart = defineAsyncComponent(() => import(/* webpackChunkName: 'TheChart' */ '@/components/CurrencyPage/TheChart.vue'))
 
 const props = defineProps<{
   id: string
@@ -31,6 +34,8 @@ const props = defineProps<{
   display: flex;
   flex-direction: column;
   background-color: #f7f9fd;
+  border-top-left-radius: 10px;
+  border-top-right-radius: 10px;
 
   // .chart__header
 
