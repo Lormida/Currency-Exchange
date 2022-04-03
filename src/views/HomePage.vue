@@ -66,11 +66,11 @@ onMounted(async () => {
   left: 0;
 }
 .header {
-  height: 33%;
+  height: auto;
 }
 .main {
   position: relative;
-  height: 58%;
+  height: 100%;
   background-color: $homeMainBg;
   display: flex;
   justify-content: center;

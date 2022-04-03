@@ -7,16 +7,13 @@ import { getDataCurrency } from '@/hooks/getDataCurrency'
 import { getIsLoading } from '@/hooks/getIsLoading'
 import ApiService from '@/utils/ApiService'
 
-const CurrencyPageHeader = defineAsyncComponent(
-  () => import(/* webpackChunkName: 'CurrencyPageHeader' */ '@/components/CurrencyPage/CurrencyPageHeader.vue')
-)
 
-const CurrencyPageMain = defineAsyncComponent(() => {
+const CurrencyPageContent = defineAsyncComponent(() => {
   return new Promise((resolve) => {
-    import(/* webpackChunkName: 'CurrencyPageMain' */ '@/components/CurrencyPage/CurrencyPageMain.vue').then((component: any) => {
+    import(/* webpackChunkName: 'CurrencyPageContent' */ '@/components/CurrencyPage/CurrencyPageContent.vue').then((component: any) => {
       setTimeout(() => {
         resolve(component)
-      }, 250)
+      }, 300)
     })
   })
 })
@@ -35,12 +32,10 @@ ApiService.loadCurrentCurrency(props.id).then(() => {
   <div class="container-currency">
     <div v-if="!getIsLoading && Object.keys(getDataCurrency).length > 0" class="container currency">
       <!-- Currency Header -->
-      <CurrencyPageHeader />
-
       <Suspense>
         <template #default>
-          <!-- Currency Main -->
-          <CurrencyPageMain :id="id"></CurrencyPageMain>
+          <!-- Currency Content -->
+          <CurrencyPageContent :id="id"></CurrencyPageContent>
         </template>
 
         <template #fallback>
@@ -58,21 +53,27 @@ ApiService.loadCurrentCurrency(props.id).then(() => {
   top: 0;
   left: 0;
   background: linear-gradient(to right, $leftGradientCurrencyPage, $rightGradientCurrencyPage);
-  height: 100%;
+  min-height: 100%;
   width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 .container {
   width: 80%;
   padding-bottom: 10px;
 }
 .currency {
-  height: 100%;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-evenly;
 
   // .currency__main
 
   &__main {
-    height: 89%;
-    // height: 86%;
+    height: auto;
+    min-height: 690px;
   }
 
   // .currency__card

@@ -24,7 +24,8 @@ import { getDataCurrency } from '@/hooks/getDataCurrency'
     display: flex;
     justify-content: space-between;
     padding: 5px 0;
-    height: 11%;
+    min-height: 80px;
+    height: auto;
   }
 
   // .currency__title-wrapper
@@ -35,9 +36,10 @@ import { getDataCurrency } from '@/hooks/getDataCurrency'
     border-radius: 5px;
     width: fit-content;
     justify-content: space-between;
+    align-items: center;
     background-color: $white8;
     padding: 10px;
-    margin-bottom: 10px;
+    margin: 0px;
     transition: all 0.3s ease;
     box-shadow: rgba(0, 0, 0, 0.15) 0px 3px 3px 0px;
     &:hover {

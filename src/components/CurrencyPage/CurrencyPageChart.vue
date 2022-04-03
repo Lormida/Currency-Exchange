@@ -30,12 +30,14 @@ const props = defineProps<{
 
 <style lang="scss" scoped>
 .chart {
-  height: 70%;
+  height: auto;
+  min-height: 523px;
   display: flex;
   flex-direction: column;
   background-color: $white;
   border-top-left-radius: 10px;
   border-top-right-radius: 10px;
+  padding: 1% 1%;
 
   // .chart__header
 

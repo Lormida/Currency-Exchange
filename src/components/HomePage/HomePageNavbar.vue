@@ -52,7 +52,8 @@ onMounted(() => {
 
 <style lang="scss" scoped>
 .nav {
-  height: 100%;
+  height: auto;
+  min-height: 269px;
   padding: 15px;
   display: flex;
   justify-content: space-evenly;
@@ -64,7 +65,7 @@ onMounted(() => {
     box-shadow: rgba(50, 50, 93, 0.25) 0px 13px 27px -5px, rgba(0, 0, 0, 0.3) 0px 8px 16px -8px;
     border: 3px $darkGrey dashed;
     background-color: $creamy;
-    height: 100%;
+    height: auto;
   }
 }
 </style>

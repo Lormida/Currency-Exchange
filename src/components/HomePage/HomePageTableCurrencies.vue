@@ -54,6 +54,7 @@ const getCurrencies = computed(() => props.currencies)
   background-color: $white;
   box-shadow: rgba(0, 0, 0, 0.08) 0px 4px 12px;
   border-radius: 10px;
+  height: 80%;
   border-collapse: collapse;
 }
 .currency-table__row:last-child {
