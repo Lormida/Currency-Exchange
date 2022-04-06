@@ -1,7 +1,7 @@
 <script setup lang="ts">
-import HomePageTableCurrencies from '@/components/HomePage/HomePageTableCurrencies.vue'
-import HomePageNavbar from '@/components/HomePage/HomePageNavbar.vue'
-import HomePagePagination from '@/components/HomePage/HomePagePagination.vue'
+import HomePageNavbar from '@/components/HomePage/Navbar/HomePageNavbar.vue'
+import HomePageTableCurrencies from '@/components/HomePage/Content/HomePageTableCurrencies.vue'
+import HomePagePagination from '@/components/HomePage/Pagination/HomePagePagination.vue'
 import SpinnerLoader from '@/components/UI/SpinnerLoader.vue'
 
 import { computed, onMounted, Ref, ref } from 'vue'
@@ -11,7 +11,7 @@ import { getCurrencies } from '@/hooks/getCurrencies'
 import ApiService from '@/utils/ApiService'
 
 //* Initialization
-const limit = 7
+const limit = 6
 const currentPage = ref(1)
 const totalPage = Math.ceil(100 / limit)
 
@@ -36,10 +36,8 @@ onMounted(async () => {
 </script>
 
 <template>
-  <div class="home-container d-flex flex-column">
-    <header class="header mw-100 p-0 m-0 container-fluid">
-      <HomePageNavbar />
-    </header>
+  <div class="home-container">
+    <HomePageNavbar class="header" />
 
     <main class="main">
       <HomePageTableCurrencies
@@ -51,32 +49,47 @@ onMounted(async () => {
       <SpinnerLoader v-else></SpinnerLoader>
     </main>
 
-    <footer class="footer">
-      <HomePagePagination :currentPage="getCurrentPage" :totalPage="totalPage" @change-current-page="setNewPage"></HomePagePagination>
-    </footer>
+    <HomePagePagination
+      class="footer"
+      :currentPage="getCurrentPage"
+      :totalPage="totalPage"
+      @change-current-page="setNewPage"
+    ></HomePagePagination>
   </div>
 </template>
 
 <style lang="scss" scoped>
 .home-container {
-  position: fixed;
+  min-height: 100%;
   height: 100%;
-  width: 100%;
-  top: 0;
-  left: 0;
+  display: flex;
+  flex-direction: column;
 }
 .header {
-  height: auto;
+  min-height: 201px;
 }
 .main {
-  position: relative;
-  height: 100%;
+  overflow: auto;
   background-color: $homeMainBg;
+  background: linear-gradient(
+    135deg,
+    rgba(98, 43, 83, 0.8) 0%,
+    rgba(175, 65, 143, 0.8) 20%,
+    rgba(111, 62, 139, 0.8) 50%,
+    rgba(96, 57, 167, 0.8) 80%,
+    rgba(155, 31, 202, 0.8) 100%
+  );
   display: flex;
+  flex-direction: column;
   justify-content: center;
-  align-items: center;
+  align-items: stretch;
+  flex: 1 0 auto;
+  width: 100%;
+  padding: 15px;
+  max-height: calc(100% - 201px - 56px);
 }
 .footer {
-  height: 9%;
+  border-bottom-left-radius: 20px;
+  border-bottom-right-radius: 20px;
 }
 </style>

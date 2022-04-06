@@ -1,4 +1,9 @@
 <script setup lang="ts">
+import CardRow from '@/components/UI/CardRow.vue'
+import Card from '@/components/UI/Card.vue'
+import Badge from '@/components/UI/Badge.vue'
+import CardTitle from '@/components/UI/CardTitle.vue'
+
 import { getFormatCurrency } from '@/hooks/getFormatCurrency'
 import { openModal } from '@/hooks/openModal'
 import { getDegreeCalc } from '@/hooks/getDegreeCalc'
@@ -15,76 +20,45 @@ const props = defineProps<Props>()
 </script>
 
 <template>
-  <div class="col-4 h-100">
-    <div class="card">
-      <div class="card__header card-header d-flex flex-column align-items-center">
-        <h5 class="card__title card-title text-center">{{ name }}</h5>
-        <span class="card__badge w-auto badge rounded-pill bg-success">Top {{ index }} currency</span>
+  <Card class="card">
+    <template #header>
+      <div class="card__content">
+        <CardTitle class="card__title card__title card-title text-center">{{ name }}</CardTitle>
+        <Badge class="card__badge">Top {{ index }} currency</Badge>
+        <button class="card__button btn-buy btn m-0 px-4 btn-sm btn-outline-success" @click="openModal(id)">Buy</button>
       </div>
+    </template>
 
-      <div class="card__main px-2">
-        <p class="card__text card-text my-1">
-          <span class="card__small-title">Price :</span>
-          ${{ (+priceUsd).toFixed(2) }}
-        </p>
-        <p class="card__text card-text my-1">
-          <span class="card__small-title">Market capital :</span>
-          ${{ getDegreeCalc(marketCapUsd, 9) }} Milliards
-        </p>
-        <p class="card__text card-text my-1">
-          <span class="card__small-title">Change for 24h :</span>
-          <span :class="getFormatCurrency(changePercent24Hr)">{{ (+changePercent24Hr).toFixed(2) }}%</span>
-        </p>
-      </div>
-
-      <div class="card__footer">
-        <button type="button" class="card__btn-buy btn mx-auto my-2 px-4 btn-sm btn-outline-success" @click="openModal(id)">Buy</button>
-      </div>
-    </div>
-  </div>
+    <template #main>
+      <CardRow title="Price :" content=""> ${{ (+priceUsd).toFixed(2) }} </CardRow>
+      <CardRow title="Market capital :" content=""> ${{ getDegreeCalc(marketCapUsd, 9) }} Yards </CardRow>
+      <CardRow title="Change for 24h :" content="">
+        <span :class="getFormatCurrency(changePercent24Hr)">{{ (+changePercent24Hr).toFixed(2) }}%</span>
+      </CardRow>
+    </template>
+  </Card>
 </template>
 
 <style lang="scss" scoped>
 .card {
   box-shadow: rgba(0, 0, 0, 0.19) 0px 10px 20px, rgba(0, 0, 0, 0.23) 0px 6px 6px;
-  height: 100%;
-
-  // .card__header
-  &__header {
-  }
-
-  // .card__main
-
-  &__main {
-  }
-
-  // .card__footer
-
-  &_footer {
-  }
-
-  &__title {
-  }
-
-  // .card__badge
-
-  &__badge {
-  }
-
-  // .card__text
-
-  &__text {
-    display: flex;
-    justify-content: space-between;
-    font-size: 11px;
-  }
-  // card__btn-buy
-  &__btn-buy {
-    display: block;
-  }
-  &__small-title {
-    text-decoration: underline;
-    // border: 1px #000 solid;
-  }
+  clip-path: polygon(10% 0, 100% 0, 100% 20%, 100% 90%, 90% 100%, 0 100%, 0% 80%, 0 10%);
+}
+.card__content {
+  display: grid;
+  grid-template-areas:
+    'title button'
+    'badge button';
+  grid-gap: 2px 10px;
+}
+.card__title {
+  grid-area: title;
+}
+.card__badge {
+  grid-area: badge;
+}
+.card__button {
+  grid-area: button;
+  align-self: center;
 }
 </style>

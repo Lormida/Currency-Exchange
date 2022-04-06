@@ -1,2 +1,0 @@
-"use strict";(self["webpackChunkcrypto_exchange"]=self["webpackChunkcrypto_exchange"]||[]).push([[611],{4943:function(n,e,t){t.r(e),t.d(e,{default:function(){return l}});var u=t(3396),c=t(4870),r=(0,u.aZ)({props:{id:null},setup(n){const e=(0,u.RC)((()=>t.e(53).then(t.bind(t,335)))),r=(0,u.RC)((()=>t.e(426).then(t.bind(t,7743))));return(t,i)=>((0,u.wg)(),(0,u.iD)(u.HY,null,[(0,u.Wm)((0,c.SU)(e)),(0,u.Wm)((0,c.SU)(r),{id:n.id},null,8,["id"])],64))}});const i=r;var l=i}}]);
-//# sourceMappingURL=CurrencyPageContent.eb5aeb5d.js.map

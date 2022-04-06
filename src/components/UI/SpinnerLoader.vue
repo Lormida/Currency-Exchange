@@ -39,6 +39,7 @@ const getLoader = computed(() => {
   align-items: center;
   width: 100%;
   min-height: 100%;
+  user-select: none;
 }
 
 .loader-default {
@@ -81,6 +82,7 @@ const getLoader = computed(() => {
   display: inline-block;
   width: 30px;
   height: 30px;
+  user-select: none;
 }
 .lds-dual-ring:after {
   content: '';
@@ -90,6 +92,7 @@ const getLoader = computed(() => {
   border-radius: 50%;
   border: 5px solid #fff;
   border-color: rgb(196, 141, 141) transparent #fff transparent;
+  user-select: none;
 }
 @keyframes lds-dual-ring {
   0% {

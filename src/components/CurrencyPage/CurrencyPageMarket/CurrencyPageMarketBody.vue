@@ -64,7 +64,6 @@ import { getRelativeSupply } from '@/hooks/getRelativeSupply'
   &__body {
     border-radius: 10px;
     padding: 10px;
-    border: 2px dashed $darkGrey;
     display: flex;
     justify-content: space-between;
     height: 100%;
