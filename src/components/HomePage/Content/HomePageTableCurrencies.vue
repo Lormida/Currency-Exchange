@@ -1,20 +1,18 @@
 <script setup lang="ts">
 import TableRowCurrency from '@/components/HomePage/Content/Table/TableRowCurrency.vue'
 import Thead from '@/components/UI/Thead.vue'
-import { computed } from 'vue'
 
 import { Currency } from '@/utils/types'
 
-interface Props {
+import { useHomePageTableCurrencies } from '@/hooks/useHomePageTableCurrencies'
+
+const props = defineProps<{
   currencies: Currency[]
   currentPage: number
   limit: number
-}
-const props = defineProps<Props>()
+}>()
 
-const titlesNames = ['Name', 'Price', 'Change', 'Trade']
-
-const getCurrencies = computed(() => props.currencies)
+const { titlesNames, getCurrencies } = useHomePageTableCurrencies(props)
 </script>
 
 <template>

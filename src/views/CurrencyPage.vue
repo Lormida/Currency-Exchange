@@ -3,8 +3,8 @@ import SpinnerLoader from '@/components/UI/SpinnerLoader.vue'
 
 import { defineAsyncComponent } from 'vue'
 
-import { getDataCurrency } from '@/hooks/getDataCurrency'
-import { getIsLoading } from '@/hooks/getIsLoading'
+import { getDataCurrency } from '@/helpers/getDataCurrency'
+import { getIsLoading } from '@/helpers/getIsLoading'
 import ApiService from '@/utils/ApiService'
 
 

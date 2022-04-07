@@ -1,21 +1,25 @@
 <script setup lang="ts">
-import { getFormatCurrency } from '@/hooks/getFormatCurrency'
-import { openModal } from '@/hooks/openModal'
-import { getActualBagData } from '@/hooks/getActualBagData'
-import BagService from '@/utils/BagService'
 import Tooltip from '@/components/UI/Tooltip.vue'
 import HomePageBagLink from '@/components/HomePage/Navbar/HomePageBagLink.vue'
 import HomePageBagLabel from '@/components/HomePage/Navbar/HomePageBagLabel.vue'
 
+import { getFormatCurrency } from '@/helpers/getFormatCurrency'
+import { openModal } from '@/helpers/openModal'
+import { getActualBagData } from '@/helpers/getActualBagData'
+
+import { useHomePageBag } from '@/hooks/useHomePageBag'
+
+const { loadBagLocal, updateInfoBag } = useHomePageBag()
+
 //* loading bag from LocalStorage
-BagService.loadBagLocal()
+loadBagLocal()
 
 //* Update info about bag
-BagService.updateInfoBag(BagService.getActualCurrencyPrices, BagService.getBag())
+updateInfoBag()
 
 //* Interval updating bag data
 setInterval(() => {
-  BagService.updateInfoBag(BagService.getActualCurrencyPrices, BagService.getBag())
+  updateInfoBag()
 }, 30000)
 </script>
 

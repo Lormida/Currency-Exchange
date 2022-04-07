@@ -3,7 +3,7 @@ import { MutationsType } from '@/store/mutations'
 import { Currency } from '@/store/state'
 import { SuperStore, useStore } from '@/store'
 import axios from 'axios'
-import { apiCoincap } from '@/hooks/apiCoincap'
+import { apiCoincap } from '@/helpers/apiCoincap'
 import { historyCurrency } from './types'
 
 interface ApiFetching {

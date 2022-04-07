@@ -6,7 +6,7 @@ import axios from 'axios'
 import { reactive } from 'vue'
 import ApiService from './ApiService'
 import { actualBagDataType, getActualCurrencyPrices } from './types'
-import { apiCoincap } from '@/hooks/apiCoincap'
+import { apiCoincap } from '@/helpers/apiCoincap'
 
 interface BagActions {
   getBag(): PurchasedCurrency[]

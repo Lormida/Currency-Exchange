@@ -1,37 +1,14 @@
 <script setup lang="ts">
 import TheModalInputCurrency from '@/components/Modal/TheModalInputCurrency.vue'
 import TheModalTitleBuyCurrency from '@/components/Modal/TheModalTitleBuyCurrency.vue'
-import BagService from '@/utils/BagService'
-import ModalService from '@/utils/ModalService'
-import { computed, ref } from 'vue'
 
-interface Props {
+import { useTheModalBuyCurrency } from '@/hooks/useTheModalBuyCurrency'
+
+const props = defineProps<{
   currency: string
-}
+}>()
 
-const props = defineProps<Props>()
-
-const disabledBtnStatus = ref(true)
-const currentAmount = ref(0)
-
-const getCurrentAmount = computed(() => currentAmount.value)
-const getDisabledBtn = computed(() => disabledBtnStatus.value)
-
-const recalcValidate = (state: boolean, amount: number) => {
-  disabledBtnStatus.value = state
-  if (!Number.isNaN(amount)) {
-    currentAmount.value = amount
-  }
-}
-
-const buyCurrency = (currencyName: string, amount: number) => {
-  BagService.addCurrencyToBag(currencyName, amount).then(() => {
-    ModalService.changeModalState(false)
-
-    //* Update info about bag
-    BagService.updateInfoBag(BagService.getActualCurrencyPrices, BagService.getBag())
-  })
-}
+const { getCurrentAmount, getDisabledBtn, recalcValidate, buyCurrency } = useTheModalBuyCurrency()
 </script>
 
 <template>

@@ -1,6 +1,6 @@
 <script setup lang="ts">
-import { getFormatCurrency } from '@/hooks/getFormatCurrency'
-import { getActualBagData } from '@/hooks/getActualBagData'
+import { getFormatCurrency } from '@/helpers/getFormatCurrency'
+import { getActualBagData } from '@/helpers/getActualBagData'
 </script>
 
 <template>

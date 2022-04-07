@@ -3,32 +3,14 @@ import HomePageNavbar from '@/components/HomePage/Navbar/HomePageNavbar.vue'
 import HomePageTableCurrencies from '@/components/HomePage/Content/HomePageTableCurrencies.vue'
 import HomePagePagination from '@/components/HomePage/Pagination/HomePagePagination.vue'
 import SpinnerLoader from '@/components/UI/SpinnerLoader.vue'
+import { useHomePage } from '@/hooks/useHomePage'
 
-import { computed, onMounted, Ref, ref } from 'vue'
+import { onMounted } from 'vue'
 
-import { getIsLoading } from '@/hooks/getIsLoading'
-import { getCurrencies } from '@/hooks/getCurrencies'
-import ApiService from '@/utils/ApiService'
+import { getIsLoading } from '@/helpers/getIsLoading'
+import { getCurrencies } from '@/helpers/getCurrencies'
 
-//* Initialization
-const limit = 6
-const currentPage = ref(1)
-const totalPage = Math.ceil(100 / limit)
-
-const setNewPage = async (pageNumber: number) => {
-  currentPage.value = pageNumber
-  await fetchData(currentPage, limit)
-}
-
-const fetchData = async (currentPage: Ref<number>, limit: number) => {
-  ApiService.setLoading(true)
-
-  ApiService.getAllCurrencies({ currentPage: currentPage.value, limit }).then(() => {
-    ApiService.setLoading(false)
-  })
-}
-
-const getCurrentPage = computed(() => currentPage.value)
+const { limit, currentPage, totalPage, getCurrentPage, setNewPage, fetchData } = useHomePage()
 
 onMounted(async () => {
   await fetchData(currentPage, limit)

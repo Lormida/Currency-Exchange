@@ -1,8 +1,8 @@
 <script setup lang="ts">
-import { getFormatCurrency } from '@/hooks/getFormatCurrency'
-import { getDegreeCalc } from '@/hooks/getDegreeCalc'
-import { getDataCurrency } from '@/hooks/getDataCurrency'
-import { getRelativeSupply } from '@/hooks/getRelativeSupply'
+import { getFormatCurrency } from '@/helpers/getFormatCurrency'
+import { getDegreeCalc } from '@/helpers/getDegreeCalc'
+import { getDataCurrency } from '@/helpers/getDataCurrency'
+import { getRelativeSupply } from '@/helpers/getRelativeSupply'
 </script>
 
 <template>

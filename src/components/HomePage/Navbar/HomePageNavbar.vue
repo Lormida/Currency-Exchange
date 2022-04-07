@@ -1,20 +1,17 @@
 <script setup lang="ts">
 import HomePageBag from '@/components/HomePage/Navbar/HomePageBag.vue'
-import { defineAsyncComponent, onMounted, ref } from 'vue'
-
-import ApiService from '@/utils/ApiService'
 import SpinnerLoader from '@/components/UI/SpinnerLoader.vue'
+
+import { useHomePageNavbar } from '@/hooks/useHomePageNavbar'
+
+import { defineAsyncComponent, onMounted } from 'vue'
 
 const CardCurrency = defineAsyncComponent(() => import('@/components/UI/CardCurrency.vue'))
 
-let currencies = ref()
-let isLoading = ref(true)
+const { currencies, isLoading, getTop3Currencies } = useHomePageNavbar()
 
 onMounted(() => {
-  ApiService.getTop3Currencies().then((data) => {
-    currencies.value = data
-    isLoading.value = false
-  })
+  getTop3Currencies()
 })
 </script>
 
@@ -54,6 +51,7 @@ onMounted(() => {
   height: auto;
   padding: 15px;
   display: flex;
+  flex-wrap: nowrap;
   justify-content: space-between;
   background-color: lighten($creamy, 5%);
   position: sticky;
@@ -66,12 +64,13 @@ onMounted(() => {
 .nav__top-currencies {
   display: flex;
   padding: 10px;
-  flex-grow: 0;
+  flex-basis: 70%;
   flex-direction: row;
   justify-content: space-between;
   gap: 2%;
   background-color: rgba(79, 34, 88, 0.55);
 }
 .nav__bag {
+  flex-basis: 25%;
 }
 </style>

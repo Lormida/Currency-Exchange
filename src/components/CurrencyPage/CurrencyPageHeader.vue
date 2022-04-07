@@ -1,6 +1,6 @@
 <script setup lang="ts">
-import { openModal } from '@/hooks/openModal'
-import { getDataCurrency } from '@/hooks/getDataCurrency'
+import { openModal } from '@/helpers/openModal'
+import { getDataCurrency } from '@/helpers/getDataCurrency'
 </script>
 
 <template>

@@ -1,39 +1,16 @@
 <script setup lang="ts">
-
-import BagService from '@/utils/BagService'
-import { PurchasedCurrency } from '@/utils/types'
-import { computed, ref } from 'vue'
 import SpinnerLoader from '@/components/UI/SpinnerLoader.vue'
+
+import { PurchasedCurrency } from '@/utils/types'
+
+import { useTheModalTableRow } from '@/hooks/useTheModalTableRow'
 
 const props = defineProps<{
   currency: PurchasedCurrency
   index: number
 }>()
 
-const customIsLoading = ref(true)
-
-//* Get actual prices to purchased currency
-let bagCurrencyActualPrices = ref<Record<string, number>>({})
-BagService.getActualCurrencyPrices(BagService.getBag()).then((actualCurrencyPrices) => {
-  bagCurrencyActualPrices.value = actualCurrencyPrices
-  customIsLoading.value = false
-})
-
-const getCustomIsLoading = computed(() => customIsLoading.value)
-const getBagCurrencyActualPrices = computed(() => bagCurrencyActualPrices.value)
-//* Remove currency from bag
-const removeCurrency = (currencyName: string) => {
-  BagService.deleteCurrencyFromBag(currencyName)
-
-  //* Update info about bag
-  BagService.updateInfoBag(BagService.getActualCurrencyPrices, BagService.getBag())
-}
-
-const getProfitCurrencyPercent = computed(() => {
-  return (currency: PurchasedCurrency) => {
-    return ((getBagCurrencyActualPrices.value[currency.name] / currency.purchasePriceUsd - 1) * 100).toFixed(2)
-  }
-})
+const { getCustomIsLoading, getBagCurrencyActualPrices, removeCurrency, getProfitCurrencyPercent } = useTheModalTableRow()
 </script>
 
 <template>

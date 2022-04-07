@@ -5,9 +5,7 @@ const props = defineProps<{
   currentPage: number
 }>()
 
-const getCurrentPage = computed(() => {
-  return props.currentPage
-})
+const getCurrentPage = computed(() => props.currentPage)
 </script>
 
 <template>
@@ -20,5 +18,4 @@ const getCurrentPage = computed(() => {
 .active {
   background-color: $paginationActive;
 }
-
 </style>

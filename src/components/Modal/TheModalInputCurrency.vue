@@ -1,59 +1,26 @@
 <script setup lang="ts">
-import { useStore } from '@/store'
-import { useField } from 'vee-validate'
-import { computed, ref } from 'vue'
+import { useThemModalInputCurrency } from '@/hooks/useTheModalInputCurrency'
 
-interface Props {
+const props = defineProps<{
   currency: string
-}
-const props = defineProps<Props>()
+}>()
 
 const emit = defineEmits<{
   (e: 'recalc-validate', getDisabledBtn: boolean, amount: number): void
 }>()
 
-const store = useStore()
-const currencySupply = store.getters.getDetailCurrency(props.currency)
-const suspendPhrase = 'Enter the amount'
-
-const validateField = (value: string | unknown) => {
-  if (typeof value === 'string') {
-    if (!value) {
-      return suspendPhrase
-    }
-    if (Number.isNaN(+value)) {
-      return 'Amount must be a number!'
-    }
-    if (+value > currencySupply) {
-      return 'You have exceeded the amount of available currency'
-    }
-    if (+value <= 0) {
-      return 'Amount must be positive!'
-    }
-  }
-  return true
-}
-
-const { value, errorMessage } = useField('fullName', validateField)
-
-let inputRef = ref<string | unknown>(value)
-
-const getErrorStatus = computed(() => {
-  return typeof validateField(inputRef.value) === 'string' && !(validateField(inputRef.value) === suspendPhrase)
-})
-
-const getDisabledBtn = computed(() => typeof validateField(inputRef.value) === 'string')
-
-const recalcValidate = () => {
-  if (typeof inputRef.value === 'string') {
-    emit('recalc-validate', getDisabledBtn.value, +inputRef.value)
-  }
-}
+const { inputRef, getErrorStatus, errorMessage, recalcValidate } = useThemModalInputCurrency(props, emit)
 </script>
 
 <template>
   <div class="form-currency__input-wrapper mx-auto">
-    <input @input="recalcValidate" v-model="inputRef" :class="{ 'error-input': getErrorStatus }" class="form-control" placeholder="Sum" />
+    <input
+      class="form-currency__input form-control"
+      @input="recalcValidate"
+      v-model="inputRef"
+      :class="{ 'error-input': getErrorStatus }"
+      placeholder="Amount"
+    />
     <pre class="form-currency__form-message" dir="auto">{{ errorMessage }}</pre>
   </div>
 </template>
@@ -66,6 +33,11 @@ const recalcValidate = () => {
     width: 70%;
   }
 
+  // .form-currency__input
+
+  &__input {
+  }
+
   // .form-currency__form-message
 
   &__form-message {
@@ -75,8 +47,6 @@ const recalcValidate = () => {
     font-weight: 800;
     margin-top: 5px;
   }
-}
-.form-control {
 }
 
 .error-input {

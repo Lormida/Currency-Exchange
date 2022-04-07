@@ -1,23 +1,19 @@
 <script setup lang="ts">
 import HomePagePaginationItem from '@/components/HomePage/Pagination/HomePagePaginationItem.vue'
 import HomePagePaginationButton from '@/components/HomePage/Pagination/HomePagePaginationButton.vue'
-import { defineProps } from 'vue'
 
-interface Props {
+import { useHomePagePagination } from '@/hooks/useHomePagePagination'
+
+const props = defineProps<{
   totalPage: number
   currentPage: number
-}
+}>()
 
-const props = defineProps<Props>()
 const emit = defineEmits<{
   (e: 'change-current-page', currentPage: number): void
 }>()
 
-const changeCurrentPage = (pageNumber: number, direction?: boolean) => {
-  if (direction === true && props.currentPage < props.totalPage) emit('change-current-page', props.currentPage + 1)
-  else if (direction === false && props.currentPage > 1) emit('change-current-page', props.currentPage - 1)
-  else emit('change-current-page', pageNumber)
-}
+const { changeCurrentPage } = useHomePagePagination(props, emit)
 </script>
 
 <template>

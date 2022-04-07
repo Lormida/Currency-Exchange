@@ -1,7 +1,9 @@
 <script setup lang="ts">
-import { openModal } from '@/hooks/openModal'
-import { getFormatCurrency } from '@/hooks/getFormatCurrency'
 import { Currency } from '@/utils/types'
+
+import { openModal } from '@/helpers/openModal'
+import { getFormatCurrency } from '@/helpers/getFormatCurrency'
+
 
 const props = defineProps<{
   currentPage: number

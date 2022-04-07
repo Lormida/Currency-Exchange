@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { defineAsyncComponent } from 'vue'
-import { getIsModalOpen } from '@/hooks/getIsModalOpen'
+import { getIsModalOpen } from '@/helpers/getIsModalOpen'
 const TheModal = defineAsyncComponent(() => import(/* webpackChunkName: 'TheModal' */ '@/components/Modal/TheModal.vue'))
 </script>
 

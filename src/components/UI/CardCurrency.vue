@@ -1,22 +1,21 @@
 <script setup lang="ts">
-import CardRow from '@/components/UI/CardRow.vue'
-import Card from '@/components/UI/Card.vue'
 import Badge from '@/components/UI/Badge.vue'
 import CardTitle from '@/components/UI/CardTitle.vue'
+import CardRow from '@/components/UI/CardRow.vue'
+import Card from '@/components/UI/Card.vue'
 
-import { getFormatCurrency } from '@/hooks/getFormatCurrency'
-import { openModal } from '@/hooks/openModal'
-import { getDegreeCalc } from '@/hooks/getDegreeCalc'
+import { getFormatCurrency } from '@/helpers/getFormatCurrency'
+import { getDegreeCalc } from '@/helpers/getDegreeCalc'
+import { openModal } from '@/helpers/openModal'
 
-interface Props {
+const props = defineProps<{
   name: string
   changePercent24Hr: number
   priceUsd: number
   marketCapUsd: number
   id: string
   index: number
-}
-const props = defineProps<Props>()
+}>()
 </script>
 
 <template>
@@ -43,22 +42,34 @@ const props = defineProps<Props>()
 .card {
   box-shadow: rgba(0, 0, 0, 0.19) 0px 10px 20px, rgba(0, 0, 0, 0.23) 0px 6px 6px;
   clip-path: polygon(10% 0, 100% 0, 100% 20%, 100% 90%, 90% 100%, 0 100%, 0% 80%, 0 10%);
-}
-.card__content {
-  display: grid;
-  grid-template-areas:
-    'title button'
-    'badge button';
-  grid-gap: 2px 10px;
-}
-.card__title {
-  grid-area: title;
-}
-.card__badge {
-  grid-area: badge;
-}
-.card__button {
-  grid-area: button;
-  align-self: center;
+
+  // .card__content
+
+  &__content {
+    display: grid;
+    grid-template-areas:
+      'title button'
+      'badge button';
+    grid-gap: 2px 10px;
+  }
+
+  // .card__title
+
+  &__title {
+    grid-area: title;
+  }
+
+  // .card__badge
+
+  &__badge {
+    grid-area: badge;
+  }
+
+  // .card__button
+
+  &__button {
+    grid-area: button;
+    align-self: center;
+  }
 }
 </style>

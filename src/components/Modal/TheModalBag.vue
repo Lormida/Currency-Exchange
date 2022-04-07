@@ -1,17 +1,14 @@
 <script setup lang="ts">
-import { computed, ref } from 'vue'
 import TheModalTableRow from '@/components/Modal/TheModalTableRow.vue'
 import AbsentLabel from '@/components/UI/AbsentLabel.vue'
 import Thead from '@/components/UI/Thead.vue'
-import BagService from '@/utils/BagService'
 
-const getBag = computed(() => BagService.getBag())
+import { useTheModalBag } from '@/hooks/useTheModalBag'
+
+const { getBag, titlesNames, titleClasses, loadBagLocal } = useTheModalBag()
 
 //* Loading bag from LocalStorage
-BagService.loadBagLocal()
-
-const titlesNames = ['Currency', 'Current price', 'Amount', 'Profit', 'Remove']
-const titleClasses = ['col-2', 'col-2', 'col-2', 'col-2', 'col-1']
+loadBagLocal()
 </script>
 
 <template>

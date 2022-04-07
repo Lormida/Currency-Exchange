@@ -1,29 +1,9 @@
 <script setup lang="ts">
-import { computed } from 'vue'
+import { useSpinnerLoader } from '@/hooks/useSpinnerLoader'
 
-interface Props {
-  size?: string
-}
-const props = defineProps<Props>()
+const props = defineProps<{ size?: string }>()
 
-const getLoader = computed(() => {
-  if (props.size === 'small') {
-    return {
-      animationName: 'loader-small',
-      background: 'background-color: transparent',
-    }
-  } else if (props.size === 'middle') {
-    return {
-      animationName: 'loader-middle',
-      background: 'background-color: transparent',
-    }
-  } else {
-    return {
-      animationName: 'loader-default',
-      background: 'background-color: transparent',
-    }
-  }
-})
+const { getLoader } = useSpinnerLoader(props)
 </script>
 
 <template>

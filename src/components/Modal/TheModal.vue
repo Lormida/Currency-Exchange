@@ -1,27 +1,9 @@
 <script setup lang="ts">
 import SpinnerLoader from '@/components/UI/SpinnerLoader.vue'
 
-import { computed, defineAsyncComponent } from 'vue'
+import { useTheModal } from '@/hooks/useTheModal'
 
-import ModalService from '@/utils/ModalService'
-import { useStore } from '@/store'
-
-const store = useStore()
-
-const getCurrentModalIndicator = computed(() => store.getters.getCurrentModalIndicator)
-
-const getCurrentModal = computed(() => {
-  let currentComponentName = 'TheModalBag'
-
-  if (getCurrentModalIndicator.value !== 'bag') {
-    currentComponentName = 'TheModalBuyCurrency'
-  }
-
-  return defineAsyncComponent(() => import(`@/components/Modal/${currentComponentName}.vue`))
-})
-const closeModal = () => {
-  ModalService.changeModalState(false)
-}
+const { getCurrentModalIndicator, getCurrentModal, closeModal } = useTheModal()
 </script>
 
 <template>
@@ -62,12 +44,14 @@ const closeModal = () => {
 .modal-window {
   min-width: 600px;
   width: fit-content;
+
   // .modal-window__content
 
   &__content {
     position: relative;
   }
   // .modal-window__close-btn
+
   &__close-btn {
     position: absolute;
     right: 0;

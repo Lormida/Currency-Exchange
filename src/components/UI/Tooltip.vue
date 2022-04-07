@@ -1,31 +1,23 @@
 <script setup lang="ts">
+import { useTooltip } from '@/hooks/useTooltip'
 import { onMounted } from 'vue'
 
-const props = defineProps({
-  classTrigger: {
-    type: String,
-    required: true,
-  },
-  left: String,
-  right: String,
-  bottom: String,
-  top: String,
-})
+const props = defineProps<{
+  classTrigger: string
+  left?: string
+  right?: string
+  top?: string
+  bottom?: string
+}>()
 
-const initTooltip = () => {
-  const tooltip = document.querySelector('.tooltip') as Element
-  const tooltipParent = document.querySelector(`.${props.classTrigger}`) as Element
-
-  tooltipParent.addEventListener('mouseenter', () => tooltip.classList.remove('hide-tooltip'))
-  tooltipParent.addEventListener('mouseleave', () => tooltip.classList.add('hide-tooltip'))
-}
+const { initTooltip } = useTooltip(props, 'tooltip--hide')
 onMounted(() => {
   initTooltip()
 })
 </script>
 
 <template>
-  <div class="tooltip hide-tooltip p-2">
+  <div class="tooltip tooltip--hide p-2">
     <slot name="default"> </slot>
   </div>
 </template>
@@ -45,7 +37,7 @@ onMounted(() => {
   background-color: $white;
   opacity: 1;
 }
-.hide-tooltip {
+.tooltip--hide {
   visibility: hidden;
 }
 </style>

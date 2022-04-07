@@ -1,8 +1,8 @@
 <script setup lang="ts">
 import { defineAsyncComponent } from 'vue'
 
-import { getFormatCurrency } from '@/hooks/getFormatCurrency'
-import { getDataCurrency } from '@/hooks/getDataCurrency'
+import { getFormatCurrency } from '@/helpers/getFormatCurrency'
+import { getDataCurrency } from '@/helpers/getDataCurrency'
 
 const TheChart = defineAsyncComponent(() => import(/* webpackChunkName: 'TheChart' */ '@/components/CurrencyPage/TheChart.vue'))
 
