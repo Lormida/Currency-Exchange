@@ -22,7 +22,7 @@ const { titlesNames, getCurrencies } = useHomePageTableCurrencies(props)
         <th class="lead text-center" scope="col">#</th>
       </template>
     </Thead>
-
+    
     <tbody>
       <TableRowCurrency
         v-for="(currency, index) of getCurrencies"

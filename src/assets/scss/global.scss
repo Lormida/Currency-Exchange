@@ -1,0 +1,47 @@
+@font-face {
+  font-family: "BiosRegular";
+  src: url("@/assets/fonts/BiosRegular.woff2") format("woff2");
+}
+
+* {
+  font-family: "BiosRegular";
+  box-sizing: border-box;
+}
+
+body {
+  width: 100%;
+  max-width: 1440px;
+  height: 100vh;
+  margin: 0 auto;
+  background: linear-gradient(45deg, transparent 3%, #00e6f6 3%, #00e6f6 5%, #5736be 5%);
+}
+
+.currency-fall {
+  color: $red;
+  font-weight: bold;
+}
+.currency-growth {
+  color: $green;
+  font-weight: bold;
+  &::before {
+    content: "+";
+  }
+}
+
+//* Custom scrollbar
+
+::-webkit-scrollbar {
+  width: 10px;
+}
+
+::-webkit-scrollbar-track {
+  background: white;
+}
+
+::-webkit-scrollbar-thumb {
+  background: rgba(245, 73, 82, 0.8);
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(22, 22, 22, 0.8);
+}

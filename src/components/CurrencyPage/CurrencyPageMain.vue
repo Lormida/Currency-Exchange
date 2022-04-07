@@ -1,9 +1,12 @@
 <script setup lang="ts">
-import CurrencyPageMarketStats from '@/components/CurrencyPage/CurrencyPageMarket/CurrencyPageMarketStats.vue'
 import { defineAsyncComponent } from 'vue'
 
-const CurrencyPageChart = defineAsyncComponent(
-  () => import(/* webpackChunkName: 'CurrencyPageChart' */ '@/components/CurrencyPage/CurrencyPageChart.vue')
+const CurrencyPageMarketStats = defineAsyncComponent(
+  () => import(/* webpackChunkName: 'CurrencyPageMarketStats' */ '@/components/CurrencyPage/CurrencyPageMarket/CurrencyPageMarketStats.vue')
+)
+const TheChart = defineAsyncComponent(() => import(/* webpackChunkName: 'TheChart' */ '@/components/CurrencyPage/Chart/TheChart.vue'))
+const HeaderChart = defineAsyncComponent(
+  () => import(/* webpackChunkName: 'HeaderChart' */ '@/components/CurrencyPage/Chart/HeaderChart.vue')
 )
 
 const props = defineProps<{
@@ -12,25 +15,26 @@ const props = defineProps<{
 </script>
 
 <template>
-  <main class="currency__main">
-    <div class="card currency__card">
-      <!-- Chart component -->
-      <CurrencyPageChart :id="id"></CurrencyPageChart>
-
-      <!-- Market Stats -->
-      <CurrencyPageMarketStats />
-    </div>
-  </main>
+  <div class="chart-wrapper">
+    <HeaderChart />
+    <TheChart :currency="id"></TheChart>
+  </div>
+  <CurrencyPageMarketStats class="currency-page__market-stats" />
 </template>
 
 <style lang="scss" scoped>
-.currency__card {
-  // min-height: 500px;
-  height: 100%;
-  background-color: transparent;
-  border: none;
+.currency-page__market-stats {
+  margin-top: 10px;
+}
+
+.chart-wrapper {
+  height: auto;
   display: flex;
   flex-direction: column;
-  justify-content: space-around;
+  background-color: $white;
+  border-top-left-radius: 10px;
+  border-top-right-radius: 10px;
+  padding: 1% 1%;
+  min-height: 531px;
 }
 </style>

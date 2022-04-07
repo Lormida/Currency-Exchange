@@ -51,3 +51,10 @@ export type actualBagDataType = {
 export type getActualCurrencyPrices = {
   (bag: PurchasedCurrency[]): Promise<Record<string, number>>
 }
+
+export type menuItem = {
+  title: string
+  body: string
+  footerChangePercent?: string
+  footerLight?: string
+}

@@ -66,7 +66,7 @@ onMounted(() => {
   padding: 10px;
   flex-basis: 70%;
   flex-direction: row;
-  justify-content: space-between;
+  justify-content: space-evenly;
   gap: 2%;
   background-color: rgba(79, 34, 88, 0.55);
 }

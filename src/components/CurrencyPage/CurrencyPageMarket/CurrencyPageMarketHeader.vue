@@ -17,10 +17,11 @@
   &__header-title {
     font-size: 20px;
     width: fit-content;
-    padding:4px;
+    padding: 4px;
     font-weight: bold;
     border: 2px solid $darkGrey;
     border-radius: 10px;
+    margin: 0;
   }
 }
 </style>

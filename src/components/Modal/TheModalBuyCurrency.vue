@@ -13,7 +13,7 @@ const { getCurrentAmount, getDisabledBtn, recalcValidate, buyCurrency } = useThe
 
 <template>
   <form class="form-currency d-flex flex-column">
-    <TheModalTitleBuyCurrency title="Specify the sum" :subtitle="String(currency).toUpperCase()"> </TheModalTitleBuyCurrency>
+    <TheModalTitleBuyCurrency title="Specify the amount" :subtitle="String(currency).toUpperCase()"> </TheModalTitleBuyCurrency>
     <TheModalInputCurrency @recalc-validate="recalcValidate" :currency="currency"></TheModalInputCurrency>
 
     <button

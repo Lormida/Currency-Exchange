@@ -7,21 +7,13 @@ import { getDataCurrency } from '@/helpers/getDataCurrency'
 import { getIsLoading } from '@/helpers/getIsLoading'
 import ApiService from '@/utils/ApiService'
 
+const CurrencyPageMain = defineAsyncComponent(
+  () => import(/* webpackChunkName: 'CurrencyPageMain' */ '@/components/CurrencyPage/CurrencyPageMain.vue')
+)
 
-const CurrencyPageContent = defineAsyncComponent(() => {
-  return new Promise((resolve) => {
-    import(/* webpackChunkName: 'CurrencyPageContent' */ '@/components/CurrencyPage/CurrencyPageContent.vue').then((component: any) => {
-      setTimeout(() => {
-        resolve(component)
-      }, 300)
-    })
-  })
-})
-
-interface Props {
+const props = defineProps<{
   id: string
-}
-const props = defineProps<Props>()
+}>()
 
 ApiService.loadCurrentCurrency(props.id).then(() => {
   ApiService.setLoading(false)
@@ -29,13 +21,12 @@ ApiService.loadCurrentCurrency(props.id).then(() => {
 </script>
 
 <template>
-  <div class="container-currency">
-    <div v-if="!getIsLoading && Object.keys(getDataCurrency).length > 0" class="container currency">
-      <!-- Currency Header -->
+  <div class="currency-page currency-page__container">
+    <div class="currency-page__main" v-if="!getIsLoading && Object.keys(getDataCurrency).length > 0">
+      <!-- <CurrencyPageHeader /> -->
       <Suspense>
         <template #default>
-          <!-- Currency Content -->
-          <CurrencyPageContent :id="id"></CurrencyPageContent>
+          <CurrencyPageMain :id="id" />
         </template>
 
         <template #fallback>
@@ -48,50 +39,30 @@ ApiService.loadCurrentCurrency(props.id).then(() => {
 </template>
 
 <style lang="scss" scoped>
-.container-currency {
-  position: fixed;
-  top: 0;
-  left: 0;
-  background: linear-gradient(to right, $leftGradientCurrencyPage, $rightGradientCurrencyPage);
-  min-height: 100%;
-  width: 100%;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-}
-.container {
-  width: 80%;
-  padding-bottom: 10px;
-}
-.currency {
-  min-height: 100vh;
-  display: flex;
-  flex-direction: column;
-  justify-content: space-evenly;
+.currency-page {
+  // .currency-page__container
 
-  // .currency__main
+  &__container {
+    min-height: calc(100% - $headerHeight);
+    max-height: calc(100% - $headerHeight);
+    display: flex;
+    flex-direction: column;
+    overflow: auto;
+    border-bottom-left-radius: 20px;
+    border-bottom-right-radius: 20px;
+  }
+
+  // .currency-page__main
 
   &__main {
-    height: auto;
-    min-height: 690px;
-  }
-
-  // .currency__card
-
-  &__card {
-    box-shadow: rgba(14, 30, 37, 0.12) 0px 2px 4px 0px, rgba(14, 30, 37, 0.32) 0px 2px 16px 0px;
-    height: 100%;
-  }
-
-  // .currency__body
-
-  &__body {
-  }
-}
-.card {
-  // .card__header
-
-  &__header {
+    background-color: $homeMainBg;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-evenly;
+    align-items: stretch;
+    flex: 1 0 auto;
+    width: 100%;
+    padding: 15px;
   }
 }
 </style>
