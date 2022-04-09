@@ -1,13 +1,12 @@
-import { useStore } from '@/store'
 import { useField } from 'vee-validate'
 import { ref, computed } from 'vue'
+import { CurrencyModule } from '@/store/modules/currency/index'
 
 export const useThemModalInputCurrency = (
   props: { currency: string },
   emit: (e: 'recalc-validate', getDisabledBtn: boolean, amount: number) => void
 ) => {
-  const store = useStore()
-  const currencySupply = store.getters.getDetailCurrency(props.currency)
+  const currencySupply = CurrencyModule.getDetailCurrency(props.currency)
   const suspendPhrase = 'Enter the amount'
 
   const validateField = (value: string | unknown) => {

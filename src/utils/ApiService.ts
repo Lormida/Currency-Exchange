@@ -1,10 +1,7 @@
-import { ActionsType } from '@/store/actions'
-import { MutationsType } from '@/store/mutations'
-import { Currency } from '@/store/state'
-import { SuperStore, useStore } from '@/store'
-import axios from 'axios'
+import { CurrencyModule } from '@/store/modules/currency/index'
+
 import { apiCoincap } from '@/helpers/apiCoincap'
-import { historyCurrency } from './types'
+import { Currency, historyCurrency } from '@/utils/types'
 
 interface ApiFetching {
   getAllCurrencies(params: { currentPage: number; limit: number }): void
@@ -16,13 +13,11 @@ interface ApiFetching {
 }
 
 class ApiService implements ApiFetching {
-  constructor(private store: SuperStore) {}
-
   async getAllCurrencies(params: { currentPage: number; limit: number }) {
-    await this.store.dispatch(ActionsType.LoadAllCurrencies, params)
+    await CurrencyModule.LoadAllCurrencies(params)
   }
   async loadCurrentCurrency(currencyName: string) {
-    await this.store.dispatch(ActionsType.LoadCurrentCurrency, currencyName)
+    await CurrencyModule.LoadCurrentCurrency(currencyName)
   }
   async getSpecificCurrency(currencyName: string) {
     try {
@@ -52,9 +47,8 @@ class ApiService implements ApiFetching {
   }
 
   setLoading(loadingStatus: boolean) {
-    this.store.commit(MutationsType.SetLoading, loadingStatus)
+    CurrencyModule.SetLoading(loadingStatus)
   }
 }
 
-const instanceApiService = new ApiService(useStore())
-export default instanceApiService
+export default new ApiService()

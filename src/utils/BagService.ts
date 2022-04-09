@@ -1,12 +1,9 @@
-import { MutationsType } from '@/store/mutations'
-import { PurchasedCurrency } from '@/store/state'
-import { SuperStore, useStore } from '@/store'
-import { Currency } from '@/store/state'
-import axios from 'axios'
 import { reactive } from 'vue'
 import ApiService from './ApiService'
-import { actualBagDataType, getActualCurrencyPrices } from './types'
+import { actualBagDataType, Currency, getActualCurrencyPrices, PurchasedCurrency } from './types'
 import { apiCoincap } from '@/helpers/apiCoincap'
+
+import { BagModule } from '@/store/modules/bag/index'
 
 interface BagActions {
   getBag(): PurchasedCurrency[]
@@ -20,14 +17,12 @@ interface BagActions {
 }
 
 class BagService implements BagActions {
-  constructor(private store: SuperStore) {}
-
   getBag(): PurchasedCurrency[] {
-    return this.store.getters.getBag
+    return BagModule.getBag
   }
   deleteCurrencyFromBag(currencyName: string): void {
-    this.store.commit(MutationsType.DeleteCurrencyFromBag, currencyName)
-    this.saveBagLocal(this.store.getters.getBag)
+    BagModule.DeleteCurrencyFromBag(currencyName)
+    this.saveBagLocal(BagModule.getBag)
   }
   addCurrencyToBag(currencyName: string, amount: number): Promise<any> {
     return apiCoincap
@@ -38,8 +33,8 @@ class BagService implements BagActions {
         priceUsd = +priceUsd
         const newCurrency = { name, symbol, amount, purchasePriceUsd: priceUsd } as PurchasedCurrency
 
-        this.store.commit(MutationsType.AddCurrencyToBag, newCurrency)
-        this.saveBagLocal(this.store.getters.getBag)
+        BagModule.AddCurrencyToBag(newCurrency)
+        this.saveBagLocal(BagModule.getBag)
       })
       .catch((e) => console.log(e))
   }
@@ -49,7 +44,7 @@ class BagService implements BagActions {
   loadBagLocal() {
     const bag = localStorage.getItem('bag')
     if (bag) {
-      this.store.commit(MutationsType.LoadBagLocal, JSON.parse(bag))
+      BagModule.LoadBagLocal(JSON.parse(bag))
     }
   }
   analyzeBag(currencyPrices: getActualCurrencyPrices, bag: PurchasedCurrency[]) {
@@ -59,7 +54,7 @@ class BagService implements BagActions {
   }
   updateInfoBag(currencyPrices: getActualCurrencyPrices, bag: PurchasedCurrency[]) {
     this.analyzeBag(currencyPrices, bag).then((actualBagProfit) => {
-      this.store.commit(MutationsType.ChangeActualBagData, actualBagProfit)
+      BagModule.ChangeActualBagData(actualBagProfit)
     })
   }
   calculateActualBagProfit(actualCurrencyPrices: Record<string, number>) {
@@ -103,5 +98,4 @@ class BagService implements BagActions {
   }
 }
 
-const instanceBagService = new BagService(useStore())
-export default instanceBagService
+export default new BagService()

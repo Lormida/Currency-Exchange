@@ -1,7 +1,6 @@
-import { useStore } from '@/store'
+import { CurrencyModule } from '@/store/modules/currency/index'
 import { computed } from 'vue'
 
-const store = useStore()
-const getCurrencies = computed(() => store.getters.getCurrencies)
+const getCurrencies = computed(() => CurrencyModule.getCurrencies)
 
 export { getCurrencies }

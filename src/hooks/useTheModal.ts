@@ -1,11 +1,9 @@
+import { ModalModule } from '@/store/modules/modal/index'
 import ModalService from '@/utils/ModalService'
 import { computed, defineAsyncComponent } from 'vue'
-import { useStore } from '@/store'
-
-const store = useStore()
 
 export const useTheModal = () => {
-  const getCurrentModalIndicator = computed(() => store.getters.getCurrentModalIndicator)
+  const getCurrentModalIndicator = computed(() => ModalModule.getCurrentModalIndicator)
 
   const getCurrentModal = computed(() => {
     let currentComponentName = 'TheModalBag'

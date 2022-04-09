@@ -1,5 +1,4 @@
-import { MutationsType } from '@/store/mutations'
-import { SuperStore, useStore } from '@/store'
+import { ModalModule } from '@/store/modules/modal/index'
 
 interface ModalActions {
   changeModalState(modalState: boolean): void
@@ -7,14 +6,12 @@ interface ModalActions {
 }
 
 class ModalService implements ModalActions {
-  constructor(private store: SuperStore) {}
   changeModalState(modalState: boolean) {
-    this.store.commit(MutationsType.ChangeModalState, modalState)
+    ModalModule.ChangeModalState(modalState)
   }
   changeCurrentModalIndicator(currentModalIndicator: string) {
-    this.store.commit(MutationsType.ChangeCurrentModalIndicator, currentModalIndicator)
+    ModalModule.ChangeCurrentModalIndicator(currentModalIndicator)
   }
 }
 
-const instanceModdalService = new ModalService(useStore())
-export default instanceModdalService
+export default new ModalService()

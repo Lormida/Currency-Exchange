@@ -1,7 +1,9 @@
 const { defineConfig } = require('@vue/cli-service')
 
 module.exports = defineConfig({
-  transpileDependencies: true,
+  transpileDependencies: [
+    'vuex-module-decorators'
+  ],
   css: {
     loaderOptions: {
       sass: {

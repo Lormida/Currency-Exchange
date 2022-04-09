@@ -1,7 +1,6 @@
-import { useStore } from '@/store'
 import { computed } from 'vue'
+import { BagModule } from '@/store/modules/bag/index'
 
-const store = useStore()
-const getActualBagData = computed(() => store.getters.getActualBagData)
+const getActualBagData = computed(() => BagModule.getActualBagData)
 
 export { getActualBagData }

@@ -1,28 +1,15 @@
-import { createStore, Store as VuexStore, CommitOptions, DispatchOptions } from 'vuex'
-import { state, State } from './state'
-import { getters, Getters } from './getters'
-import { mutations, Mutations } from './mutations'
-import { actions, Actions } from './actions'
+import { createStore } from 'vuex'
 
-const store = createStore<State>({
-  state,
-  getters,
-  mutations,
-  actions,
-})
+import { IModal } from './modules/modal/types'
+import { IBag } from './modules/bag/types'
+import { ICurrency } from './modules/currency/types'
 
-type SuperStore = Omit<VuexStore<State>, 'getters' | 'commit' | 'dispatch'> & {
-  commit<K extends keyof Mutations>(key: K, payload?: Parameters<Mutations[K]>[1], options?: CommitOptions): ReturnType<Mutations[K]>
-} & {
-  dispatch<K extends keyof Actions>(key: K, payload?: Parameters<Actions[K]>[1], options?: DispatchOptions): ReturnType<Actions[K]>
-} & {
-  getters: {
-    [K in keyof Getters]: ReturnType<Getters[K]>
-  }
+export interface SuperStore {
+  user: IModal
+  bag: IBag
+  currency: ICurrency
 }
 
-const useStore = () => {
-  return store as SuperStore
-}
+const store = createStore<SuperStore>({})
 
-export { useStore, SuperStore }
+export { store }

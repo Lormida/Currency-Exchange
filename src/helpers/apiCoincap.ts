@@ -1,9 +1,8 @@
-import { useStore } from '@/store'
 import axios from 'axios'
+import { baseApiURL } from '@/utils/constants'
 
-const store = useStore()
 const apiCoincap = axios.create({
-  baseURL: `${store.getters.getBaseApiURL}`,
+  baseURL: baseApiURL,
 })
 
 export { apiCoincap }

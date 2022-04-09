@@ -1,7 +1,6 @@
-import { useStore } from '@/store'
+import { ModalModule } from '@/store/modules/modal/index'
 import { computed } from 'vue'
 
-const store = useStore()
-const getIsModalOpen = computed(() => store.getters.getIsModalOpen)
+const getIsModalOpen = computed(() => ModalModule.getIsModalOpen)
 
 export { getIsModalOpen }
