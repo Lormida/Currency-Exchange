@@ -1,5 +1,5 @@
 import axios from 'axios'
-import { baseApiURL } from '@/utils/constants'
+import { baseApiURL } from '@/services/constants'
 
 const apiCoincap = axios.create({
   baseURL: baseApiURL,

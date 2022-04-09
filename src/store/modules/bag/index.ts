@@ -4,7 +4,7 @@ import { store } from '@/store'
 import { IBag } from './types'
 import { MutationsType } from './types'
 import { reactive } from 'vue'
-import { actualBagDataType, PurchasedCurrency } from '@/utils/types'
+import { actualBagDataType, PurchasedCurrency } from '@/services/types'
 
 @Module({ dynamic: true, store, name: 'bag' })
 class Bag extends VuexModule implements IBag {

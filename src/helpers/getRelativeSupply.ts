@@ -1,5 +1,5 @@
 import { computed } from 'vue'
-import { getDataCurrency } from './getDataCurrency'
+import { getDataCurrency } from './reactive-getters/getDataCurrency'
 
 const getRelativeSupply = computed(() => {
   if (getDataCurrency.value.maxSupply == null) return null

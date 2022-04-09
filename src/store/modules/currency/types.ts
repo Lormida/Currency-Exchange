@@ -1,4 +1,4 @@
-import { Currency } from '@/utils/types'
+import { Currency } from '@/services/types'
 
 //*------------- Helpers types -------------
 export enum MutationsType {

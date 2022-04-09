@@ -1,11 +1,11 @@
 import { VuexModule, Module, Mutation, Action, getModule } from 'vuex-module-decorators'
 import { store } from '@/store'
-import { baseApiURL } from '@/utils/constants'
+import { baseApiURL } from '@/services/constants'
 import { ICurrency } from './types'
 import { MutationsType } from './types'
 import { ActionsType } from './types'
 import axios from 'axios'
-import { Currency } from '@/utils/types'
+import { Currency } from '@/services/types'
 
 @Module({ dynamic: true, store, name: 'currency' })
 class CurrencyClass extends VuexModule implements ICurrency {

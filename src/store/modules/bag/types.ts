@@ -1,4 +1,4 @@
-import { actualBagDataType, PurchasedCurrency } from '@/utils/types'
+import { actualBagDataType, PurchasedCurrency } from '@/services/types'
 
 //*------------- Helpers types -------------
 export enum MutationsType {

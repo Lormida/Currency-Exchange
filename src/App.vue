@@ -1,14 +1,14 @@
 <script setup lang="ts">
 import { defineAsyncComponent } from 'vue'
-import { getIsModalOpen } from '@/helpers/getIsModalOpen'
-import HomePageNavbar from '@/components/HomePage/Navbar/HomePageNavbar.vue'
+import { getIsModalOpen } from '@/helpers/reactive-getters/getIsModalOpen'
+import Navbar from '@/modules/Navbar/Navbar.vue'
 
-const TheModal = defineAsyncComponent(() => import(/* webpackChunkName: 'TheModal' */ '@/components/Modal/TheModal.vue'))
+const Modal = defineAsyncComponent(() => import(/* webpackChunkName: 'Modal' */ '@/modules/Modal/Modal.vue'))
 </script>
 
 <template>
   <div class="global-container">
-    <HomePageNavbar class="header__navbar" />
+    <Navbar class="header__navbar" />
     <router-view v-slot="{ Component }">
       <transition name="page" mode="out-in">
         <component :is="Component" />
@@ -16,7 +16,7 @@ const TheModal = defineAsyncComponent(() => import(/* webpackChunkName: 'TheModa
     </router-view>
 
     <!-- Modal-->
-    <TheModal v-if="getIsModalOpen"></TheModal>
+    <Modal v-if="getIsModalOpen"></Modal>
   </div>
 </template>
 
