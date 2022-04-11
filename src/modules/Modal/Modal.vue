@@ -42,7 +42,6 @@ const { getCurrentModalIndicator, getCurrentModal, closeModal } = useModal()
 }
 
 .modal-window {
-  min-width: 600px;
   width: fit-content;
 
   // .modal-window__content

@@ -44,5 +44,10 @@ setInterval(() => {
   box-shadow: rgba(50, 50, 93, 0.25) 0px 13px 27px -5px, rgba(0, 0, 0, 0.3) 0px 8px 16px -8px;
   position: relative;
   background-color: rgba(79, 34, 88, 0.3);
+  padding: 10px;
+
+  @media (max-width: $tablet) {
+    flex-direction: column;
+  }
 }
 </style>

@@ -17,11 +17,11 @@ onMounted(() => {
 <template>
   <nav class="nav">
     <template v-if="!isLoading">
-      <!-- Top 3 currencies -->
-      <div class="nav__top-currencies">
+      <div class="nav__cards">
         <Suspense>
           <template #default>
             <CardCurrency
+              class="card-currency"
               v-for="(currency, index) of currencies"
               :key="currency.id"
               :name="currency.name"
@@ -36,10 +36,17 @@ onMounted(() => {
             <SpinnerLoader size="middle"></SpinnerLoader>
           </template>
         </Suspense>
-      </div>
 
-      <!-- Bag currency -->
-      <Bag class="nav__bag" />
+        <Suspense>
+          <template #default>
+            <!-- Bag currency -->
+            <Bag class="nav__bag" />
+          </template>
+          <template #fallback>
+            <SpinnerLoader size="middle"></SpinnerLoader>
+          </template>
+        </Suspense>
+      </div>
     </template>
     <SpinnerLoader v-else size="middle"></SpinnerLoader>
   </nav>
@@ -47,10 +54,9 @@ onMounted(() => {
 
 <style lang="scss" scoped>
 .nav {
-  height: auto;
-  padding: 15px;
+  padding: 5px;
   display: flex;
-  flex-wrap: nowrap;
+  flex-wrap: wrap;
   justify-content: space-between;
   background-color: lighten($creamy, 5%);
   position: sticky;
@@ -59,17 +65,48 @@ onMounted(() => {
   z-index: 1;
   border-top-left-radius: 20px;
   border-top-right-radius: 20px;
+
+  @media (max-width: $phone-md) {
+    padding: 0;
+  }
+  // .nav__cards
+
+  &__cards {
+    display: flex;
+    padding: 5px;
+    width: 100%;
+    flex-wrap: wrap;
+    flex-direction: row;
+    justify-content: space-evenly;
+    gap: 1%;
+    border-top-left-radius: 10px;
+    border-top-right-radius: 10px;
+    background-color: $navbarBg;
+    @media (max-width: $tablet) {
+    }
+  }
+
+  // .nav__bag
+
+  &__bag {
+    flex-basis: 24%;
+    @media (max-width: $desktop-sm) {
+      flex-basis: 40%;
+    }
+
+    @media (max-width: $phone-lg) {
+      flex-basis: 49%;
+    }
+  }
 }
-.nav__top-currencies {
-  display: flex;
-  padding: 10px;
-  flex-basis: 70%;
-  flex-direction: row;
-  justify-content: space-evenly;
-  gap: 2%;
-  background-color: rgba(79, 34, 88, 0.55);
-}
-.nav__bag {
-  flex-basis: 25%;
+.card-currency {
+  margin: 5px 0;
+  flex-basis: 24%;
+  @media (max-width: $desktop-sm) {
+    flex-basis: 40%;
+  }
+  @media (max-width: $phone-lg) {
+    flex-basis: 49%;
+  }
 }
 </style>

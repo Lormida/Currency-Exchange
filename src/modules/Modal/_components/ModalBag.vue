@@ -17,7 +17,7 @@ loadBagLocal()
       <table v-if="getBag?.length" class="table bag__table table-striped table-hover">
         <Thead :titles="titlesNames" :classes="titleClasses">
           <template #first-column>
-            <th class="col-1 align-middle" scope="col">#</th>
+            <th class="col-1 align-middle custom-th" scope="col">#</th>
           </template>
         </Thead>
 
@@ -36,8 +36,10 @@ loadBagLocal()
   padding: 10px 10px;
   border-radius: 10px;
   box-shadow: 0px 0px 13px 10px rgba(41, 61, 77, 0.2);
-  min-height: 100px;
   max-height: 600px;
   overflow: auto;
+}
+.custom_th {
+  @include adaptive-value('font-size', 18, 8);
 }
 </style>

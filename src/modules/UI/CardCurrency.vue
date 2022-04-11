@@ -29,9 +29,9 @@ const props = defineProps<{
     </template>
 
     <template #main>
-      <CardRow title="Price :" content=""> ${{ (+priceUsd).toFixed(2) }} </CardRow>
-      <CardRow title="Market capital :" content=""> ${{ getDegreeCalc(marketCapUsd, 9) }} Yards </CardRow>
-      <CardRow title="Change for 24h :" content="">
+      <CardRow title="Price :"> ${{ (+priceUsd).toFixed(2) }} </CardRow>
+      <CardRow title="Market capital :"> ${{ getDegreeCalc(marketCapUsd, 9) }} Mrd </CardRow>
+      <CardRow title="Change for 24h :">
         <span :class="getFormatCurrency(changePercent24Hr)">{{ (+changePercent24Hr).toFixed(2) }}%</span>
       </CardRow>
     </template>
@@ -50,7 +50,14 @@ const props = defineProps<{
     grid-template-areas:
       'title button'
       'badge button';
-    grid-gap: 2px 10px;
+    grid-gap: 1px 10px;
+
+    @media (max-width: $tablet) {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: space-between;
+    }
   }
 
   // .card__title

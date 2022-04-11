@@ -15,7 +15,7 @@
 
   // market__header-title
   &__header-title {
-    font-size: 20px;
+    @include adaptive-value('font-size', 20, 14);
     width: fit-content;
     padding: 4px;
     font-weight: bold;

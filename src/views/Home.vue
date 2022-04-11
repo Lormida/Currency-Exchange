@@ -19,7 +19,7 @@ onMounted(async () => {
 
 <template>
   <div class="home-page home-page__container">
-    <main class="home-page__main">
+    <section class="home-page__main">
       <TableCurrencies
         v-if="!getIsLoading && Object.keys(getCurrencies).length > 0"
         :limit="limit"
@@ -27,14 +27,14 @@ onMounted(async () => {
         :currencies="getCurrencies"
       ></TableCurrencies>
       <SpinnerLoader v-else></SpinnerLoader>
-    </main>
 
-    <Pagination
-      class="home-page__footer"
-      :currentPage="getCurrentPage"
-      :totalPage="totalPage"
-      @change-current-page="setNewPage"
-    ></Pagination>
+      <Pagination
+        class="home-page__footer"
+        :currentPage="getCurrentPage"
+        :totalPage="totalPage"
+        @change-current-page="setNewPage"
+      ></Pagination>
+    </section>
   </div>
 </template>
 
@@ -43,16 +43,16 @@ onMounted(async () => {
   // .home-page__container
 
   &__container {
-    min-height: calc(100% - $headerHeight);
-    max-height: calc(100% - $headerHeight);
     display: flex;
     flex-direction: column;
+    height: 100%;
+    overflow: auto;
   }
 
   // .home-page__main
 
   &__main {
-    overflow: auto;
+    padding-top: 20px;
     background-color: $homeMainBg;
     background: linear-gradient(
       135deg,
@@ -64,21 +64,16 @@ onMounted(async () => {
     );
     display: flex;
     flex-direction: column;
-    justify-content: center;
+    justify-content: space-between;
     align-items: stretch;
     flex: 1 0 auto;
     width: 100%;
-    padding: 15px;
-    min-height: calc(100% - $footerHeight);
-    max-height: calc(100% - $footerHeight);
   }
 
   // .home-page__footer
 
   &__footer {
     height: $footerHeight;
-    border-bottom-left-radius: 20px;
-    border-bottom-right-radius: 20px;
   }
 }
 </style>

@@ -40,7 +40,7 @@ onMounted(() => {
     box-shadow: none;
     &:hover {
       transform: scale(1.2);
-      background-color: rgba(22, 22, 22, 1);
+      background-color: $darkGrey;
     }
   }
 }

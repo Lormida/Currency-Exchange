@@ -23,19 +23,19 @@ const props = defineProps<{
 
 <style lang="scss" scoped>
 .title {
-  font-size: 16px;
+  @include adaptive-value('font-size', 15, 10);
   font-weight: bolder;
   color: $lightGrey;
   text-align: left;
   margin: 5px 0;
 }
 .value {
-  font-size: 15px;
   margin: 5px 0;
+  @include adaptive-value('font-size', 13, 10);
 }
 .stats {
-  font-size: 13px;
-  opacity: 0.8;
+  @include adaptive-value('font-size', 13, 10);
+  opacity: 0.4;
   margin: 5px 0;
 }
 
@@ -44,15 +44,21 @@ const props = defineProps<{
 
   &__menu {
     border-radius: 10px;
-    padding: 10px;
+    padding: 1px;
     display: flex;
     justify-content: space-between;
+    flex-wrap: wrap;
     height: 100%;
   }
 
   // .market__item
 
   &__item {
+    flex-basis: 20%;
+
+    @media (max-width: $tablet) {
+      flex-basis: 33%;
+    }
   }
 }
 </style>

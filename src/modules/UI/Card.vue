@@ -6,7 +6,6 @@ const props = defineProps({
     default: `rgba(255,255,255,1)`,
   },
 })
-
 </script>
 
 <template>
@@ -32,6 +31,12 @@ const props = defineProps({
   // .card__header
   &__header {
     gap: 10px;
+  }
+  // .card__header
+  &__main {
+    @media (max-height: 790px) {
+      display: none;
+    }
   }
 }
 </style>

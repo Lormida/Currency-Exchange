@@ -33,6 +33,5 @@ const props = defineProps<{
   border-top-left-radius: 10px;
   border-top-right-radius: 10px;
   padding: 1% 1%;
-  min-height: 531px;
 }
 </style>

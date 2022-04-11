@@ -25,6 +25,7 @@ const Modal = defineAsyncComponent(() => import(/* webpackChunkName: 'Modal' */ 
 
 .global-container {
   width: 80%;
+  max-width: $desktop-sm;
   height: 95%;
   display: flex;
   position: fixed;
@@ -34,10 +35,13 @@ const Modal = defineAsyncComponent(() => import(/* webpackChunkName: 'Modal' */ 
   justify-content: space-between;
   align-items: stretch;
   flex-direction: column;
+  @media (max-width: $tablet) {
+    width: 98%;
+    height: 98%;
+  }
 }
 
 .header__navbar {
-  min-height: $headerHeight;
 }
 
 //* Transition
@@ -57,5 +61,4 @@ const Modal = defineAsyncComponent(() => import(/* webpackChunkName: 'Modal' */ 
 .page-leave-active {
   transition: all 0.25s ease-in-out 0s;
 }
-
 </style>

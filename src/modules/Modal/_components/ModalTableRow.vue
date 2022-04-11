@@ -15,7 +15,7 @@ const { getCustomIsLoading, getBagCurrencyActualPrices, removeCurrency, getProfi
 
 <template>
   <tr>
-    <th scope="row" class="col-1">{{ index + 1 }}</th>
+    <td scope="row" class="col-1">{{ index + 1 }}</td>
     <td class="col-1">{{ currency.symbol }}</td>
     <td v-if="!getCustomIsLoading" class="col-2">{{ (+getBagCurrencyActualPrices[currency.name]).toFixed(2) }}</td>
     <td style="position: relative" p-0 v-else class="col-2">
@@ -33,6 +33,11 @@ const { getCustomIsLoading, getBagCurrencyActualPrices, removeCurrency, getProfi
 </template>
 
 <style lang="scss" scoped>
+td {
+  @include adaptive-value('font-size', 18, 11);
+  vertical-align: middle;
+
+}
 .bag {
   &__trash-btn {
     width: 33px;

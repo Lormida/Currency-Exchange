@@ -27,13 +27,13 @@ import { getDataCurrency } from '@/helpers/reactive-getters/getDataCurrency'
   // .statistics__currency-short
 
   &__currency-short {
-    font-size: 32px;
+    @include adaptive-value('font-size', 32, 15);
   }
 
   // .statistics__currency-price
 
   &__currency-price {
-    font-size: 48px;
+    @include adaptive-value('font-size', 48, 20);
     font-weight: bolder;
     text-shadow: 0 0 4px rgb(72, 68, 68);
   }
@@ -44,8 +44,8 @@ import { getDataCurrency } from '@/helpers/reactive-getters/getDataCurrency'
     position: absolute;
     top: 0;
     right: 0;
-    font-size: 18px;
-    transform: translateX(100%);
+     @include adaptive-value('font-size', 18, 13);
+    transform: translate(100%,-50%);
   }
 }
 </style>

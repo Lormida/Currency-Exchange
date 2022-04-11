@@ -20,14 +20,16 @@ const props = defineProps<{
   &__title {
     color: white;
     text-align: center;
+    @include adaptive-value('font-size', 22, 15);
   }
 
   // .form-currency__label
 
   &__label {
-    font-size: 15px;
+    @include adaptive-value('font-size', 15, 12);
     font-weight: 800;
     color: lighten($green, 20%);
+    margin-right: 5px;
   }
 }
 </style>

@@ -12,11 +12,13 @@ const CardInfo = defineAsyncComponent(() => import(/* webpackChunkName: 'CardInf
 <template>
   <header class="currency-stats">
     <Statistics></Statistics>
-    <CardInfo>
-      <template #name>{{ getDataCurrency.name }}</template>
-      <template #symbol>{{ getDataCurrency.symbol }}</template>
-    </CardInfo>
-    <BigButton @click="openModal(getDataCurrency.id)">Buy</BigButton>
+    <div class="currency-stats__buttons-wrapper">
+      <CardInfo>
+        <template #name>{{ getDataCurrency.name }}</template>
+        <template #symbol>{{ getDataCurrency.symbol }}</template>
+      </CardInfo>
+      <BigButton @click="openModal(getDataCurrency.id)">Buy</BigButton>
+    </div>
   </header>
 </template>
 
@@ -24,10 +26,16 @@ const CardInfo = defineAsyncComponent(() => import(/* webpackChunkName: 'CardInf
 .currency-stats {
   width: 100%;
   height: auto;
-  padding: 1% 0 1% 5%;
+  padding: 1%;
   background-color: $white;
   display: flex;
-  justify-content: space-around;
+  justify-content: space-between;
   align-items: center;
+
+  // .currency-stats__buttons-wrapper
+
+  &__buttons-wrapper {
+  // display: flex;
+  }
 }
 </style>

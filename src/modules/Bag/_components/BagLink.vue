@@ -10,6 +10,9 @@
 .bag-link {
   height: 50%;
   width: 50%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
   transition: transform 0.3s ease;
   &:hover {
     transform: scale(1) rotateZ(15deg);
@@ -18,7 +21,8 @@
   // .bag-link__image
   &__image {
     height: 100%;
-    width: 100%;
+    width: auto;
+    object-fit: contain;
   }
 }
 </style>

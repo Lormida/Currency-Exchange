@@ -4,7 +4,6 @@ import { Currency } from '@/services/types'
 import { openModal } from '@/helpers/openModal'
 import { getFormatCurrency } from '@/helpers/getFormatCurrency'
 
-
 const props = defineProps<{
   currentPage: number
   limit: number
@@ -34,6 +33,7 @@ const props = defineProps<{
 
 <style lang="scss" scoped>
 .table-row {
+  @include adaptive-value('font-size', 18, 11);
   // .table-row__link-detail
 
   &__link-detail {
@@ -50,6 +50,7 @@ const props = defineProps<{
   // .table-row__btn
 
   &__btn {
+    @include adaptive-value('font-size', 18, 11);
   }
 }
 </style>

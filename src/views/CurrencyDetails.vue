@@ -8,7 +8,7 @@ import { getIsLoading } from '@/helpers/reactive-getters/getIsLoading'
 import ApiService from '@/services/ApiService'
 
 const CurrencyDetailsContent = defineAsyncComponent(
-    () => import(/* webpackChunkName: 'CurrencyDetailsContent' */ '@/modules/CurrencyDetailsContent/CurrencyDetailsContent.vue')
+  () => import(/* webpackChunkName: 'CurrencyDetailsContent' */ '@/modules/CurrencyDetailsContent/CurrencyDetailsContent.vue')
 )
 
 const props = defineProps<{
@@ -22,7 +22,6 @@ ApiService.loadCurrentCurrency(props.id).then(() => {
 
 <template>
   <div class="currency-page currency-page__container">
-
     <div class="currency-page__main" v-if="!getIsLoading && Object.keys(getDataCurrency).length > 0">
       <!-- <CurrencyPageHeader /> -->
       <Suspense>
@@ -34,7 +33,6 @@ ApiService.loadCurrentCurrency(props.id).then(() => {
           <SpinnerLoader size="middle"></SpinnerLoader>
         </template>
       </Suspense>
-      
     </div>
     <SpinnerLoader v-else></SpinnerLoader>
   </div>
@@ -45,8 +43,7 @@ ApiService.loadCurrentCurrency(props.id).then(() => {
   // .currency-page__container
 
   &__container {
-    min-height: calc(100% - $headerHeight);
-    max-height: calc(100% - $headerHeight);
+    height: 100%;
     display: flex;
     flex-direction: column;
     overflow: auto;
@@ -65,6 +62,10 @@ ApiService.loadCurrentCurrency(props.id).then(() => {
     flex: 1 0 auto;
     width: 100%;
     padding: 15px;
+
+    @media (max-width: $phone-lg) {
+      padding: 15px 1px;
+    }
   }
 }
 </style>

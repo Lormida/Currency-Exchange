@@ -16,7 +16,9 @@
   justify-content: center;
   align-items: center;
   height: 100%;
-  padding: 0 80px;
+  padding: 0 10px;
+  border-bottom-left-radius: 5px;
+  border-bottom-right-radius: 5px;
   transition: all 0.3s ease;
   box-shadow: rgba(0, 0, 0, 0.15) 0px 3px 3px 0px;
   background-color: $green8;

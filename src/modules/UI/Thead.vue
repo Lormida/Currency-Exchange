@@ -18,4 +18,9 @@ const getCurrentStyle = (index: number) => props.classes && props.classes[index]
   </thead>
 </template>
 
-<style lang="scss" scoped></style>
+<style lang="scss" scoped>
+
+th {
+  @include adaptive-value('font-size', 18, 9);
+}
+</style>

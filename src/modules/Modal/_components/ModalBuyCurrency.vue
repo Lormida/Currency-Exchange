@@ -22,7 +22,7 @@ const { getCurrentAmount, getDisabledBtn, recalcValidate, buyCurrency } = useMod
       class="w-50 mx-auto btn btn-lg btn-primary"
       type="submit"
     >
-      Buy currency
+      Buy
     </button>
   </form>
 </template>
@@ -30,7 +30,7 @@ const { getCurrentAmount, getDisabledBtn, recalcValidate, buyCurrency } = useMod
 <style lang="scss" scoped>
 .form-currency {
   background-color: $modalBuyBg;
-  padding: 50px 80px;
+  padding: 50px 30px;
   box-shadow: 0px 0px 13px 10px rgba(41, 61, 77, 0.2);
 }
 </style>

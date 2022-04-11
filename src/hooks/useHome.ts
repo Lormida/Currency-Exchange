@@ -3,7 +3,7 @@ import { ref, Ref, computed } from 'vue'
 
 export const useHome = () => {
   //* Initialization
-  const limit = 6
+  const limit = 7
   const currentPage = ref(1)
   const totalPage = Math.ceil(100 / limit)
 

@@ -19,7 +19,8 @@
   &__wrapper {
     display: flex;
     box-shadow: rgba(0, 0, 0, 0.09) 0px 3px 12px;
-    border-radius: 5px;
+    border-top-left-radius: 5px;
+    border-top-right-radius: 5px;
     width: fit-content;
     justify-content: space-between;
     align-items: center;
@@ -37,14 +38,14 @@
   // .title-symbol__title-name
 
   &__title-name {
-    font-size: 32px;
     font-weight: bold;
-    margin-right: 30px;
+    @include adaptive-value('margin-right', 30, 10);
   }
 
   // .title-symbol__title-symbol
 
   &__title-symbol {
+    color: $currencySymbol;
   }
 }
 </style>

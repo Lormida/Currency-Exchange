@@ -39,9 +39,10 @@ body {
 }
 
 ::-webkit-scrollbar-thumb {
-  background: rgba(245, 73, 82, 0.8);
+  background: $scrollbar;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: rgba(22, 22, 22, 0.8);
+  background: $scrollbarHover;
 }
+
